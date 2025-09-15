@@ -1,23 +1,30 @@
-# Use Node.js 18 LTS
-FROM node:18-alpine
+# Multi-stage Dockerfile for Next.js (production)
 
-# Install dependencies only when needed
-RUN apk add --no-cache libc6-compat
-
-# Set working directory
+FROM node:24-alpine AS builder
+RUN apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 
-# Copy package files (will be created when project exists)
+# Install all dependencies (including dev deps needed for build)
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies (skip if no package.json exists yet)
-RUN npm install || echo "No package.json found, skipping npm install"
-
-# Copy source code
+# Copy source and build
 COPY . .
+RUN npm run build
 
-# Expose port 3000
+FROM node:24-alpine AS runner
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Copy only what's required to run the app
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+
+ENV NODE_ENV=production
 EXPOSE 3000
 
-# Start development server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
+
+# For development: run locally with dev deps and `npm run dev`, or create a separate dev Dockerfile that mounts the source and runs the dev script.
