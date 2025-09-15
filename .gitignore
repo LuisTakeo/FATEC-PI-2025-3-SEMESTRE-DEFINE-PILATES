@@ -1,0 +1,6 @@
+# Common OS / IDE files
+.DS_Store
+Thumbs.db
+.env
+node_modules/
+vendor/
