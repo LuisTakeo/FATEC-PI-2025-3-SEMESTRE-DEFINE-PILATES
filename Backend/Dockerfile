@@ -1,54 +1,49 @@
-# Use PHP 8.2 CLI for development with hot-reload
+# Etapa 1: Composer install
+FROM composer:2.8 AS composer
+
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer update --no-scripts
+
+# Etapa 2: PHP + app
 FROM php:8.2-cli
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
+# Instala dependências do sistema necessárias para extensões PHP
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
-    libssl-dev \
-    pkg-config \
-    libsasl2-dev \
-    zip \
-    unzip \
-    nodejs \
-    npm
+    && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Instala extensões PHP
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Copia o Composer para a imagem final
+COPY --from=composer:2.7.6 /usr/bin/composer /usr/bin/composer
 
-# Install MongoDB PHP extension (latest version)
-RUN pecl install mongodb-1.21.0 && docker-php-ext-enable mongodb
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
 WORKDIR /var/www
+COPY . .
+COPY --from=composer /app/vendor ./vendor
 
-# Create user for Laravel
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Cria usuário para o Laravel
+RUN groupadd -g 1000 www \
+    && useradd -u 1000 -ms /bin/bash -g www www
 
-# Expose port 8000
 EXPOSE 8000
 
-# Create start script
+# Cria script de inicialização
 RUN echo '#!/bin/bash\n\
 cd /var/www\n\
 if [ ! -f "artisan" ]; then\n\
     echo "Laravel project not found. Please ensure Laravel is properly installed."\n\
     sleep infinity\n\
 fi\n\
-chown -R www:www /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true\n\
+chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true\n\
 php artisan serve --host=0.0.0.0 --port=8000\n\
 ' > /usr/local/bin/start-laravel.sh && chmod +x /usr/local/bin/start-laravel.sh
 
-# Start Laravel server
 CMD ["/usr/local/bin/start-laravel.sh"]
