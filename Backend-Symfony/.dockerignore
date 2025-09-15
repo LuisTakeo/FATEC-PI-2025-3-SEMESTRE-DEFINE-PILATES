@@ -1,0 +1,16 @@
+# Symfony Backend .dockerignore
+node_modules
+npm-debug.log
+vendor
+.env
+.env.local
+.env.dev.local
+.env.test.local
+.git
+.gitignore
+README.md
+docker-compose.yml
+var/cache/*
+var/log/*
+var/sessions/*
+public/bundles/*

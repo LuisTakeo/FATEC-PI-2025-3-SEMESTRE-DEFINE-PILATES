@@ -1,0 +1,153 @@
+services:
+  # Symfony Backend
+  symfony-backend:
+    build:
+      context: ./Backend-Symfony
+      dockerfile: Dockerfile
+    container_name: define-pilates-symfony
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./Backend-Symfony:/var/www
+    ports:
+      - "8001:8001"
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=1
+      - DATABASE_URL=mysql://root:password@mysql:3306/define_pilates_symfony
+      - MONGODB_URL=mongodb://admin:password@mongodb:27017/define_pilates_symfony
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - app-network
+
+  # Laravel Backend (para comparação)
+  laravel-backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: define-pilates-laravel
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./Backend:/var/www
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=define_pilates
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=define_pilates_mongo
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - app-network
+
+  # Next.js Frontend
+  nextjs-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: define-pilates-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_LARAVEL_API_URL=http://localhost:8000/api
+      - NEXT_PUBLIC_SYMFONY_API_URL=http://localhost:8001/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - laravel-backend
+      - symfony-backend
+    networks:
+      - app-network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: define-pilates-mysql-compare
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: define_pilates
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_AUTO_CREATE_USER,NO_AUTO_CREATE_USER,ERROR_FOR_DIVISION_BY_ZERO
+    networks:
+      - app-network
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: define-pilates-mongodb-compare
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: define_pilates_mongo
+    volumes:
+      - mongodb_data:/data/db
+      - ./database/mongodb/init.js:/docker-entrypoint-initdb.d/init.js
+    networks:
+      - app-network
+
+  # PHPMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: define-pilates-phpmyadmin-compare
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  # Mongo Express
+  mongo-express:
+    image: mongo-express
+    container_name: define-pilates-mongo-express-compare
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongodb:27017/
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge

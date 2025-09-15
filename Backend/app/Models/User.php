@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -44,5 +45,48 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Aulas que o usuário está instruindo
+     */
+    public function instructedClasses(): HasMany
+    {
+        return $this->hasMany(PilatesClass::class, 'instructor_id');
+    }
+
+    /**
+     * Reservas do usuário
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Reservas confirmadas do usuário
+     */
+    public function confirmedBookings(): HasMany
+    {
+        return $this->hasMany(Booking::class)->where('status', 'confirmed');
+    }
+
+    /**
+     * Verifica se o usuário é um instrutor
+     */
+    public function isInstructor(): bool
+    {
+        return $this->instructedClasses()->exists();
+    }
+
+    /**
+     * Verifica se o usuário tem uma reserva específica
+     */
+    public function hasBookingForClass(int $classId): bool
+    {
+        return $this->bookings()
+            ->where('class_id', $classId)
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->exists();
     }
 }

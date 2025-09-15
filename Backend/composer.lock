@@ -2184,23 +2184,24 @@
         },
         {
             "name": "mongodb/mongodb",
-            "version": "1.21.2",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mongodb/mongo-php-library.git",
-                "reference": "0e80d179370b9d6338df4e62c292c3652e0a2396"
+                "reference": "f399d24905dd42f97dfe0af9706129743ef247ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/0e80d179370b9d6338df4e62c292c3652e0a2396",
-                "reference": "0e80d179370b9d6338df4e62c292c3652e0a2396",
+                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/f399d24905dd42f97dfe0af9706129743ef247ac",
+                "reference": "f399d24905dd42f97dfe0af9706129743ef247ac",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0",
-                "ext-mongodb": "^1.21.0",
+                "ext-mongodb": "^2.1",
                 "php": "^8.1",
-                "psr/log": "^1.1.4|^2|^3"
+                "psr/log": "^1.1.4|^2|^3",
+                "symfony/polyfill-php85": "^1.32"
             },
             "replace": {
                 "mongodb/builder": "*"
@@ -2254,9 +2255,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mongodb/mongo-php-library/issues",
-                "source": "https://github.com/mongodb/mongo-php-library/tree/1.21.2"
+                "source": "https://github.com/mongodb/mongo-php-library/tree/2.1.1"
             },
-            "time": "2025-08-13T18:23:22+00:00"
+            "time": "2025-08-13T20:50:05+00:00"
         },
         {
             "name": "monolog/monolog",
