@@ -42,6 +42,10 @@ Backend (Laravel):
 6. php artisan migrate --seed
 7. php artisan serve --host=0.0.0.0 --port=8000
 
+Atualizar doc do Swagger:
+1. php artisan config:clear
+2. php artisan l5-swagger:generate
+
 Frontend (Next.js):
 1. cd frontend
 2. npm install
