@@ -1,6 +1,7 @@
 services:
   # Laravel Backend
   laravel-backend:
+    cpus: 0.5
     build:
       context: ./Backend
       dockerfile: Dockerfile
@@ -31,6 +32,7 @@ services:
 
   # Next.js Frontend
   nextjs-frontend:
+    cpus: 0.5
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -52,6 +54,7 @@ services:
 
   # MySQL Database
   mysql:
+    cpus: 0.5
     image: mysql:8.0
     container_name: define-pilates-mysql
     restart: unless-stopped
@@ -70,6 +73,7 @@ services:
 
   # MongoDB Database
   mongodb:
+    cpus: 0.5
     image: mongo:7.0
     container_name: define-pilates-mongodb
     restart: unless-stopped
@@ -85,25 +89,9 @@ services:
     networks:
       - app-network
 
-  # PHPMyAdmin (opcional - para gerenciar MySQL)
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: define-pilates-phpmyadmin
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: password
-    depends_on:
-      - mysql
-    networks:
-      - app-network
-
   # Mongo Express (opcional - para gerenciar MongoDB)
   mongo-express:
+    cpus: 0.5
     image: mongo-express
     container_name: define-pilates-mongo-express
     restart: unless-stopped

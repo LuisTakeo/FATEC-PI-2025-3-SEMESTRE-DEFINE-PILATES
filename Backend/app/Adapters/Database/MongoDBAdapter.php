@@ -17,7 +17,13 @@ class MongoDBAdapter implements NoSQLPort
 
     public function __construct()
     {
-        $this->connection = app('mongodb');
+        // Try to resolve the mongodb binding if available. If not, keep null.
+        try {
+            $this->connection = app()->has('mongodb') ? app('mongodb') : null;
+        } catch (\Throwable $e) {
+            // app('mongodb') may throw if the package isn't installed; swallow and keep null.
+            $this->connection = null;
+        }
     }
 
 
