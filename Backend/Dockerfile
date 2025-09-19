@@ -42,7 +42,14 @@ if [ ! -f "artisan" ]; then\n\
     echo "Laravel project not found. Please ensure Laravel is properly installed."\n\
     sleep infinity\n\
 fi\n\
+# Instala dependências se vendor não existir\n\
+if [ ! -d "vendor" ]; then\n\
+    echo "Installing Composer dependencies..."\n\
+    composer install --no-scripts --no-dev --optimize-autoloader\n\
+fi\n\
+# Ajusta permissões\n\
 chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true\n\
+# Inicia o servidor\n\
 php artisan serve --host=0.0.0.0 --port=8000\n\
 ' > /usr/local/bin/start-laravel.sh && chmod +x /usr/local/bin/start-laravel.sh
 
