@@ -1,39 +1,25 @@
-# Multi-stage Dockerfile for Next.js (production)
+# Dockerfile para Next.js
 
-FROM node:24-alpine AS base
-RUN apk add --no-cache libc6-compat
+FROM node:24-alpine
+RUN apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 
-FROM base AS deps
-# Install dependencies based on the preferred package manager
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
-
-FROM base AS builder
-WORKDIR /app
-COPY package.json package-lock.json* ./
+# Install dependencies
+COPY package*.json ./
 RUN npm ci
+
+# Copy source code
 COPY . .
-RUN npm run build
 
-FROM base AS runner
-WORKDIR /app
+# Create .next directory if it doesn't exist
+RUN mkdir -p .next
 
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy built application
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-ENV NODE_ENV=production
+# Set environment variables
+ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 
-CMD ["node", "server.js"]
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["npm", "run", "dev"]
