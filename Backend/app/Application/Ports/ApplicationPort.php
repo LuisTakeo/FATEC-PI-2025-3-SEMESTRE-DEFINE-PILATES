@@ -9,4 +9,5 @@ namespace App\Application\Ports;
 interface ApplicationPort
 {
     // Interface limpa para implementação futura
+    public function createUser() : User;
 }

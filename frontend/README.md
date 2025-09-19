@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Define Pilates - Frontend
 
-## Getting Started
+Frontend da aplicação Define Pilates construído com Next.js 15.
 
-First, run the development server:
+## 🚀 Como executar
 
+### Pré-requisitos
+- Docker e Docker Compose instalados
+- Node.js 24+ (para desenvolvimento local)
+
+### Executar com Docker (Recomendado)
+
+1. **No diretório raiz do projeto**, execute:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Acesse http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Executar localmente (Desenvolvimento)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Instale as dependências:
+```bash
+npm ci
+```
 
-## Learn More
+2. Copie o arquivo de ambiente:
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Execute o servidor de desenvolvimento:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 Configuração
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Variáveis de Ambiente
 
-## Deploy on Vercel
+Copie `.env.example` para `.env.local` e ajuste conforme necessário:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `NEXT_PUBLIC_API_URL`: URL da API backend
+- `NODE_ENV`: Ambiente de execução
+- `NEXT_TELEMETRY_DISABLED`: Desabilita telemetria do Next.js
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🐳 Docker
+
+### Estrutura do Container
+- **Imagem base**: node:24-alpine
+- **Porta**: 3000
+- **Ambiente**: Produção (otimizado)
+- **Saída**: Standalone (auto-contido)
+
+### Comandos Docker úteis
+
+```bash
+# Rebuild apenas o frontend
+docker-compose up --build nextjs-frontend
+
+# Ver logs do frontend
+docker-compose logs -f nextjs-frontend
+
+# Parar todos os containers
+docker-compose down
+
+# Limpar cache do Docker
+docker system prune -a
+```
+
+## 🛠 Scripts Disponíveis
+
+- `npm run dev`: Servidor de desenvolvimento
+- `npm run build`: Build para produção
+- `npm run start`: Servidor de produção
+
+## 🔍 Solução de Problemas
+
+### Container não inicia
+1. Verifique se o Docker Desktop está executando
+2. Execute `docker-compose down` e depois `docker-compose up --build`
+3. Verifique os logs: `docker-compose logs nextjs-frontend`
+
+### Erro de build
+1. Limpe o cache: `docker system prune -a`
+2. Rebuild com `--no-cache`: `docker-compose build --no-cache nextjs-frontend`
+
+### Problemas de rede
+- Verifique se a porta 3000 não está sendo usada por outro processo
+- Verifique a conectividade com o backend na porta 8000
+
+### Em outras máquinas
+1. Certifique-se de que o Docker Desktop está instalado e rodando
+2. Clone o repositório completo
+3. Execute `docker-compose up --build` no diretório raiz
+4. Aguarde o build completo (pode demorar na primeira vez)
+
+## 📚 Tecnologias
+
+- Next.js 15
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- Docker (produção)
