@@ -1,34 +1,24 @@
-Rails backend skeleton for experimentation
+# README
 
-This folder contains helpers and a Dockerfile to create and run a minimal Ruby on Rails application for experimentation.
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-Files:
-- Dockerfile: development image for Ruby/Rails
-- bootstrap.sh: convenience script to generate a new Rails app inside this folder (does not run automatically)
+Things you may want to cover:
 
-How to create a new Rails app inside this folder (host machine must have Docker or Ruby installed):
+* Ruby version
 
-1) Using Docker (recommended):
-   # from project root
-   cd Backend-Rails
-   # create the rails app skeleton in ./app
-   ./bootstrap.sh app
+* System dependencies
 
-   Then you can build and run with the Dockerfile.
+* Configuration
 
-2) Locally (if you have Ruby and Rails):
-   cd Backend-Rails
-   gem install rails
-   rails new app --database=sqlite3
+* Database creation
 
-Bootstrap script usage:
-- ./bootstrap.sh <target-dir>
-  Example: ./bootstrap.sh app
+* Database initialization
 
-The script will create a new Rails application in the given directory using Docker (ruby:3.2 image).
+* How to run the test suite
 
-Dockerfile notes:
-- Exposes port 3000
-- Uses sqlite3 for development
+* Services (job queues, cache servers, search engines, etc.)
 
-This is intentionally minimal: run the bootstrap script to generate a full Rails app skeleton.
+* Deployment instructions
+
+* ...

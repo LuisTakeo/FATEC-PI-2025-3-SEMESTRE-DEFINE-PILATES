@@ -10,7 +10,6 @@ services:
     working_dir: /var/www
     volumes:
       - ./Backend:/var/www
-      - /var/www/vendor
     ports:
       - "8000:8000"
     environment:
@@ -44,7 +43,6 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_URL=http://localhost:8000/api
-      - NEXT_TELEMETRY_DISABLED=1
     volumes:
       - ./frontend:/app
       - /app/node_modules
