@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import "./globals.css"
-import "/styles.mobile.css"
+import "../../globals.css"
+import "./styles.mobile.css"
 
 export default function Header() {
   return (
@@ -15,7 +15,7 @@ export default function Header() {
               type="button"
               onClick={() => window.history.back()}
             >
-              <img src="" alt="" />
+              <img src="/" alt="" />
               <h1>Voltar</h1>
             </button>
 

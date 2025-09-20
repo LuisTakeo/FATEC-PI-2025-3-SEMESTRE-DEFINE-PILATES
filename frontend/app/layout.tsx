@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "./components/layout/Header/Header"
-import Footer from "./components/layout/Footer/Footer"
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -17,9 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-br">
       <body className={`${dmSans.variable} ${inter.variable}`}>
-        <Header/>
+        <Header />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
