@@ -1,5 +1,5 @@
 import "./globals.css"
-import "/styles.mobile.css"
+import "./styles.mobile.css"
 
 export default function Cadastro_Recep_Adm() {
   return (
