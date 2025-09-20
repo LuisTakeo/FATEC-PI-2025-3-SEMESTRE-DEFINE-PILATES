@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import "./style.css"
+import "./globals.css"
+import "/styles.mobile.css"
+
 export default function Header() {
   return (
     <header>
