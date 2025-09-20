@@ -1,3 +1,5 @@
+import "./globals.css"
+import "/styles.mobile.css"
 
 export default function Cadastro_Usuario() {
   return (
