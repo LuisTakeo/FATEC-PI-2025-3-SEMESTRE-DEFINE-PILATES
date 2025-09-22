@@ -6,22 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+  
     public function up(): void
     {
-        Schema::create('pilates_classes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('type_classes', function (Blueprint $table) {
+            $table->id('Id_type_classes');
+            $table->string('typeclass', 20);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('pilates_classes');
+        Schema::dropIfExists('type_classes');
     }
 };
