@@ -8,7 +8,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-inter">
-      {/* HEADER */}
       <header className="flex items-center justify-between px-6 py-4">
         <button
           onClick={() => router.back()}
@@ -20,9 +19,7 @@ export default function LoginPage() {
         <h1 className="text-[#832965] font-italiana text-3xl ml-auto">Define Pilates</h1>
       </header>
 
-      {/* MAIN */}
       <main className="flex flex-col items-center px-6 py-4">
-        {/* Título + imagem da moça */}
         <div className="flex w-full max-w-sm justify-between items-end mb-6">
           <h2 className="text-2xl text-[#832965] font-bold font-inter leading-tight">
             Entre <br /> na sua conta
@@ -34,7 +31,6 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Formulário */}
         <div className="w-full max-w-sm flex flex-col gap-4">
           <p className="text-[#832965] text-lg font-semibold font-inter">Acessar</p>
 
@@ -63,7 +59,6 @@ export default function LoginPage() {
         </div>
       </main>
 
-      {/* FOOTER */}
       <footer className="bg-[#832965] text-white mt-auto px-6 py-6">
         <div className="text-center font-italiana text-lg mb-4">Define Pilates</div>
         <div className="flex justify-center gap-4 text-sm font-inter mb-4">
