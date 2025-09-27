@@ -53,7 +53,6 @@ export default function CadastroInicialPage() {
 
       <footer className="bg-[#832965] text-white mt-auto px-6 py-4">
         <div className="text-center font-italiana text-lg mb-2">Define Pilates</div>
-
         <div className="flex justify-center gap-4 text-sm font-inter mb-2">
           <a href="/" className="hover:underline">Pagina inicial</a>
           <a href="/user/login" className="hover:underline">Login</a>
