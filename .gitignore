@@ -4,3 +4,5 @@ Thumbs.db
 .env
 node_modules/
 vendor/
+/Backend-Rails/
+/Backend-Spring/
