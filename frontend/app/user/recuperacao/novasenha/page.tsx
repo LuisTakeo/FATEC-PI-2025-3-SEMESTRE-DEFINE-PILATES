@@ -7,7 +7,7 @@ export default function NewPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-inter">
-      {/* HEADER */}
+     
       <header className="flex items-center justify-between px-6 py-4">
         <button
           onClick={() => router.back()}
@@ -19,7 +19,6 @@ export default function NewPasswordPage() {
         <h1 className="text-[#832965] font-italiana text-3xl ml-auto">Define Pilates</h1>
       </header>
 
-      {/* MAIN */}
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-6">
         <h2 className="text-2xl font-bold text-[#832965] mb-2">Escreva sua nova senha</h2>
         <p className="text-black text-center mb-6 font-inter">

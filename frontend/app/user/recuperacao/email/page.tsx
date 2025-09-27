@@ -7,7 +7,7 @@ export default function RecoveryEmailPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-inter">
-      {/* HEADER */}
+      
       <header className="flex items-center justify-between px-6 py-4">
         <button
           onClick={() => router.back()}
@@ -19,7 +19,7 @@ export default function RecoveryEmailPage() {
         <h1 className="text-[#832965] font-italiana text-3xl ml-auto">Define Pilates</h1>
       </header>
 
-      {/* MAIN */}
+      
       <main className="flex flex-col items-center px-6 py-6">
         <img src="/envelope.png" alt="Envelope" className="w-32 h-32 object-contain mb-6" />
 
