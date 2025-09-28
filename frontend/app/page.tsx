@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./globals.css"
+import "./styles.mobile.css"
 
 export default function Home() {
   return (
