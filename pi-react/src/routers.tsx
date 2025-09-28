@@ -1,6 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import PaginaInicio from "./pages/PaginaInicio/index";
 import Cadastro_Aluno from "./pages/Cadastros/Cadastro_Aluno/"
+import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
+import Login from "./pages/Login/Login/page"
+import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
 
 function MainRoutes() {
     return (
@@ -8,6 +11,11 @@ function MainRoutes() {
             {/* Rotas públicas ou acesso a todos */}
             <Route path="/" element={<PaginaInicio />} />
             <Route path="/Cadastro_Aluno" element={<Cadastro_Aluno />} />
+
+            <Route path="/Calendario_Aluno" element={<Calendario_Aluno/>}/>
+
+            <Route path="/Login" element={<Login/>}/>
+            <Route path="/Login_Funcionario" element={<Login_Funcionario/>}/>
         </Routes>
 
         // {/* SÓ ADMIN LOGADO */}

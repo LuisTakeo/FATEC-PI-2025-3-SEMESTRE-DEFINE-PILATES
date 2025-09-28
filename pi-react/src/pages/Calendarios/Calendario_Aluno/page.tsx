@@ -1,5 +1,6 @@
 import Botao from "../../../components/Botao"
 import Estilizacoes from "../../../model/Estilizacoes";
+import Calendario from "../../../components/Calendario/Calendario"
 
 function Calendario_Aluno(){
 
@@ -31,7 +32,7 @@ function Calendario_Aluno(){
 
             <main className={`${Estilizacoes.container_main} bg-[var(--destaque)] min-h-screen w-full pl-[8%] pr-[8%]  rounded-t-[15px] mt-[3%]`}>
                 <section className={Estilizacoes.container_main}>
-                   
+                   <Calendario/>
                 </section>
             </main>
 

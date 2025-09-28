@@ -1,26 +1,35 @@
-import"./stylesCadastroAluno.css"
 import OptionsForm from "./optionsForm"
+import Estilizacoes from "../../../model/Estilizacoes";
+import BotaoInput from "../../../components/BotaoInput";
+import Botao from "../../../components/Botao"
+import { useState } from "react";
 
 function Cadastro_Aluno(){
 
     let estilizacao_input: string = "bg-[var(--input-background)] rounded-[7px] p-3 text-lg h-[50px] focus:border-none"
     // let estilizacao_input_file: string = ""
+    
+    const [permissao, setPermissao] = useState(false);
+
+    function permitirInputs(state: boolean){
+        setPermissao(state);
+    }
 
     return(
         <div className="flex flex-col items-center justify-center w-full">
             <main className="flex flex-col  w-[80vw]">
                 <header className="flex justify-start flex-col mb-10">
                     <div>
-                        <h1 className="text-[2rem] font-bold text-[var(--destaque)]">Cadastro de Aluno</h1>
+                        <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>Cadastro de Aluno</h1>
                     </div>
                     <div>
-                        <h1 className="text-[1.5rem] font-semibold">Informe os dados abaixo para criar o acesso</h1>
+                        <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--foreground)]`}>Informe os dados abaixo para criar o acesso</h1>
                     </div>
                 </header>
                     <form>
                         <section id="info-pessoais-section" className="flex justify-start items-start flex-col gap-5 w-full  ">
                             <div>
-                                <h1 className="text-[1.3rem] font-bold text-[var(--destaque)]">Informações pessoais</h1>
+                                <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)]`}>Informações pessoais</h1>
                             </div>
                             <div id="nome" className="flex flex-col gap-3 w-full">
                                 <label htmlFor="nome-input" className="text-[1.2rem]">
@@ -64,6 +73,7 @@ function Cadastro_Aluno(){
                                         type="text"
                                         inputMode="numeric"
                                         pattern="[0-9]+"
+                                        placeholder="DDD"
                                         maxLength={4}
                                         className={`${estilizacao_input} w-full`}
                                         />
@@ -126,31 +136,27 @@ function Cadastro_Aluno(){
                             <OptionsForm/>
                         </section>
 
-                        <section id="ft-postura" className="flex justify-start items-start flex-col">
+                        <section id="ft-postura" className="flex justify-start items-start flex-col gap-5 mt-8">
                             <div>
-                                <h1>Foto da postura</h1>
+                                <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)]`}>Foto da postura</h1>
                             </div>
                             <div className="flex justify-start items-start flex-col">
-                                <label htmlFor="img-postura">
+                                <label htmlFor="img-postura" className={Estilizacoes.titulo_segundario}>
                                     Selecione um documento ou imagem 
                                 </label>
-                                <input 
-                                className=""
-                                id="img-postura" 
-                                type="file"
-                                accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                />
+                               <BotaoInput texto="Clique para selecionar"/>
+                               
                             </div>
                         </section>
 
-                        <section id="endereço" className="flex justify-start items-start flex-col">
+                        <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-20">
                             <div>
-                                <h1 className="text-[1.5rem]">Endereço</h1>
+                                <h1 className={Estilizacoes.segundo_titulo_principal}>Endereço</h1>
                             </div>
 
                             {/* aplicar api */}
-                            <div id="cep" className="flex flex-col">
-                                <label htmlFor="cep-input" className="">
+                            <div id="cep" className="flex flex-col gap-3">
+                                <label htmlFor="cep-input" className="text-[1.2rem]">
                                     CEP
                                 </label>
                                 <div className="flex">
@@ -160,46 +166,43 @@ function Cadastro_Aluno(){
                                     inputMode="numeric"
                                     pattern="[0-9]+"
                                     maxLength={10}
+                                    placeholder="CEP"
                                     className={estilizacao_input}
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex justify-start items-start flex-row">
-                                <div id="rua" className="flex flex-col">
-                                    <label htmlFor="rua-input" className="">
-                                        Rua
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="rua-input"
-                                        type="text"
-                                        inputMode="numeric"
-                                        pattern="[a-zA-Z0-9/-]+"
-                                        maxLength={15}
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
+                            <div className="flex justify-start items-start w-full">
+                                <div id="rua" className="flex flex-col w-[75%] gap-3">
+                                    <label htmlFor="rua-input" className="text-[1.2rem]">Rua</label>
+                                    <input
+                                    id="rua-input"
+                                    type="text"
+                                    inputMode="numeric"
+                                    pattern="[a-zA-Z0-9/-]+"
+                                    maxLength={15}
+                                    placeholder="Rua"
+                                    className={estilizacao_input}
+                                    />
                                 </div>
-                                <div id="numero" className="flex flex-col">
-                                    <label htmlFor="numero-input" className="">
-                                        Número
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="numero-input"
-                                        type="text"
-                                        inputMode="text"
-                                        pattern="[a-zA-Z0-9/-]+"
-                                        maxLength={15}
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
+
+                                <div id="numero" className="flex flex-col w-[25%] ml-4 gap-3">
+                                    <label htmlFor="numero-input" className="text-[1.2rem]">Número</label>
+                                    <input
+                                    id="numero-input"
+                                    type="text"
+                                    inputMode="text"
+                                    pattern="[a-zA-Z0-9/-]+"
+                                    maxLength={15}
+                                    placeholder="Número"
+                                    className={estilizacao_input}
+                                    />
                                 </div>
                             </div>
 
-                            <div id="bairro" className="flex flex-col">
-                                <label htmlFor="bairro-input" className="">
+
+                            <div id="bairro" className="flex flex-col gap-3">
+                                <label htmlFor="bairro-input" className="text-[1.2rem]">
                                     Bairro
                                 </label>
                                 <div className="flex">
@@ -209,6 +212,7 @@ function Cadastro_Aluno(){
                                     inputMode="numeric"
                                     pattern="[0-9]+"
                                     maxLength={15}
+                                    placeholder="Bairro"
                                     className={estilizacao_input}
                                     />
                                 </div>
@@ -224,84 +228,92 @@ function Cadastro_Aluno(){
                             </div>
                         </section>
 
-                        <section id="info-medicas" className="flex justify-start items-start flex-col">
-                            <div>
-                                <label>Informações médicas</label>
-                                <h1>Este aluno vai fazer acompanhamento médico no pilates?</h1>
+                        <section id="info-medicas" className="flex justify-start items-start flex-col gap-5">
+                            <div className="flex flex-col gap-3">
+                                <label className={Estilizacoes.segundo_titulo_principal}>Informações médicas</label>
+                                <h1 className={Estilizacoes.titulo_segundario}>Este aluno vai fazer acompanhamento médico no pilates?</h1>
                                     <div>
-                                        <input type="radio" id="nao-info-medicas" name="info-medicas" defaultChecked />
-                                        <label htmlFor="nao-info-medicas">Não</label>
+                                        <input type="radio" id="nao-info-medicas" name="info-medicas"
+                                        onClick={() => permitirInputs(false)}
+                                        className="scale-150 accent-[var(--destaque)]"
+                                        />
+                                        <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
                                     </div>
                                     
                                     <div>
-                                        <input type="radio" id="sim-info-medicas" name="info-medicas" />
-                                        <label htmlFor="sim-info-medicas">Sim, ele(a) tem acompanhamento médico</label>
+                                        <input type="radio" id="sim-info-medicas" name="info-medicas"
+                                        className="scale-150 accent-[var(--destaque)]" 
+                                        onClick={() => permitirInputs(true)}
+                                        />
+                                        <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
                                     </div>
                             </div>
 
-                            <div>
-                                <div>
-                                    <h1>Historico Médico</h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="img-hist-medico-input">
-                                        Selecione um documento ou imagem 
-                                    </label>
-                                    <input 
-                                    className=""
-                                    id="img-hist-medico-input" 
-                                    type="file"
-                                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    />
-                                </div>
-                            </div>
+                            {permissao && (
+                                <div>                        
+                                    <div>
+                                        <div>
+                                            <h1>Historico Médico</h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col">
+                                            <label htmlFor="img-hist-medico-input">
+                                                Selecione um documento ou imagem 
+                                            </label>
+                                            <input 
+                                            className=""
+                                            id="img-hist-medico-input" 
+                                            type="file"
+                                            accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            />
+                                        </div>
+                                    </div>
 
-                            <div>
-                                <div>
-                                    <h1>Diagnóstico</h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="img-diagnostico-input">
-                                        Selecione um documento ou imagem 
-                                    </label>
-                                    <input 
-                                    className=""
-                                    id="img-diagnostico-input" 
-                                    type="file"
-                                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    />
-                                </div>
-                            </div>
+                                    <div>
+                                        <div>
+                                            <h1>Diagnóstico</h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col">
+                                            <label htmlFor="img-diagnostico-input">
+                                                Selecione um documento ou imagem 
+                                            </label>
+                                            <input 
+                                            className=""
+                                            id="img-diagnostico-input" 
+                                            type="file"
+                                            accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                            />
+                                        </div>
+                                    </div>
 
-                            <div>
-                                <div>
-                                    <h1>Medicamentos </h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="medicamentos-boxarea">
-                                        Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele utiliza
-                                    </label>
-                                    <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
-                                </div>
-                            </div>
+                                    <div>
+                                        <div>
+                                            <h1>Medicamentos </h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col">
+                                            <label htmlFor="medicamentos-boxarea">
+                                                Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele utiliza
+                                            </label>
+                                            <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
+                                        </div>
+                                    </div>
 
-                            <div className="flex justify-start items-start flex-col">
-                                <div>
-                                    <h1>Tratamento proposto  </h1>
+                                    <div className="flex justify-start items-start flex-col">
+                                        <div>
+                                            <h1>Tratamento proposto  </h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col">
+                                            <label htmlFor="medicamentos-boxarea">
+                                                Escreva abaixo qual é o tratamento proposto pelo seu medico(a) do aluno(a)
+                                            </label>
+                                            <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="medicamentos-boxarea">
-                                        Escreva abaixo qual é o tratamento proposto pelo seu medico(a) do aluno(a)
-                                    </label>
-                                    <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
-                                </div>
-                            </div>     
+                            )}     
                         </section>
 
-                        <section>
-                            <div>
-                                <button type="submit">Cadastrar</button>
-                            </div>
+                        <section onClick={() => console.log("certo")}>
+                            <Botao texto="Cadastrar" link="/"/>
                         </section>
 
                     </form>

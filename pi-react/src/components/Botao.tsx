@@ -14,7 +14,7 @@ export default function Botao({texto, link}: BotaoProps){
         <Link 
             className='w-full flex justify-center items-center bg-[var(--rosa-segundario)] 
             text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mb-5 mt-5
-            h-[50px]
+            h-[50px] cursor-poiter
             '
             
             to={link}
