@@ -8,6 +8,7 @@ export default function CadastroInicialPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-inter">
+      {/* Header */}
       <header className="flex items-center justify-between px-6 py-4">
         <div className="flex flex-col gap-2">
           <button
@@ -31,28 +32,33 @@ export default function CadastroInicialPage() {
         </h1>
       </header>
 
+      {/* Main */}
       <main className="flex flex-col items-center px-6 py-8 bg-white">
-        <h2 className="text-2xl text-[#832965] font-bold font-inter mb-8">
-          Cadastro
-        </h2>
+        <div className="w-full max-w-sm flex flex-col">
+          <h2 className="text-2xl text-[#832965] font-bold font-inter mb-8">
+            Cadastro
+          </h2>
 
-        <div className="flex flex-col gap-6 w-full max-w-sm">
-          <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
-            Aluno
-          </button>
+          <div className="flex flex-col gap-6 w-full">
+            <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
+              Aluno
+            </button>
 
-          <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
-            Instrutor
-          </button>
+            <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
+              Instrutor
+            </button>
 
-          <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
-            Recepcionista | Administrador
-          </button>
+            <button className="bg-[#832965] text-white font-inter py-4 rounded-md text-lg font-semibold hover:opacity-90">
+              Recepcionista | Administrador
+            </button>
+          </div>
         </div>
       </main>
 
+      {/* Footer */}
       <footer className="bg-[#832965] text-white mt-auto px-6 py-4">
         <div className="text-center font-italiana text-lg mb-2">Define Pilates</div>
+
         <div className="flex justify-center gap-4 text-sm font-inter mb-2">
           <a href="/" className="hover:underline">Pagina inicial</a>
           <a href="/user/login" className="hover:underline">Login</a>
