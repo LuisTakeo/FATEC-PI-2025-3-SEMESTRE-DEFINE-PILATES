@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Italiana&display=swap');
+
+.nav-bar{
+    min-height: 18vh;
+    width: 100%;
+    /* border: 1px solid red; */
+    display: flex;
+    color: var(--background);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0 0 30px 0;
+}
+
+.container-left{
+    display: flex;
+    flex-direction: column;
+    gap: 5; 
+    height: 100%;
+    min-width: 50%;
+    padding-right: 10px;
+
+
+    /* border: 1px solid purple; */
+}
+
+    .button-voltar{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        align-content: center;  
+        gap: 10px;
+        min-height: 40px;
+        height: 50%; 
+        max-width: 100%;
+        background-color: var(--rosa-recundario);
+        border-radius: 10px;
+        margin: 3%;
+        border: none;
+    }
+
+    .button-pag-inicial{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        align-content: center;  
+        min-height: 40px;
+        height: 50%; 
+        max-width: 100%;
+        background-color: var(--rosa-recundario);
+        border-radius: 10px;
+        margin: 3%;
+        border: none;
+    }
+
+.container-right{
+    display: flex;
+    flex-direction: column;
+    gap: 0; 
+    height: 100%;
+    width: 50%;
+    padding-left: 10px;
+
+
+    /* border: 1px solid yellow;    */
+}
+
+    .logo-container-right{
+        color: var(--destaque);
+        font-size: 2rem;
+        font-family: "Italiana";
+        font-weight: 100;
+        font-style: normal;
+        line-height: 1;
+    }
