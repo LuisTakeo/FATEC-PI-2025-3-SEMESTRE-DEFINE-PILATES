@@ -1,7 +1,6 @@
 services:
   # Laravel Backend
   laravel-backend:
-    cpus: 0.5
     build:
       context: ./Backend
       dockerfile: Dockerfile
@@ -25,8 +24,10 @@ services:
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=define_pilates_mongo
     depends_on:
-      - mysql
-      - mongodb
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
     networks:
       - app-network
 
@@ -67,9 +68,14 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./database/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 10s
 
   # MongoDB Database
   mongodb:
