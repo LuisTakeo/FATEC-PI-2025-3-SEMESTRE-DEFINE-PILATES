@@ -19,14 +19,21 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}  */
+}
+
 
 body {
   height: 100vh;
   width: 100vw;
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter';
-  font-size: 1rem;
-  padding: 8% 5% 0 5%;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-italiana {
+  font-family: var(--font-italiana), serif;
 }
