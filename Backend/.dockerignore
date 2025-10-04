@@ -1,4 +1,14 @@
-# Laravel Backend .dockerignore
+/.git
+/.gitignore
+/vendor
+/node_modules
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/tests
+/docker-compose.yml
+/.env*# Laravel Backend .dockerignore
 node_modules
 npm-debug.log
 vendor

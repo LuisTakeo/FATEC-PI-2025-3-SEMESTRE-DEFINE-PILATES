@@ -1,0 +1,2 @@
+admin:
+- Cadastro geral (aluno, recepcionista)
