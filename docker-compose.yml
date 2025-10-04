@@ -96,7 +96,8 @@ services:
       - app-network
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
+      # Interval aumentado para reduzir conexões e ruído de logs. Ajuste se precisar de detecção mais rápida.
+      interval: 30s
       timeout: 3s
       retries: 20
       start_period: 10s
@@ -107,6 +108,10 @@ services:
     image: mongo-express
     container_name: define-pilates-mongo-express
     restart: unless-stopped
+    # # Só será iniciado quando perfil 'tools' for usado:
+    # # docker compose --profile tools up -d mongo-express
+    # profiles:
+    #   - tools
     ports:
       - "8081:8081"
     environment:
