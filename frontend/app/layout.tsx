@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Italiana } from "next/font/google";
 import "./globals.css";
+import Header from "./components/layout/Header/Header"
+import Footer from "./components/layout/Footer/Footer"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
   subsets: ["latin"],
+  variable: "--font-dm-sans",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
 });
 
@@ -29,17 +29,14 @@ export const metadata: Metadata = {
   description: "Aplicação desenvolvida com Next.js",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${italiana.variable} font-inter`}
       >
         {children}
+        <Footer/>
       </body>
     </html>
   );

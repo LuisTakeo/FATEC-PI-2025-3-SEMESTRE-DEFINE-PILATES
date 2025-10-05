@@ -9,6 +9,7 @@ use App\Application\Ports\NoSQLPort;
 use App\Application\Services\PilatesApplicationService;
 use App\Adapters\Database\MySQLAdapter;
 use App\Adapters\Database\MongoDBAdapter;
+use App\Adapters\Database\NullNoSQLAdapter;
 
 /**
  * Hexagonal Architecture Service Provider
@@ -24,8 +25,13 @@ class HexagonalArchitectureProvider extends ServiceProvider
         // Bind SQL Port to MySQL Adapter
         $this->app->bind(SQLPort::class, MySQLAdapter::class);
 
-        // Bind NoSQL Port to MongoDB Adapter
-        $this->app->bind(NoSQLPort::class, MongoDBAdapter::class);
+        // Bind NoSQL Port to MongoDB Adapter when mongodb binding is available,
+        // otherwise use a Null adapter so the app can run without the package.
+        if ($this->app->bound('mongodb')) {
+            $this->app->bind(NoSQLPort::class, MongoDBAdapter::class);
+        } else {
+            $this->app->bind(NoSQLPort::class, NullNoSQLAdapter::class);
+        }
 
         // Bind Application Port to Application Service
         $this->app->bind(ApplicationPort::class, function ($app) {
