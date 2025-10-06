@@ -2,6 +2,7 @@ import OptionsForm from "./optionsForm"
 import Estilizacoes from "../../../model/Estilizacoes";
 import BotaoInput from "../../../components/BotaoInput";
 import Botao from "../../../components/Botao"
+import OptionsFormCidades from "./optionsFormCidades"
 import { useState } from "react";
 
 function Cadastro_Aluno(){
@@ -144,12 +145,12 @@ function Cadastro_Aluno(){
                                 <label htmlFor="img-postura" className={Estilizacoes.titulo_segundario}>
                                     Selecione um documento ou imagem 
                                 </label>
-                               <BotaoInput texto="Clique para selecionar"/>
+                               <BotaoInput texto="Clique para selecionar" id="img-postura"/>
                                
                             </div>
                         </section>
 
-                        <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-20">
+                        <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-5">
                             <div>
                                 <h1 className={Estilizacoes.segundo_titulo_principal}>Endereço</h1>
                             </div>
@@ -218,12 +219,9 @@ function Cadastro_Aluno(){
                                 </div>
                             </div>
 
-                            <div className="flex justify-start items-start flex-row">
-                                <div>
-
-                                </div>
-                                <div>
-
+                            <div className="flex justify-start items-start flex-row mb-8 w-full">
+                                <div id="input-city" className="w-full">
+                                    <OptionsFormCidades/>
                                 </div>
                             </div>
                         </section>
@@ -250,69 +248,85 @@ function Cadastro_Aluno(){
                             </div>
 
                             {permissao && (
-                                <div>                        
+                                <div className="flex flex-col gap-5 mt-5">                        
                                     <div>
                                         <div>
-                                            <h1>Historico Médico</h1>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Historico Médico</h1>
                                         </div>
                                         <div className="flex justify-start items-start flex-col">
-                                            <label htmlFor="img-hist-medico-input">
-                                                Selecione um documento ou imagem 
-                                            </label>
-                                            <input 
-                                            className=""
-                                            id="img-hist-medico-input" 
-                                            type="file"
-                                            accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                            />
+                                            <div className="flex justify-start items-start flex-col">
+                                                    <label htmlFor="historico-medico" className={Estilizacoes.titulo_segundario}>
+                                                        Selecione um documento ou imagem 
+                                                    </label>
+                                                <BotaoInput texto="Clique para selecionar" id="historico-medico"/>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div>
                                         <div>
-                                            <h1>Diagnóstico</h1>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Diegnóstico</h1>
                                         </div>
                                         <div className="flex justify-start items-start flex-col">
-                                            <label htmlFor="img-diagnostico-input">
-                                                Selecione um documento ou imagem 
-                                            </label>
-                                            <input 
-                                            className=""
-                                            id="img-diagnostico-input" 
-                                            type="file"
-                                            accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                            />
+                                            <div className="flex justify-start items-start flex-col">
+                                                    <label htmlFor="diegnostico" className={Estilizacoes.titulo_segundario}>
+                                                        Selecione um documento ou imagem 
+                                                    </label>
+                                                <BotaoInput texto="Clique para selecionar" id="diegnostico"/>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div className="flex flex-col gap-3 w-full">
                                         <div>
-                                            <h1>Medicamentos </h1>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Medicamentos </h1>
                                         </div>
-                                        <div className="flex justify-start items-start flex-col">
-                                            <label htmlFor="medicamentos-boxarea">
-                                                Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele utiliza
+                                        <div className="flex justify-start items-start flex-col gap-3">
+                                            <label htmlFor="medicamentos-boxarea"
+                                            className="text-[1.3rem] font-semibold text-[var(--foreground)]"
+                                            >
+                                                Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele(a) utiliza
                                             </label>
-                                            <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
+                                            <textarea 
+                                            name="medicamentos" 
+                                            id="medicamentos-boxarea"
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem]" 
+                                            ></textarea>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-start items-start flex-col">
+                                    <div className="flex flex-col gap-3 w-full">
                                         <div>
-                                            <h1>Tratamento proposto  </h1>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Tratamento Proposto</h1>
                                         </div>
-                                        <div className="flex justify-start items-start flex-col">
-                                            <label htmlFor="medicamentos-boxarea">
-                                                Escreva abaixo qual é o tratamento proposto pelo seu medico(a) do aluno(a)
+                                        <div className="flex justify-start items-start flex-col gap-3">
+                                            <label htmlFor="medicamentos-boxarea"
+                                            className="text-[1.3rem] font-semibold text-[var(--foreground)]"
+                                            >
+                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                            
                                             </label>
-                                            <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
+                                            <textarea 
+                                            name="medicamentos" 
+                                            id="medicamentos-boxarea"
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem]" 
+                                            ></textarea>
                                         </div>
                                     </div>
                                 </div>
                             )}     
                         </section>
 
-                        <section onClick={() => console.log("certo")}>
+                        <section 
+                        className="mt-10"
+                        onClick={() => console.log("certo")}>
                             <Botao texto="Cadastrar" link="/"/>
                         </section>
 

@@ -35,7 +35,7 @@ function Header(){
                 </Link>        
                 </nav>
 
-                <a className="text-bold flex order-first lg:order-none lg:w-1/5 italiana-regular text-[var(--destaque)] lg:items-center lg:justify-center mb-4 md:mb-0">
+                <a href="/" className="text-bold flex order-first lg:order-none lg:w-1/5 italiana-regular text-[var(--destaque)] lg:items-center lg:justify-center mb-4 md:mb-0">
                 <span className="ml-3 text-[2rem]">Define Pilates</span>
                 </a>
                 <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">

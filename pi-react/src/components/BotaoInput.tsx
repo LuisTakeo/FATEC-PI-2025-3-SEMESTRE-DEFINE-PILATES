@@ -1,26 +1,34 @@
 import { useState } from "react";
 import "../index.css"
+import {comprimirImagem} from "../services/comprimirImagem"
 
 interface BotaoProps {
     texto: string;
+    id: string;
 }
 
-export default function BotaoInput({texto}: BotaoProps){
+export default function BotaoInput({texto, id}: BotaoProps){
     
     const [arquivoSelecionado, setArquivoSelecionado] = useState<File | null>(null)
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]){
             setArquivoSelecionado(e.target.files[0])
             console.log(e.target.files[0])
+            
+            const arquivoOriginal = e.target.files[0];
+            const arquivoComprimido = await comprimirImagem(arquivoOriginal);
+            
+            console.log("Arquivo original:", arquivoOriginal.size);
+            console.log("Arquivo comprimido:", arquivoComprimido.size);
         }
     }
 
     return(  
         <>
             <div className="w-full h-[50px] mb-8 cursor-poiter" >
-                <label htmlFor="input"
-                    className="w-full flex justify-center items-center bg-[var(--rosa-segundario)] 
+                <label htmlFor={id}
+                    className="w-full flex justify-center items-center bg-[var(--azul-segundario)] 
                             text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mt-5
                             h-[50px]"
                     >
@@ -28,9 +36,9 @@ export default function BotaoInput({texto}: BotaoProps){
                 </label>
                 <input
                     className="hidden "
-                    id="input" 
+                    id={id} 
                     type="file"
-                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    accept="image/*"
                     onChange={handleChange}
                 />
             </div>
