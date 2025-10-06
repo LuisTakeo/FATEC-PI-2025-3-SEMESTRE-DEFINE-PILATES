@@ -13,14 +13,14 @@ class UserTgi extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens;
 
     protected $table = 'users';
-    protected $primaryKey = 'id_users'; 
+    protected $primaryKey = 'Id_users'; 
 
     protected $fillable = [
         'nameuser',
         'passworduser',
         'typeuser',
         'statususer',
-        'email_sent',
+        'message_sent',
     ];
 
     public function collaborators(): HasMany
