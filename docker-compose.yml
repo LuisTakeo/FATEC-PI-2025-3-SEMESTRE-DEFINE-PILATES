@@ -124,9 +124,40 @@ services:
     networks:
       - app-network
 
+  # Frontend React (Vite) - Projeto pi-react (opcional)
+  pi-react:
+    # Para subir somente quando necessário, descomente o bloco profiles abaixo
+    # profiles:
+    #   - tools
+    build:
+      context: ./pi-react
+      dockerfile: Dockerfile
+    container_name: define-pilates-pi-react
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+    command: ["npm","run","dev","--","--host","0.0.0.0"]
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./pi-react:/app:cached
+      - pi_react_node_modules:/app/node_modules
+    depends_on:
+      - laravel-backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5173 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - app-network
+
 volumes:
   mysql_data:
   mongodb_data:
+  pi_react_node_modules:
 
 networks:
   app-network:

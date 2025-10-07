@@ -8,13 +8,30 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
+  pi-react:
     build:
       context: .
+      target: dev
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
+    command: ["npx","vite","--host","0.0.0.0"]
     ports:
-      - 5173:5173
+      - "5173:5173"
+    # Bind mount do código para hot reload imediato
+    volumes:
+      - .:/app:cached
+      # Cache opcional dos módulos para acelerar rebuilds (não persiste em prod)
+      - node_modules_cache:/app/node_modules
+    # Healthcheck simples (Vite responde cabeçalho rápido)
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://127.0.0.1:5173 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  node_modules_cache:
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
