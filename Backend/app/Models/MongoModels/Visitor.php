@@ -1,10 +1,20 @@
 <?php
 
-namespace App\Models\ModelsMongo;
+namespace App\Models\MongoModels;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Visitor extends Model
 {
-    //
+    protected $connection = 'mongodb';
+    protected $collection = 'visitors_mongo';
+
+    protected $fillable = [
+        'nome_completo',
+        'telefone',
+        'data_visita',
+        'forma_conhecimento',
+        'status',
+        'observacoes'
+    ];
 }
