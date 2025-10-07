@@ -10,3 +10,6 @@ Route::get('/', function () {
 
 // Simple controller-backed hello endpoint
 Route::get('/hello', [PilatesController::class, 'hello']);
+
+
+require __DIR__.'/api/students.php';

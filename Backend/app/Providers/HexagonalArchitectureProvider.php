@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Application\Ports\StudentServiceContract;
+use App\Application\Services\Student\StudentService;
 use Illuminate\Support\ServiceProvider;
 use App\Application\Ports\ApplicationPort;
 use App\Application\Ports\SQLPort;
@@ -40,6 +42,14 @@ class HexagonalArchitectureProvider extends ServiceProvider
                 $app->make(NoSQLPort::class)
             );
         });
+
+        $this->app->bind(StudentServiceContract::class,
+            function ($app) {
+                return new StudentService(
+                    $app->make(SQLPort::class),
+                    $app->make(NoSQLPort::class)
+                );
+            });
     }
 
     /**
