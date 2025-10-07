@@ -7,11 +7,11 @@ use App\Adapters\Http\StudentControllerAdapter;
 Route::prefix('students')->name('students.')->group(function () {
 
     Route::get('/',        [StudentControllerAdapter::class, 'index'])->name('index');
-    Route::post('/',       [StudentControllerAdapter::class, 'store'])->name('store');
-    Route::get('{id}',     [StudentControllerAdapter::class, 'show'])->name('show');
-    Route::put('{id}',     [StudentControllerAdapter::class, 'update'])->name('update');
-    Route::delete('{id}',  [StudentControllerAdapter::class, 'destroy'])->name('destroy');
+    Route::post('/save',       [StudentControllerAdapter::class, 'store'])->name('store');
+    // Route::get('{id}',     [StudentControllerAdapter::class, 'show'])->name('show');
+    // Route::put('{id}',     [StudentControllerAdapter::class, 'update'])->name('update');
+    // Route::delete('{id}',  [StudentControllerAdapter::class, 'destroy'])->name('destroy');
 
     // Endpoints específicos (exemplo)
-    Route::post('{id}/activate', [StudentControllerAdapter::class, 'activate'])->name('activate');
+    // Route::post('{id}/activate', [StudentControllerAdapter::class, 'activate'])->name('activate');
 });
