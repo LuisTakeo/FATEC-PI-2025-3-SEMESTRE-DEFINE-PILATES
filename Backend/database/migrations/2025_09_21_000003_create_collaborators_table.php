@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('collaborators', function (Blueprint $table) {
             $table->id('Id_collaborators');
-            $table->unsignedBigInteger('id_users')->index();
+            $table->unsignedBigInteger('Id_users')->index();
             $table->string('typecollaborator', 50)->nullable();
             $table->date('birthday')->nullable();
             $table->string('fulladdress', 100)->nullable();
