@@ -16,6 +16,11 @@ class StudentControllerAdapter extends BaseController
         $this->studentService = $studentService;
     }
 
+    public function index(Request $request)
+    {
+        return "It works";
+    }
+
     public function store(Request $request)
     {
         var_dump($request->all());

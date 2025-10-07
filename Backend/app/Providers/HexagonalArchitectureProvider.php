@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Adapters\Database\StudentMySQLAdapter;
+use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
 use App\Application\Services\Student\StudentService;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +28,8 @@ class HexagonalArchitectureProvider extends ServiceProvider
     {
         // Bind SQL Port to MySQL Adapter
         $this->app->bind(SQLPort::class, MySQLAdapter::class);
-
+        $this->app->bind(StudentRepositoryPort::class, StudentMySQLAdapter::class);
+        
         // Bind NoSQL Port to MongoDB Adapter when mongodb binding is available,
         // otherwise use a Null adapter so the app can run without the package.
         if ($this->app->bound('mongodb')) {
@@ -36,18 +39,13 @@ class HexagonalArchitectureProvider extends ServiceProvider
         }
 
         // Bind Application Port to Application Service
-        $this->app->bind(ApplicationPort::class, function ($app) {
-            return new PilatesApplicationService(
-                $app->make(SQLPort::class),
-                $app->make(NoSQLPort::class)
-            );
-        });
+
 
         $this->app->bind(StudentServiceContract::class,
             function ($app) {
                 return new StudentService(
-                    $app->make(SQLPort::class),
-                    $app->make(NoSQLPort::class)
+                    $app->make(StudentRepositoryPort::class),
+                    $app->make(NoSQLPort::class),
                 );
             });
     }

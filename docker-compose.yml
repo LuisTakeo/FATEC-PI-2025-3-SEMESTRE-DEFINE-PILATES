@@ -32,26 +32,26 @@ services:
       - app-network
 
   # Next.js Frontend
-  nextjs-frontend:
-    cpus: 0.5
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: define-pilates-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: ${NODE_ENV}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      - laravel-backend
-    networks:
-      - app-network
+  # nextjs-frontend:
+  #   cpus: 0.5
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: define-pilates-frontend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     NODE_ENV: ${NODE_ENV}
+  #     NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #     - /app/.next
+  #   depends_on:
+  #     - laravel-backend
+  #   networks:
+  #     - app-network
 
   # MySQL Database
   mysql:
