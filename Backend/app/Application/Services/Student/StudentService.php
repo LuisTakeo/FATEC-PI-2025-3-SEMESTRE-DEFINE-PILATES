@@ -2,6 +2,7 @@
 
 namespace App\Application\Services\Student;
 
+use App\Adapters\Http\StudentDTORequest;
 use App\Application\Ports\NoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
@@ -23,5 +24,15 @@ class StudentService implements StudentServiceContract
     public function example(array $input): array
     {
         return ['ok' => true];
+    }
+
+    public function registerStudent(StudentDTORequest $request): array
+    {
+
+        return [
+        'message' => 'Acessando a Service',
+        'data' => $request->json()->all(),
+        'status' => 'success'
+    ];
     }
 }
