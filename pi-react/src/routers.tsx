@@ -10,12 +10,12 @@ function MainRoutes() {
         <Routes>
             {/* Rotas públicas ou acesso a todos */}
             <Route path="/" element={<PaginaInicio />} />
-            <Route path="/Cadastro_Aluno" element={<Cadastro_Aluno />} />
+            <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
 
-            <Route path="/Calendario_Aluno" element={<Calendario_Aluno/>}/>
+            <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
 
-            <Route path="/Login" element={<Login/>}/>
-            <Route path="/Login_Funcionario" element={<Login_Funcionario/>}/>
+            <Route path="/login/aluno" element={<Login/>}/>
+            <Route path="/login/funcionario" element={<Login_Funcionario/>}/>
         </Routes>
 
         // {/* SÓ ADMIN LOGADO */}

@@ -1,6 +1,6 @@
 // reutilizar
 
-function OptionsForm(){
+function Options_categprofis(){
     return(
         <div className="flex justify-start items-start flex-col gap-3  w-full">
             <label htmlFor="categ-profis" className="text-[1.2rem]">
@@ -36,4 +36,4 @@ function OptionsForm(){
     )
 }
 
-export default OptionsForm;
+export default Options_categprofis;

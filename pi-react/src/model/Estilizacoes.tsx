@@ -4,6 +4,7 @@ interface Estilizacoes {
     segundo_titulo_principal: string;
     titulo_segundario: string;
     container_main: string;
+    estilizacao_input: string;
 }
 
 const Estilizacoes = {
@@ -13,7 +14,11 @@ const Estilizacoes = {
     titulo_segundario: "text-[1.3rem] font-semibold text-[var(--foreground)]",
 
     //container
-    container_main: "flex justify-start items-start flex-col gap-5 w-full h-full"
+    container_main: "flex justify-start items-start flex-col gap-5 w-full h-full",
+
+    //input
+    estilizacao_input: "bg-[var(--input-background)] rounded-[7px] p-3 text-lg h-[50px] focus:border-none"
+
 }
 
 export default Estilizacoes

@@ -1,7 +1,7 @@
 import "../../index.css";
 import "./stylesHeader.css"
 "use client";
-import Botao from "../Botao"
+import Botao from "../Cadastros/Botao"
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Header(){
