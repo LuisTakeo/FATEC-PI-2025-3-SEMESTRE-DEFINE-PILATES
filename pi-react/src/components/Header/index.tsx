@@ -42,7 +42,7 @@ function Header(){
 
                 {Pagina && (
                     <div className="w-[200px]">
-                        <Botao texto="Acessar conta" link="/Login" />
+                        <Botao texto="Acessar conta" link="/login/aluno" />
                     </div>
                 )}
 
