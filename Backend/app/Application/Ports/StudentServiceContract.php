@@ -2,10 +2,10 @@
 
 namespace App\Application\Ports;
 
-use App\Adapters\Http\StudentDTORequest;
+use App\Application\DTOs\StudentDTO;
 
 interface StudentServiceContract
 {
     // Define service contract methods here
-    public function registerStudent(StudentDTORequest $request): array;
+    public function registerStudent(StudentDTO $studentDTO): array;
 }
