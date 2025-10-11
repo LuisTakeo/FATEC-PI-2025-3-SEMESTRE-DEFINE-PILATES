@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export default function LoginPage() {
+export default function RecoveryPhonePage() {
   const router = useRouter();
 
   return (
@@ -24,59 +23,46 @@ export default function LoginPage() {
       </header>
 
       {/* Main */}
-      <main className="flex flex-col items-center px-6 py-4">
-        <div className="flex w-full max-w-sm justify-between items-end mb-6">
-          <h2 className="text-2xl text-[var(--destaque)] font-bold font-inter leading-tight">
-            Entre <br /> na sua conta
-          </h2>
-          <img
-            src="/pilates.png"
-            alt="Pilates Illustration"
-            className="w-32 h-32 object-contain -mt-4"
-          />
-        </div>
+      <main className="flex flex-col items-center justify-center flex-1 px-6 py-6">
+        <img
+          src="/envelope.png"
+          alt="Telefone"
+          className="w-32 h-32 object-contain mb-6"
+        />
 
-        <div className="w-full max-w-sm flex flex-col gap-4">
-          <p className="text-[var(--destaque)] text-lg font-semibold font-inter">
-            Acessar
+        <div className="w-full max-w-sm flex flex-col">
+          <h2 className="text-2xl font-bold text-[var(--destaque)] mb-2 text-left">
+            Digite seu telefone
+          </h2>
+          <p className="text-[var(--color-foreground)] mb-6 text-left">
+            Para receber o seu código de segurança por SMS
           </p>
 
-          <div className="flex flex-col gap-3">
-            <label className="font-inter text-[var(--color-foreground)] text-sm">
-              Escreva seu e-mail
-            </label>
-            <input
-              type="email"
-              className="bg-[var(--input-background)] px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)]"
-            />
-
-            <label className="font-inter text-[var(--color-foreground)] text-sm">
-              Escreva sua senha
-            </label>
-            <input
-              type="password"
-              className="bg-[var(--input-background)] px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)]"
-            />
-
-            <a
-              href="#"
-              className="text-[var(--destaque)] font-inter text-sm underline hover:opacity-90"
-            >
-              Esqueci a minha senha
-            </a>
-          </div>
+          <input
+            type="tel"
+            placeholder="(99) 99999-9999"
+            maxLength={14}
+            className="w-full bg-[var(--input-background)] px-4 py-3 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--destaque)]"
+            onChange={(e) => {
+              let value = e.target.value.replace(/\D/g, "");
+              if (value.length > 11) value = value.slice(0, 11);
+              value = value.replace(/^(\d{2})(\d)/g, "($1) $2");
+              value = value.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+              e.target.value = value;
+            }}
+          />
 
           <button
-            type="submit"
-            className="bg-[var(--destaque)] text-white font-inter py-3 rounded-md mt-2 font-semibold hover:opacity-90"
+            onClick={() => router.push("/user/recuperacao/codigo")}
+            className="bg-[var(--destaque)] text-white font-inter py-3 rounded-md hover:opacity-90 w-full font-semibold"
           >
-            Entrar
+            Solicitar código
           </button>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-[var(--destaque)] text-white mt-auto px-6 py-6">
+      <footer className="bg-[var(--destaque)] text-white px-6 py-6">
         <div className="text-center font-italiana text-lg mb-4">
           Define Pilates
         </div>
