@@ -12,3 +12,4 @@ Route::get('/', function () {
 // Route::get('/hello', [PilatesController::class, 'hello']);
 
 require __DIR__.'/api/students.php';
+require __DIR__.'/api/instructors.php';
