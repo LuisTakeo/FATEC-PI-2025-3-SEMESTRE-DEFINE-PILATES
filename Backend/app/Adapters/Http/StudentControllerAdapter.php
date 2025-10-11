@@ -1,35 +1,87 @@
 <?php
+// Backend/app/Adapters/Http/StudentControllerAdapter.php
 
 namespace App\Adapters\Http;
 
 use App\Application\Ports\StudentServiceContract;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use App\Adapters\Http\StudentRegisterRequest;
-use Illuminate\Support\Facades\Log;
+use OpenApi\Attributes as OA; // ✅ Attributes ao invés de Annotations
 
-
+#[OA\Info(
+    title: "Define Pilates API",
+    version: "1.0.0",
+    description: "API documentation for Define Pilates management system"
+)]
+#[OA\Server(
+    url: "http://localhost:8000",
+    description: "Development Server"
+)]
+#[OA\Tag(
+    name: "Students",
+    description: "Student management operations"
+)]
 class StudentControllerAdapter extends BaseController
 {
-    private StudentServiceContract $studentService;
-    public function __construct(StudentServiceContract $studentService)
-    {
-        // Inject dependencies here
-        $this->studentService = $studentService;
-    }
+    public function __construct(
+        private StudentServiceContract $studentService
+    ) {}
 
+    #[OA\Get(
+        path: "/api/students",
+        operationId: "getStudents",
+        tags: ["Students"],
+        summary: "Test endpoint"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Success response",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "message", type: "string", example: "It works INDEX EEEEEEEEE")
+            ]
+        )
+    )]
     public function index(Request $request)
     {
-        return "It works INDEX EEEEEEEEE";
+        return response()->json(["message" => "It works INDEX EEEEEEEEE"]);
     }
 
-    public function postRequest(StudentRegisterRequest $request)
+    #[OA\Post(
+        path: "/api/students/save",
+        operationId: "registerStudent",
+        tags: ["Students"],
+        summary: "Register a new student"
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "name", type: "string", example: "João Silva"),
+                new OA\Property(property: "phone", type: "string", example: "11999999999"),
+                new OA\Property(property: "password", type: "string", example: "abc123A"),
+                new OA\Property(property: "cpf", type: "string", example: "12345678901"),
+                new OA\Property(property: "profession", type: "string", example: "Engenheiro"),
+                new OA\Property(property: "birth_date", type: "string", example: "15-01-1990")
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: "Success",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success")
+            ]
+        )
+    )]
+    public function postRequest(StudentRegisterRequest $request): JsonResponse
     {
-        // Log::info('StudentController postWithValidation foi alcançado!', [
-        //     'raw_data' => $request->all(),
-        //     'input' => $request->input(),
-        //     'json' => $request->json()->all()
-        // ]);
-        return response()->json($this->studentService->registerStudent($request->toDTO()));
+        $result = $this->studentService->registerStudent($request->toDTO());
+        $status = $result['status'] === 'success' ? 201 : 422;
+        
+        return response()->json($result, $status);
     }
 }

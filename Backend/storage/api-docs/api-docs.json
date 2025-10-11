@@ -2,47 +2,79 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Define Pilates API",
-        "description": "API documentation for Define Pilates (generated).",
+        "description": "API documentation for Define Pilates management system",
         "version": "1.0.0"
     },
     "servers": [
         {
             "url": "http://localhost:8000",
-            "description": "Local server"
+            "description": "Development Server"
         }
     ],
     "paths": {
-        "/api/users": {
+        "/api/students": {
             "get": {
-                "summary": "Get all users",
-                "operationId": "f94626a07af90577e39a22acf8cee1cf",
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Test endpoint",
+                "operationId": "getStudents",
                 "responses": {
                     "200": {
-                        "description": "Users list"
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "It works INDEX EEEEEEEEE"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/api/students/save": {
             "post": {
-                "summary": "Create new user",
-                "operationId": "690baa20e7558a0a2a66b65b6be9f895",
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Register a new student",
+                "operationId": "registerStudent",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "email",
-                                    "password"
-                                ],
                                 "properties": {
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "João Silva"
                                     },
-                                    "email": {
-                                        "type": "string"
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "11999999999"
                                     },
                                     "password": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "abc123A"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "profession": {
+                                        "type": "string",
+                                        "example": "Engenheiro"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "example": "15-01-1990"
                                     }
                                 },
                                 "type": "object"
@@ -52,132 +84,38 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
-                    }
-                }
-            }
-        },
-        "/api/users/{id}": {
-            "get": {
-                "summary": "Get user by ID",
-                "operationId": "16e454195e54364b09ba4ac1116a8e0a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
                         }
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User found"
-                    }
-                }
-            },
-            "put": {
-                "summary": "Update user",
-                "operationId": "1d952e99ac98a8da1cc942ca5f7f8566",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User updated"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete user",
-                "operationId": "7342b6673b02b4f331d9d2fc0c0ed1f9",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User deleted"
-                    }
                 }
             }
-        },
-        "/api/classes": {
-            "get": {
-                "summary": "Get all Pilates classes",
-                "operationId": "50b97475998a7e9e27cb2c699ee48b3f",
-                "responses": {
-                    "200": {
-                        "description": "Classes list"
-                    }
-                }
-            },
-            "post": {
-                "summary": "Create new Pilates class",
-                "operationId": "c0c123040a6280c0283e7a69b42790fd",
-                "responses": {
-                    "201": {
-                        "description": "Class created successfully"
-                    }
-                }
-            }
-        },
-        "/api/classes/{id}": {
-            "get": {
-                "summary": "Get Pilates class by ID",
-                "operationId": "8a823e1466db63453a74c8da6abcd637",
-                "responses": {
-                    "200": {
-                        "description": "Class found"
-                    }
-                }
-            }
-        },
-        "/api/classes/available": {
-            "get": {
-                "summary": "Get available Pilates classes",
-                "operationId": "e119564472db83127ac17172e5d08fc2",
-                "responses": {
-                    "200": {
-                        "description": "Available classes list"
-                    }
-                }
-            }
-        },
-        "/api/bookings": {
-            "post": {
-                "summary": "Book user to class",
-                "operationId": "a163d7a0c7af13208c24563535b514f2",
-                "responses": {
-                    "201": {
-                        "description": "Booking created successfully"
-                    }
-                }
-            }
-        },
-        "/api/users/{userId}/classes": {
-            "get": {
-                "summary": "Get classes by user",
-                "operationId": "3f94f5061fca80b379e9441d90b51398",
-                "responses": {
-                    "200": {
-                        "description": "User classes list"
-                    }
-                }
+        }
+    },
+    "tags": [
+        {
+            "name": "Students",
+            "description": "Student management operations"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
     }
