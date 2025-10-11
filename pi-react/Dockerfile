@@ -8,7 +8,7 @@
 ###################################################################################################
 
 ARG NODE_VERSION=22.14.0
-FROM node:${NODE_VERSION}-alpine
+FROM node:22.14.0-alpine
 
 WORKDIR /app
 ENV NODE_ENV=development

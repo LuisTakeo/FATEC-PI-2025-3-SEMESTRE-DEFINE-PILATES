@@ -5,6 +5,8 @@ namespace App\Adapters\Http;
 use App\Application\Ports\StudentServiceContract;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use App\Adapters\Http\StudentDTORequest;
+use Illuminate\Support\Facades\Log;
 
 
 class StudentControllerAdapter extends BaseController
@@ -18,12 +20,16 @@ class StudentControllerAdapter extends BaseController
 
     public function index(Request $request)
     {
-        return "It works";
+        return "It works INDEX EEEEEEEEE";
     }
 
-    public function store(Request $request)
+    public function postRequest(StudentDTORequest $request)
     {
-        var_dump($request->all());
-        return "It Works";
+        // Log::info('StudentController postWithValidation foi alcançado!', [
+        //     'raw_data' => $request->all(),
+        //     'input' => $request->input(),
+        //     'json' => $request->json()->all()
+        // ]);
+        return response()->json($this->studentService->registerStudent($request));
     }
 }

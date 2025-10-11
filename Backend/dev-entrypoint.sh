@@ -17,5 +17,11 @@ fi
 echo "[dev] Executando migrations (ignorado se falhar)"
 php artisan migrate --force || true
 
+echo "[dev] Limpando caches (rotas, config, views, eventos)"
+php artisan optimize:clear || true
+
+echo "[dev] Rotas registradas:"
+php artisan route:list || true
+
 echo "[dev] Iniciando servidor artisan em 0.0.0.0:8000"
 exec php artisan serve --host=0.0.0.0 --port=8000
