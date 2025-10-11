@@ -17,6 +17,7 @@ export default async function submitForm(
     });
 
     console.log(list)
+    console.log(FormData)
 
     list.forEach(f => f.set(f.value instanceof Object ? {} : ""));
 }

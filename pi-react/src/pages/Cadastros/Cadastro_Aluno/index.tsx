@@ -44,6 +44,7 @@ function Cadastro_Aluno(){
         { value: tratProposto, set: setTratProposto },
         { value: arquivoComprimido, set: setArquivoComprimido },
         { value: categoria, set: setCategoria},
+        { value: permissao, set: setPermissao}
     ] 
 
     console.log("Quantidade de arquivos:", Object.keys(arquivoComprimido).length);
@@ -102,6 +103,7 @@ function Cadastro_Aluno(){
                                         pattern=".*"
                                         placeholder = "DDD"
                                         size = "w-full"
+                                        maxLength={4}
                                     />
                                 </div>
 
@@ -133,6 +135,7 @@ function Cadastro_Aluno(){
                                             pattern="[.-0-9]+"
                                             placeholder = "Digite o CPF"
                                             size = "w-full"
+                                            maxLength={11}
                                         />
                                     </div>
 
@@ -145,6 +148,7 @@ function Cadastro_Aluno(){
                                             type = "date"
                                             pattern="[0-9]+"
                                             size = "w-full"
+                                            maxLength={8}
                                         />
                                     </div>
                             </div>
@@ -178,6 +182,7 @@ function Cadastro_Aluno(){
                                     pattern="[-0-9]+"
                                     placeholder = "CEP"
                                     size = "w-full"
+                                    maxLength={8}
                                 />
                             </div>
 

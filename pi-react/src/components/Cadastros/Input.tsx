@@ -10,7 +10,7 @@ interface InputProps {
     pattern?: string;
     placeholder?: string;
     size?: string;
-    
+    maxLength?: number
 }
 
 export default function Input({
@@ -21,7 +21,8 @@ export default function Input({
     type = "text",
     pattern = ".*",
     placeholder = "",
-    size = ""
+    size = "",
+    maxLength = 500
 }: InputProps) {
 
     return (
@@ -35,6 +36,7 @@ export default function Input({
                     type={type}
                     pattern={pattern}
                     placeholder={placeholder}
+                    maxLength={maxLength}
                     className={`${Estilizacoes.estilizacao_input} ${size}`}
                 />
             </div>
