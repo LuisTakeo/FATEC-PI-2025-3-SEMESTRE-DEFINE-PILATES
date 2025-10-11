@@ -21,6 +21,12 @@ class UserTgi extends Authenticatable
         'typeuser',
         'statususer',
         'message_sent',
+        'birthdate'
+    ];
+
+    protected $casts = [
+        'birthdate' => 'date',
+        'message_sent' => 'boolean',
     ];
 
     public function collaborators(): HasMany
