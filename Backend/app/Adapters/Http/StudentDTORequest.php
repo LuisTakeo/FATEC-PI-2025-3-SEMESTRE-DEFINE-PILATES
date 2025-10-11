@@ -17,10 +17,24 @@ class StudentDTORequest extends FormRequest
     {
         return [
             'name'       => ['required','string','max:255'],
-            'email'      => ['required','email','max:255'],
-            'phone'      => ['nullable','string','max:30'],
-            'birth_date' => ['nullable','date'],
-            'gender'     => ['nullable','in:M,F,O'],
+            'phone'      => [
+                'required',
+                'string',
+                'regex:/^(\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$/'
+            ],
+            'password' => ['required', 'string',''],
+            'cpf' => ['required','string',''],
+            'profession' => ['required','string',''],
+            // 'birth_date' => ['required','date'],
+            // 'gender'     => ['nullable','in:M,F,O'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'phone.required' => 'O telefone celular é obrigatório.',
+            'phone.regex' => 'Formato inválido. Use: 11999999999 ou (11)99999-9999',
         ];
     }
 
