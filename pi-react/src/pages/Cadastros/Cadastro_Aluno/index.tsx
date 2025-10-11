@@ -3,6 +3,7 @@ import Estilizacoes from "../../../model/Estilizacoes";
 import Input_Arquivo from "../../../components/Cadastros/Input_Arquivo";
 import Botao from "../../../components/Cadastros/Botao"
 import Input from "../../../components/Cadastros/Input"
+import inputCPF from "../../../services/inputCPF"
 import { useState } from "react";
 
 function Cadastro_Aluno(){
@@ -57,7 +58,7 @@ function Cadastro_Aluno(){
                                     value={nome}
                                     onChange={setNome}
                                     type = "text"
-                                    pattern="[-a-zA-Z0-9/]+"
+                                    pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite o nome"
                                     size = "w-full"
                                 />
@@ -111,9 +112,11 @@ function Cadastro_Aluno(){
                                             id="cpf"
                                             label="CPF"
                                             value={cpf}
-                                            onChange={setCPF}
+                                            onChange={(valor) =>{
+                                                setCPF(inputCPF(valor));
+                                            }}
                                             type = "text"
-                                            pattern="[0-9]+"
+                                            pattern="[.-0-9]+"
                                             placeholder = "Digite o CPF"
                                             size = "w-full"
                                         />
