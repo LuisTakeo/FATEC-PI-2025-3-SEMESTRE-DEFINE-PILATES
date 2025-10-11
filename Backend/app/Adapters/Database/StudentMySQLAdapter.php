@@ -19,6 +19,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
         // Inject dependencies here
     }
 
+
     public function create(StudentDTO $studentDTO): bool
     {
         try {
