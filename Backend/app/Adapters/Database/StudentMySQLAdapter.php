@@ -7,6 +7,8 @@ use App\Application\Ports\StudentRepositoryPort;
 use App\Models\ProfessionClassification;
 use App\Models\Student;
 use App\Models\UserTgi;
+use DB;
+use Exception;
 use Log;
 
 class StudentMySQLAdapter implements StudentRepositoryPort
@@ -20,18 +22,15 @@ class StudentMySQLAdapter implements StudentRepositoryPort
     public function create(StudentDTO $studentDTO): bool
     {
         try {
-            return DB::transaction(function () use ($studentDTO) {
-                
-                // ✅ 1. Buscar ou criar ProfessionClassification
+            return DB::transaction(function () use ($studentDTO) {                
                 $professionClassId = $this->getOrCreateProfessionClassification($studentDTO->profession);
                 
-                // ✅ 2. Criar UserTgi (telefone como login)
                 $userTgi = UserTgi::create([
-                    'nameuser' => $studentDTO->phone,        // Telefone como login
-                    'passworduser' => $studentDTO->password, // Senha já hasheada
-                    'typeuser' => 'student',                 // Tipo fixo
-                    'statususer' => 'active',                // Status padrão
-                    'message_sent' => null,                  // Padrão null
+                    'nameuser' => $studentDTO->phone,        
+                    'passworduser' => $studentDTO->password,
+                    'typeuser' => 'student',
+                    'statususer' => 'active',
+                    'message_sent' => false,
                     'birthdate' => $studentDTO->birthDate->format('Y-m-d') // Formato para banco
                 ]);
                 
@@ -52,7 +51,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                 return true;
             });
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to create student', [
                 'error' => $e->getMessage(),
                 'student_data' => [
