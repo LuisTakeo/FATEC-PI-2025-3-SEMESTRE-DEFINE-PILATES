@@ -2,11 +2,12 @@
 
 namespace App\Adapters\Http;
 
+use App\Application\DTOs\StudentDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Adapters\Http\Exceptions\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 
-class StudentDTORequest extends FormRequest
+class StudentRegisterRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -60,5 +61,10 @@ class StudentDTORequest extends FormRequest
             $validator->errors()->toArray(),
             'Student validation failed'
         );
+    }
+
+    public function toDTO(): StudentDTO
+    {
+        return StudentDTO::fromArray($this->validated());
     }
 }
