@@ -17,7 +17,8 @@ const Estilizacoes = {
     container_main: "flex justify-start items-start flex-col gap-5 w-full h-full",
 
     //input
-    estilizacao_input: "bg-[var(--input-background)] rounded-[7px] p-3 text-lg h-[50px] focus:border-none"
+    estilizacao_input: 
+    "bg-[var(--input-background)] rounded-[7px] p-3 text-lg h-[50px] focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] "
 
 }
 

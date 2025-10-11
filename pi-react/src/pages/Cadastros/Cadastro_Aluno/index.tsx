@@ -4,36 +4,50 @@ import Input_Arquivo from "../../../components/Cadastros/Input_Arquivo";
 import Botao from "../../../components/Cadastros/Botao"
 import Input from "../../../components/Cadastros/Input"
 import inputCPF from "../../../services/inputCPF"
+import submitForm from "../../../services/submitForm"
 import { useState } from "react";
 
 function Cadastro_Aluno(){
     
     const [permissao, setPermissao] = useState(false);
-
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("");
     const [cpf, setCPF] = useState("");
     const [data, setData] = useState("");
     const [ddd, setDDD] = useState("");
     const [telefone, setTelefone] = useState("");
-
     const [cep, setCEP] = useState("");
     const [rua, setRua] = useState("");
     const [numero, setNumero] = useState("");
     const [bairro, setBairro] = useState("");
-
     const [medicamento, setMedicamento] = useState("")
     const [tratProposto, setTratProposto] = useState("")
-
+    const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: File}>({})
+    const [categoria, setCategoria] = useState("")
 
     function permitirInputs(state: boolean){
         setPermissao(state);
     }
 
-    //enviar back-end
-    const handleSubmit = async () => {
-        console.log(medicamento, tratProposto)
-    }
+    const useStatesList = [
+        { value: nome, set: setNome },
+        { value: email, set: setEmail },
+        { value: cpf, set: setCPF },
+        { value: data, set: setData },
+        { value: ddd, set: setDDD },
+        { value: telefone, set: setTelefone },
+        { value: cep, set: setCEP },
+        { value: rua, set: setRua },
+        { value: numero, set: setNumero },
+        { value: bairro, set: setBairro },
+        { value: medicamento, set: setMedicamento },
+        { value: tratProposto, set: setTratProposto },
+        { value: arquivoComprimido, set: setArquivoComprimido },
+        { value: categoria, set: setCategoria},
+    ] 
+
+    console.log("Quantidade de arquivos:", Object.keys(arquivoComprimido).length);
+    console.log("Arquivos:", arquivoComprimido);
 
     return(
         <div className="flex flex-col items-center justify-center w-full">
@@ -46,7 +60,7 @@ function Cadastro_Aluno(){
                         <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--foreground)]`}>Informe os dados abaixo para criar o acesso</h1>
                     </div>
                 </header>
-                    <form>
+                    <form onSubmit={(e) => submitForm(e, useStatesList)}>
                         <section id="info-pessoais-section" className="flex justify-start items-start flex-col gap-5 w-full  ">
                             <div>
                                 <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)]`}>Informações pessoais</h1>
@@ -84,8 +98,8 @@ function Cadastro_Aluno(){
                                         label="DDD"
                                         value={ddd}
                                         onChange={setDDD}
-                                        type = "text"
-                                        pattern="[0-9]+"
+                                        type = "numeric"
+                                        pattern=".*"
                                         placeholder = "DDD"
                                         size = "w-full"
                                     />
@@ -135,19 +149,18 @@ function Cadastro_Aluno(){
                                     </div>
                             </div>
 
-                            <Options_categprofis/>
+                            <Options_categprofis value={categoria} onChange={setCategoria}/>
                         </section>
 
-                        <section id="ft-postura" className="flex justify-start items-start flex-col gap-5 mt-8">
-                            <div className="w-full">
-                                <Input_Arquivo
-                                id="ft-postura"
-                                titulo="Foto"
-                                label="Selecione uma imagem dos seus arquivos"
-                                texto_input="Clique aqui para selecionar"
-                                />
-                            </div>
-                        </section>
+                        <div className="w-full mt-8">
+                            <Input_Arquivo
+                            id="ft-postura"
+                            titulo="Foto"
+                            label="Selecione uma imagem dos seus arquivos"
+                            texto_input="Clique aqui para selecionar"
+                            onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["ft-postura"]: arquivoComprimido }))}
+                            />
+                        </div>
 
                         <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-5">
                             <div>
@@ -162,7 +175,7 @@ function Cadastro_Aluno(){
                                     value={cep}
                                     onChange={setCEP}
                                     type = "text"
-                                    pattern="[0-9]+"
+                                    pattern="[-0-9]+"
                                     placeholder = "CEP"
                                     size = "w-full"
                                 />
@@ -208,15 +221,9 @@ function Cadastro_Aluno(){
                                     size = "w-full"
                                 />
                             </div>
-
-                            <div className="flex justify-start items-start flex-row mb-8 w-full">
-                                <div id="input-city" className="w-full">
-                                    <Options_categprofis/>
-                                </div>
-                            </div>
                         </section>
 
-                        <section id="info-medicas" className="flex justify-start items-start flex-col gap-5">
+                        <section id="info-medicas" className="flex justify-start items-start flex-col gap-5 mt-8">
                             <div id="option-info-medica" className="flex flex-col gap-3">
                                 <label className={Estilizacoes.segundo_titulo_principal}>Informações médicas</label>
                                 <h1 className={Estilizacoes.titulo_segundario}>Este aluno vai fazer acompanhamento médico no pilates?</h1>
@@ -245,6 +252,8 @@ function Cadastro_Aluno(){
                                         titulo="Histórico Médico"
                                         label="Selecione uma imagem dos seus arquivos"
                                         texto_input="Clique aqui para selecionar"
+                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["histico-medico"]: arquivoComprimido }))}
+
                                         />
                                     </div>
 
@@ -254,6 +263,8 @@ function Cadastro_Aluno(){
                                         titulo="Diagnóstico"
                                         label="Selecione uma imagem dos seus arquivos"
                                         texto_input="Clique aqui para selecionar"
+                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["diagnostico"]: arquivoComprimido }))}
+
                                         />
                                     </div>
 
@@ -272,7 +283,7 @@ function Cadastro_Aluno(){
                                             <textarea 
                                             name="medicamentos" 
                                             id="medicamentos-boxarea"
-                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none" 
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] focus:border-none" 
                                             onChange={(e) => setMedicamento(e.target.value)}
                                             ></textarea>
                                         </div>
@@ -293,7 +304,7 @@ function Cadastro_Aluno(){
                                             <textarea 
                                             name="medicamentos" 
                                             id="medicamentos-boxarea"
-                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none" 
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] focus:border-none" 
                                             onChange={(e) => setTratProposto(e.target.value)}
                                             ></textarea>
                                         </div>
@@ -304,7 +315,7 @@ function Cadastro_Aluno(){
 
                         <section 
                         className="mt-10">
-                            <Botao texto="Cadastrar" onClick={handleSubmit}/>
+                            <Botao texto="Cadastrar" type="submit"/>
                         </section>
 
                     </form>

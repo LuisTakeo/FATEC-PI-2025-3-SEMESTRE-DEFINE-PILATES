@@ -7,6 +7,7 @@ interface BotaoProps {
     titulo?: string;
     label?: string;
     texto_input?: string;
+    onArquivoComprimido?: (arquivo: File) => void
 
 }
 
@@ -15,22 +16,24 @@ export default function Input_Arquivo({
     titulo = "",
     label = "",
     texto_input = "", 
+    onArquivoComprimido,
 }: BotaoProps){
     
     const [arquivoSelecionado, setArquivoSelecionado] = useState<File | null>(null)
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]){
-            setArquivoSelecionado(e.target.files[0])
-            console.log(e.target.files[0])
-            
+            setArquivoSelecionado(e.target.files[0])            
             const arquivoOriginal = e.target.files[0];
             const arquivoComprimido = await comprimirImagem(arquivoOriginal);
             
-            console.log("Arquivo original:", arquivoOriginal.size);
-            console.log("Arquivo comprimido:", arquivoComprimido.size);
+            setArquivoSelecionado(arquivoComprimido)
+
+            onArquivoComprimido?.(arquivoComprimido)
+            
         }
     }
+    
 
     return(  
         <>
@@ -45,7 +48,7 @@ export default function Input_Arquivo({
                         {label}
                     </label>
                     <div className="w-full h-[50px] mb-8 cursor-poiter" >
-                        <label
+                        <label htmlFor={id}
                             className="w-full flex justify-center items-center bg-[var(--azul-segundario)] 
                                     text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mt-5
                                     h-[50px]"
@@ -67,7 +70,9 @@ export default function Input_Arquivo({
                     )}
                 </div>
             </div>
-        </>   
+        </>  
+        
     )
+    
 }
 
