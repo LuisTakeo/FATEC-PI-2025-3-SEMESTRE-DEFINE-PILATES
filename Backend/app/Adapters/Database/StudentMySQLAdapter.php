@@ -4,6 +4,7 @@ namespace App\Adapters\Database;
 
 use App\Application\DTOs\StudentDTO;
 use App\Application\Ports\StudentRepositoryPort;
+use App\Models\Student;
 
 class StudentMySQLAdapter implements StudentRepositoryPort
 {
@@ -13,8 +14,15 @@ class StudentMySQLAdapter implements StudentRepositoryPort
         // Inject dependencies here
     }
 
-    public function save(StudentDTO $student): bool
+    public function create(StudentDTO $student): bool
     {
+        $instance = Student::create([
+            'name' => $student->name,
+            'phone' => $student->phone,
+            'password' => $student->password,
+            'cpf' => $student->cpf,
+            'profession' => $student->profession
+        ]);
         return true;
     }
 }

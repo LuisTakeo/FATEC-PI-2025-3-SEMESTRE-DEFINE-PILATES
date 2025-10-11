@@ -3,6 +3,7 @@
 
 namespace App\Application\DTOs;
 
+use DateTime;
 use Illuminate\Contracts\Support\Arrayable;
 
 final class StudentDTO implements Arrayable 
@@ -13,6 +14,7 @@ final class StudentDTO implements Arrayable
         public readonly string $password,
         public readonly string $cpf,
         public readonly string $profession,
+        public readonly DateTime $birthDate,
         public readonly ?int $id = null
     ) {}
 
@@ -24,7 +26,8 @@ final class StudentDTO implements Arrayable
             phone: $data['phone'],
             password: $data['password'],
             cpf: $data['cpf'],
-            profession: $data['profession']
+            profession: $data['profession'],
+            birthDate: DateTime::createFromFormat('d-m-Y', $data['birth_date']),
         );
     }
 
@@ -36,7 +39,8 @@ final class StudentDTO implements Arrayable
             'phone' => $this->phone,
             'password' => $this->password,
             'cpf' => $this->cpf,
-            'profession' => $this->profession
+            'profession' => $this->profession,
+            'birth_date' => $this->birthDate->format("d-m-Y"),
         ];
     }
 
@@ -47,7 +51,8 @@ final class StudentDTO implements Arrayable
             'name' => $this->name,
             'phone' => $this->phone,
             'cpf' => $this->cpf,
-            'profession' => $this->profession
+            'profession' => $this->profession,
+            'birth_date' => $this->birthDate->format("d-m-Y"),
         ];
     }
 }

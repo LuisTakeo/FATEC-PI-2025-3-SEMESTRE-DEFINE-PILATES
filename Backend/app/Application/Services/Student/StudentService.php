@@ -33,7 +33,8 @@ class StudentService implements StudentServiceContract
     {
         try
         {
-            $hasSave = $this->sqlAdapter->save($studentDTO);
+            $studentDTOFiltered = $this->sanitizeStudentData($studentDTO);
+            $hasSave = $this->sqlAdapter->create($studentDTOFiltered);
             if (!$hasSave)
             {
                 return [
@@ -49,7 +50,7 @@ class StudentService implements StudentServiceContract
         }
         return [
         'message' => 'Acessando a Service',
-        'data' => $studentDTO->withoutPassword(),
+        'data' => $studentDTOFiltered->toArray(),
         'status' => 'success'
         ];
     }
@@ -62,7 +63,8 @@ class StudentService implements StudentServiceContract
             phone: preg_replace('/[^0-9]/', '', $dto->phone),                  // Só números
             password: password_hash($dto->password, PASSWORD_DEFAULT),                                          // Não sanitizar senha (será hasheada)
             cpf: preg_replace('/[^0-9]/', '', $dto->cpf),                     // Só números
-            profession: Str::title(trim(strip_tags($dto->profession)))        // Remove tags, trim, capitaliza
+            profession: Str::title(trim(strip_tags($dto->profession))),
+            birthDate: $dto->birthDate
         );
     }
 }
