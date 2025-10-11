@@ -44,7 +44,7 @@
                 "tags": [
                     "Students"
                 ],
-                "summary": "Register a new student",
+                "summary": "Cadastro de novo estudante",
                 "operationId": "registerStudent",
                 "requestBody": {
                     "required": true,
@@ -54,7 +54,7 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "João Silva"
+                                        "example": "John Doe"
                                     },
                                     "phone": {
                                         "type": "string",
@@ -70,7 +70,7 @@
                                     },
                                     "profession": {
                                         "type": "string",
-                                        "example": "Engenheiro"
+                                        "example": "Professor"
                                     },
                                     "birth_date": {
                                         "type": "string",

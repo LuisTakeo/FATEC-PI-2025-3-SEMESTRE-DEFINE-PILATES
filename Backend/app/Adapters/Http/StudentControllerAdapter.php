@@ -53,17 +53,17 @@ class StudentControllerAdapter extends BaseController
         path: "/api/students/save",
         operationId: "registerStudent",
         tags: ["Students"],
-        summary: "Register a new student"
+        summary: "Cadastro de novo estudante"
     )]
     #[OA\RequestBody(
         required: true,
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: "name", type: "string", example: "João Silva"),
+                new OA\Property(property: "name", type: "string", example: "John Doe"),
                 new OA\Property(property: "phone", type: "string", example: "11999999999"),
                 new OA\Property(property: "password", type: "string", example: "abc123A"),
                 new OA\Property(property: "cpf", type: "string", example: "12345678901"),
-                new OA\Property(property: "profession", type: "string", example: "Engenheiro"),
+                new OA\Property(property: "profession", type: "string", example: "Professor"),
                 new OA\Property(property: "birth_date", type: "string", example: "15-01-1990")
             ]
         )
