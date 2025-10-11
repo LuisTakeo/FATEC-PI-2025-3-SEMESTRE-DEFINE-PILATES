@@ -6,7 +6,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Header(){
 
-    const navigate = useNavigate();
     const location = useLocation();
 
     const Pagina: boolean = location.pathname !== "/Login" && location.pathname !== "/Login_Funcionario";

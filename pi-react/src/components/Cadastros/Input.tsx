@@ -43,3 +43,14 @@ export default function Input({
         </div>
     );
 }
+
+//  <Input
+//     id="email"
+//     label="E-mail"
+//     value={email}
+//     onChange={setEmail}
+//     type = "email"
+//     pattern=".*"
+//     placeholder = "Digite o email"
+//     size = "w-full"
+// />

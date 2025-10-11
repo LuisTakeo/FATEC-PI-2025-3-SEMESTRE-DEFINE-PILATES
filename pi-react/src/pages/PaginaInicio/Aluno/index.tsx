@@ -1,5 +1,5 @@
 import "./stylesPaginaInicio.css"
-import Estilizacoes from "../../model/Estilizacoes";
+import Estilizacoes from "../../../model/Estilizacoes";
 
 function PaginaInicio(){
 
