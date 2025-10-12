@@ -4,9 +4,9 @@ import Cadastro_Aluno from "./pages/Cadastros/Cadastro_Aluno/"
 import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
 import LoginPage from "./pages/Login/Login/page"
 import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
-import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone"
-import RecebimentoCodigo from "./pages/RecuperarSenha/RecebimentoCodigo"
-import AlterarSenha from "./pages/RecuperarSenha/AlterarSenha"
+import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone_1"
+import RecebimentoCodigo from "./pages/RecuperarSenha/RecebimentoCodigo_2"
+import AlterarSenha from "./pages/RecuperarSenha/AlterarSenha_3"
 
 function MainRoutes() {
     return (

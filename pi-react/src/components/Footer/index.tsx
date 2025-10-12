@@ -4,84 +4,86 @@ import { Link } from "react-router-dom";
 function Footer(){
     return(
     <footer className="text-black-600 body-font">
-        <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-            <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left md:mt-0 mt-10">
-            <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-                <a className="text-bold flex order-first lg:order-none lg:w-1/5 italiana-regular text-[var(--destaque)] lg:items-center lg:justify-center mb-4 md:mb-0"
-                >
-                <span className="ml-0 text-[2rem] pl-8">Define Pilates</span>
+        <div className="container  px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+            <div className=" w-64 flex-shrink-0 md:mx-0 mx-auto text-left md:mt-0 mt-10">
+                <a className="flex title-font font-medium items-start justify-start text-gray-900 w-full">
+                    <span className="text-[2.2rem] kaisei-tokumin-regular font-extrabold text-[var(--destaque)] tracking-[-0.1px]">
+                    Defıne Pilates<span className="text-[3rem]">.</span>
+                    </span>
                 </a>
-            </a>
-            <p className="mt-2 text-sm text-gray-700">Pilates é para você: construa força, aumente sua flexibilidade e domine sua energia</p>
+                <p className="text-sm text-gray-700 text-[1.2rem] flex justify-start items-start mt-2">
+                    Pilates é para você: construa força, aumente sua flexibilidade e domine sua energia
+                </p>
             </div>
+
 
             <div className="flex-grow flex flex-wrap md:pr-20 -mb-10 md:text-left text-center order-first pr-10">
             <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">PÁGINAS</h2>
-                <nav className="list-none mb-10 flex flex-col gap-y-5">
-                <li>
-                    <Link to="/PaginaInicio" className="text-gray-600 hover:text-gray-800">
-                        Página Inicial
-                    </Link>
-                </li>
-                <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-800">
-                    Calendário
+            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">PÁGINAS</h2>
+            <nav className="list-none mb-10 flex flex-col gap-y-5">
+            <li>
+                <Link to="/PaginaInicio" className="text-gray-600 hover:text-gray-800">
+                    Página Inicial
                 </Link>
-                </li>
-                <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-800">
-                    Perfil pessoal
-                </Link>
-                </li>
-                <li>
-                <Link to="" className="text-gray-600 hover:text-gray-800">
-                    Consultar plano
-                </Link>
-                </li>
-                </nav>
-            </div>
-            <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ENDEREÇOS</h2>
-                <nav className="list-none mb-10 flex flex-col gap-y-5">
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800">
-                        <strong>Unidade 1</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
-                    </a>
-                </li>
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800">
-                        <strong>Unidade 2</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
-                    </a>
-                </li>
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800">
-                        <strong>Unidade 3</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
-                    </a>
-                </li>
+            </li>
+            <li>
+            <Link to="/" className="text-gray-600 hover:text-gray-800">
+                Calendário
+            </Link>
+            </li>
+            <li>
+            <Link to="/" className="text-gray-600 hover:text-gray-800">
+                Perfil pessoal
+            </Link>
+            </li>
+            <li>
+            <Link to="" className="text-gray-600 hover:text-gray-800">
+                Consultar plano
+            </Link>
+            </li>
+            </nav>
+        </div>
+        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ENDEREÇOS</h2>
+            <nav className="list-none mb-10 flex flex-col gap-y-5">
+            <li>
+                <a className="text-gray-600 hover:text-gray-800">
+                    <strong>Unidade 1</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
+                </a>
+            </li>
+            <li>
+                <a className="text-gray-600 hover:text-gray-800">
+                    <strong>Unidade 2</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
+                </a>
+            </li>
+            <li>
+                <a className="text-gray-600 hover:text-gray-800">
+                    <strong>Unidade 3</strong><br/>Rua José Aldo Piassa, 165<br/>São Miguel Paulista
+                </a>
+            </li>
 
-                </nav>
-            </div>
-            <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CONTATOS</h2>
-                <nav className="list-none mb-10 flex flex-col gap-y-5">
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800" href="https://l.instagram.com/?u=https%3A%2F%2Fwa.me%2F5511941424166%3Ffbclid%3DPAZXh0bgNhZW0CMTEAAac_M8GRzr2tOwWjzF_sFJ6o6C7O88TUXjjtz0NmQwsMLQgU8BrTNIo6NW0ABw_aem_Vtyy7ZGSwovfayBCBKUNcw&e=AT2kNj1QmZpXGVK9cn0t3PhzQ2KTx92QQs_r8qRtaK7JFr-bY1YxPoTctB5Zp6SbOqGUNVQ6x2yL1wI_0PhkzjXx4Efr84OCT8UZMzEJYg" target="_blank">WhatsApp</a>
-                </li>
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800" href="https://www.instagram.com/define.pilates/" target="_blank">Instagram</a>
-                </li>
-                <li>
-                    <a className="text-gray-600 hover:text-gray-800" href="https://www.facebook.com/pilates.define/" target="_blank">Facebook</a>
-                </li>
-                </nav>
-            </div>
-            </div>
+            </nav>
+        </div>
+        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CONTATOS</h2>
+            <nav className="list-none mb-10 flex flex-col gap-y-5">
+            <li>
+                <a className="text-gray-600 hover:text-gray-800" href="https://l.instagram.com/?u=https%3A%2F%2Fwa.me%2F5511941424166%3Ffbclid%3DPAZXh0bgNhZW0CMTEAAac_M8GRzr2tOwWjzF_sFJ6o6C7O88TUXjjtz0NmQwsMLQgU8BrTNIo6NW0ABw_aem_Vtyy7ZGSwovfayBCBKUNcw&e=AT2kNj1QmZpXGVK9cn0t3PhzQ2KTx92QQs_r8qRtaK7JFr-bY1YxPoTctB5Zp6SbOqGUNVQ6x2yL1wI_0PhkzjXx4Efr84OCT8UZMzEJYg" target="_blank">WhatsApp</a>
+            </li>
+            <li>
+                <a className="text-gray-600 hover:text-gray-800" href="https://www.instagram.com/define.pilates/" target="_blank">Instagram</a>
+            </li>
+            <li>
+                <a className="text-gray-600 hover:text-gray-800" href="https://www.facebook.com/pilates.define/" target="_blank">Facebook</a>
+            </li>
+            </nav>
+        </div>
+        </div>
         </div>
         <div className="bg-[var(--destaque)]">
             <div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
             <p className="text-[var(--background)] text-sm text-center sm:text-left">© 2025 —
-                <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" className="text-[var(--background)] ml-1" target="_blank">@define.pilates</a>
+                <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" className="text-[var(--background)] ml-1" target="_blank">Akemi, Luana, Luis, Vanessa</a>
             </p>
             <span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
                 <a className="text-[var(--background)]" href="https://www.facebook.com/pilates.define/">
@@ -107,7 +109,7 @@ function Footer(){
             </span>
             </div>
         </div>
-        </footer>
+    </footer>
     )
 }
 

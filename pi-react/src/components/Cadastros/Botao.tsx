@@ -10,7 +10,7 @@ interface BotaoProps {
 
 export default function Botao({texto, link, onClick, type}: BotaoProps){
     
-    const estilo: string = 'w-full flex justify-center items-center bg-[var(--azul-segundario)] text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mb-5 mt-5 h-[50px] cursor-pointer'
+    const estilo: string = 'w-full flex justify-center items-center bg-[var(--azul-segundario)] text-white font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mb-5 mt-5 h-[50px] cursor-pointer'
 
     if (!link){
     return(  
