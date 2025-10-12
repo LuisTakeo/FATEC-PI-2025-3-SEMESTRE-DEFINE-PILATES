@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   return (
 
-    <main className="flex flex-col justify-center items-center px-6 py-4">
+    <main className="flex flex-col justify-center items-center px-6 py-4 mt-8">
         <section className="flex w-full max-w-sm justify-between items-center mb-6">
             <h2 className={Estilizacoes.titulo_principal}>
             Entre <br /> na sua conta

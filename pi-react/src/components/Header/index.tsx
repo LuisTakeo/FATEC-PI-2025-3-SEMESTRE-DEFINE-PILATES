@@ -8,7 +8,7 @@ function Header(){
 
     const location = useLocation();
 
-    const Pagina: boolean = location.pathname !== "/Login" && location.pathname !== "/Login_Funcionario";
+    const Pagina: boolean = location.pathname !== "/login/aluno" && location.pathname !== "/login/funcionario";
 
     return(
         <header className="text-black-600 body-font bg-transparent">
@@ -34,8 +34,11 @@ function Header(){
                 </Link>        
                 </nav>
 
-                <a href="/" className="text-bold flex order-first lg:order-none lg:w-1/5 italiana-regular text-[var(--destaque)] lg:items-center lg:justify-center mb-4 md:mb-0">
-                <span className="ml-3 text-[2rem]">Define Pilates</span>
+                <a href="/" className=" flex order-first lg:order-none lg:w-1/5  lg:items-center lg:justify-center mb-4 md:mb-0">
+                    <span className="ml-3 text-[2.2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
+                        Defıne Pilates
+                        <span className="font-extrabold text-[3rem]">.</span>
+                    </span>
                 </a>
                 <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
 

@@ -3,8 +3,8 @@ import Estilizacoes from "../../../model/Estilizacoes";
 import Input_Arquivo from "../../../components/Cadastros/Input_Arquivo";
 import Botao from "../../../components/Cadastros/Botao"
 import Input from "../../../components/Cadastros/Input"
-import inputCPF from "../../../services/inputCPF"
-import submitForm from "../../../services/submitForm"
+import inputCPF from "../../../uteis/inputCPF"
+import submitForm from "../../../uteis/submitForm"
 import { useState } from "react";
 
 function Cadastro_Aluno(){
