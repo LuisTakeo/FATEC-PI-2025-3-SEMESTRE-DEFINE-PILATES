@@ -39,7 +39,7 @@ export default function RecuperacaoTelefone(){
                         size = "w-full"
                         />
 
-                        <Botao texto="Solicitar Código" type="submit"/>
+                        <Botao texto="Solicitar Código" type="submit" link="/recuperarsenha/confirmarcodigo"/>
                     </div>
             </section>
         </main>

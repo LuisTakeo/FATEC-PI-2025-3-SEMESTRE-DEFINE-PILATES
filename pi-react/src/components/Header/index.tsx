@@ -8,7 +8,8 @@ function Header(){
 
     const location = useLocation();
 
-    const Pagina: boolean = location.pathname !== "/login/aluno" && location.pathname !== "/login/funcionario";
+    const paginas = ["/login/aluno", "/login/funcionario", "/recuperarsenha/dados", "/recuperarsenha/confirmarcodigo", "/recuperarsenha/alterarsenha"];
+    const permissao: boolean = !paginas.includes(location.pathname) ;
 
     return(
         <header className="text-black-600 body-font bg-transparent">
@@ -42,7 +43,7 @@ function Header(){
                 </a>
                 <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
 
-                {Pagina && (
+                {permissao && (
                     <div className="w-[200px]">
                         <Botao texto="Acessar conta" link="/login/aluno" />
                     </div>

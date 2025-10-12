@@ -52,7 +52,7 @@ export default function LoginPage() {
                 />
                 </div>
                 <div>
-                <a href="/" className="text-[var(--destaque)] text-[1.2rem] font-inter text-sm underline">
+                <a href="/recuperarsenha/dados" className="text-[var(--destaque)] text-[1.2rem] font-inter text-sm underline">
                     Esqueci a minha senha
                 </a>
                 
