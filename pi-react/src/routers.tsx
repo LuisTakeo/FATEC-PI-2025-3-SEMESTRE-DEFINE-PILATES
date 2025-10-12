@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import PaginaInicio from "./pages/PaginaInicio/Aluno/index";
+import PaginaInicio from "./pages/PaginaInicio/HomeDeslogada/page";
 import Cadastro_Aluno from "./pages/Cadastros/Cadastro_Aluno/"
 import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
 import LoginPage from "./pages/Login/Login/page"

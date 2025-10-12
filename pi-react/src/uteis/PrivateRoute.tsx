@@ -3,7 +3,8 @@
 // function PrivateRoute({ roleRequired }) {
 //     const isLogado = localStorage.getItem("Logado") === "true";
 //     const isAdmin = localStorage.getItem("Cargo").toLowerCase() === "admin";
-//     const isFuncionario = localStorage.getItem("Cargo") === "Funcionario";
+//     const isFuncionario = localStorage.getItem("Cargo") === "funcionario";
+//     const isInstrutor = localStorage.getItem("Cargo") === "instrutor";
 
 //     let permissao = false;
 

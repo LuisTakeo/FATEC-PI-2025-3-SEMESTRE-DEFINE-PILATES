@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 interface BotaoProps {
-    texto: string;
+    texto?: string;
     link?: string;
     onClick?: () => void;
     type?: "button" | "submit" | "reset" | undefined;
