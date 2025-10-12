@@ -6,26 +6,21 @@ function PaginaInicio(){
 
     return(
         <main className={`${Estilizacoes.container_main} w-full`}>
-            <section className="relative flex flex-row w-full h-[550px] justify-between items-center px-[8%] py-[5%] bg-[var(--destaque)]
-            bg-[url('/estate-planning-78.png')] bg-center bg-cover bg-opacity-8 bg-no-repeat bg-fixed"
-                    >
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="relative z-10 bg-[var(--background)] px-5 py-8 rounded-[7px]
-                    flex flex-col justify-center items-center gap-5
-                    w-full h-auto ">
-                    <div>
-                    <h1 className={Estilizacoes.titulo_principal}>
-                        A Define Pilates é um espaço acolhedor, feito para você cuidar do corpo e da mente com atenção, leveza e bem-estar
-                    </h1>
-                    <p className={`${Estilizacoes.titulo_segundario} mt-5`} >
-                        O Define Pilates é um estúdio dedicado a promover bem-estar e qualidade de vida através de aulas personalizadas. 
-                        Com foco em melhorar a postura, a mobilidade e a força, atendemos pessoas com dificuldades motoras, adultos 
-                        que buscam aprimorar a forma física e idosos que querem manter a saúde e a autonomia. 
-                    </p>
-                    </div>
-                </div>
-               
-            </section>
+<section className="relative flex w-full h-[620px] justify-start items-center px-[8%] py-[5%]">
+  {/* Fundo responsivo */}
+  <div 
+    className="absolute inset-0 bg-[url('/background.jpg')] bg-center bg-cover
+               sm:bg-[length:150%_auto] md:bg-[length:100%_auto] bg-no-repeat"
+  ></div>
+
+  {/* Conteúdo */}
+  <div className="relative z-10 bg-white/90 px-5 py-8 rounded-[7px]">
+    <h1 className={Estilizacoes.titulo_principal}>
+      A Define Pilates é um espaço acolhedor, feito para você cuidar do corpo e da mente com atenção, leveza e bem-estar
+    </h1>
+  </div>
+</section>
+
 
 
             <section className="text-gray-600 body-font w-full px-[8%]">
