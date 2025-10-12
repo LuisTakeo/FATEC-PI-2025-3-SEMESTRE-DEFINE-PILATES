@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Adapters\Http\InstructorControllerAdapter;
+use App\Adapters\Http\Instructor\InstructorControllerAdapter;
 
 Route::prefix('instructors')->name('instructors.')->group(function () {
     Route::get('/', [InstructorControllerAdapter:: class, 'index'])->name('index');
