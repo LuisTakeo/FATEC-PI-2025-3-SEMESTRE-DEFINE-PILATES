@@ -35,7 +35,6 @@ export default function RecoveryPhonePage() {
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px] max-sm:mt-[-40px] transition-all duration-300">
 
-        {/* Imagem responsiva */}
         <img
           src="/envelope.png"
           alt="Telefone"
@@ -50,7 +49,6 @@ export default function RecoveryPhonePage() {
             Para receber o seu código de segurança por SMS
           </p>
 
-          {/* Campo Telefone */}
           <input
             type="tel"
             placeholder="(99) 99999-9999"
@@ -67,7 +65,6 @@ export default function RecoveryPhonePage() {
               }`}
           />
 
-          {/* Campo Confirmar Telefone */}
           <input
             type="tel"
             placeholder="Confirme seu telefone"
@@ -85,12 +82,10 @@ export default function RecoveryPhonePage() {
               }`}
           />
 
-          {/* Mensagem de erro */}
           {error && (
             <p className="text-red-500 mb-4 text-sm text-center">{error}</p>
           )}
 
-          {/* Botão de envio */}
           <Button onClick={handleSubmit}>Solicitar Código</Button>
         </div>
       </main>
