@@ -1,28 +1,16 @@
 <?php
 // Backend/app/Adapters/Http/StudentControllerAdapter.php
 
-namespace App\Adapters\Http;
+namespace App\Adapters\Http\Student;
 
 use App\Application\Ports\StudentServiceContract;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
-use App\Adapters\Http\StudentRegisterRequest;
+use App\Adapters\Http\Student\StudentRegisterRequest;
 use OpenApi\Attributes as OA; // ✅ Attributes ao invés de Annotations
 
-#[OA\Info(
-    title: "Define Pilates API",
-    version: "1.0.0",
-    description: "API documentation for Define Pilates management system"
-)]
-#[OA\Server(
-    url: "http://localhost:8000",
-    description: "Development Server"
-)]
-#[OA\Tag(
-    name: "Students",
-    description: "Student management operations"
-)]
+#[OA\Tag(name: "Students", description: "Student management operations")] // ✅ Apenas tag
 class StudentControllerAdapter extends BaseController
 {
     public function __construct(
@@ -51,32 +39,21 @@ class StudentControllerAdapter extends BaseController
 
     #[OA\Post(
         path: "/api/students/save",
-        operationId: "registerStudent",
+        operationId: "registerStudent", 
         tags: ["Students"],
-        summary: "Cadastro de novo estudante"
+        summary: "Cadastro completo de novo estudante"
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: "name", type: "string", example: "John Doe"),
-                new OA\Property(property: "phone", type: "string", example: "11999999999"),
-                new OA\Property(property: "password", type: "string", example: "abc123A"),
-                new OA\Property(property: "cpf", type: "string", example: "12345678901"),
-                new OA\Property(property: "profession", type: "string", example: "Professor"),
-                new OA\Property(property: "birth_date", type: "string", example: "15-01-1990")
-            ]
-        )
+        content: new OA\JsonContent(ref: "#/components/schemas/StudentRegisterRequest")
     )]
     #[OA\Response(
         response: 201,
-        description: "Success",
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: "status", type: "string", example: "success")
-            ]
-        )
+        description: "Sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/StudentSuccessResponse")
     )]
+    #[OA\Response(response: 422, description: "Erro de validação")]
+    #[OA\Response(response: 500, description: "Erro interno")]
     public function postRequest(StudentRegisterRequest $request): JsonResponse
     {
         $result = $this->studentService->registerStudent($request->toDTO());

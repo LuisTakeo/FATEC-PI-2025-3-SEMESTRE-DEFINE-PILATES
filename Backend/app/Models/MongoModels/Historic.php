@@ -2,7 +2,7 @@
 
 namespace App\Models\MongoModels;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use Mongodb\Laravel\Eloquent\Model;
 
 class Historic extends Model
 {

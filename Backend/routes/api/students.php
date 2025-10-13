@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Adapters\Http\StudentControllerAdapter;
+use App\Adapters\Http\Student\StudentControllerAdapter;
 
 // Agrupa tudo de Student
 Route::prefix('students')->name('students.')->group(function () {
