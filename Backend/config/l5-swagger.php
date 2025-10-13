@@ -21,7 +21,8 @@ return [
 
                 // ✅ CORRIGIR: Escanear apenas controllers, não toda app/
                 'annotations' => [
-                    base_path('app/Adapters/Http'), // ✅ Apenas seus controllers
+                    base_path('app/Adapters/Http/Student'), // ✅ Apenas seus controllers
+                    base_path('app/Swagger/Schemas'),
                 ],
             ],
         ],
@@ -53,8 +54,6 @@ return [
 
             // ✅ EXCLUIR explicitamente pastas problemáticas
             'exclude' => [
-                base_path('app/Models'), // ✅ Excluir todos os models
-                base_path('app/Http'), // ✅ Excluir controllers padrão
             ],
 
             'open_api_spec_version' => env('L5_SWAGGER_OPEN_API_SPEC_VERSION', \L5Swagger\Generator::OPEN_API_DEFAULT_SPEC_VERSION),
