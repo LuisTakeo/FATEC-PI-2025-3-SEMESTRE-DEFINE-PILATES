@@ -8,15 +8,13 @@ export default function RecoveryPhonePage() {
   const [confirmPhone, setConfirmPhone] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  // Função para aplicar a máscara de telefone (formato brasileiro)
   const formatPhone = (value: string): string => {
-    let digits = value.replace(/\D/g, "").slice(0, 11); // limita a 11 dígitos
+    let digits = value.replace(/\D/g, "").slice(0, 11); 
     digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
     digits = digits.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
     return digits;
   };
 
-  // Validação e navegação
   const handleSubmit = (): void => {
     if (phone.length < 15 || confirmPhone.length < 15) {
       setError("O telefone está incompleto.");
@@ -27,7 +25,7 @@ export default function RecoveryPhonePage() {
       return;
     }
     setError("");
-    navigate("/recupera-senha/code"); // ✅ rota corrigida conforme suas rotas
+    navigate("/recupera-senha/code"); 
   };
 
   const inputClass =

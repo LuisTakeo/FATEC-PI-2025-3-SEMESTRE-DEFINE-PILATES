@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      <main className="flex flex-col items-center px-6 py-4">
+      <main className="flex flex-col items-center justify-start flex-1 px-6 pt-24">
         <div className="flex w-full max-w-sm justify-between items-end mb-6">
           <h2 className="text-2xl text-[var(--destaque)] font-bold leading-tight">
             Entre <br /> na sua conta
@@ -76,13 +76,12 @@ export default function LoginPage() {
               className="text-[var(--destaque)] text-sm underline hover:opacity-90"
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/recupera-senha/"); // navega para RecoveryPhonePage
+                navigate("/recupera-senha/"); 
               }}
             >
               Esqueci a minha senha
             </a>
 
-            {/* Mensagem de erro */}
             {error && <p className="text-red-500 text-sm">{error}</p>}
           </div>
 
