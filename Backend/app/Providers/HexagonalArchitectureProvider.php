@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
 use App\Adapters\Database\StudentMySQLAdapter;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
@@ -14,6 +15,9 @@ use App\Application\Services\PilatesApplicationService;
 use App\Adapters\Database\MySQLAdapter;
 use App\Adapters\Database\MongoDBAdapter;
 use App\Adapters\Database\NullNoSQLAdapter;
+use App\Application\Ports\Instructor\InstructorRepositoryPort;
+use App\Application\Ports\Instructor\InstructorServiceContract;
+use App\Application\Services\Instructor\InstructorService;
 
 /**
  * Hexagonal Architecture Service Provider
@@ -48,6 +52,17 @@ class HexagonalArchitectureProvider extends ServiceProvider
                     $app->make(NoSQLPort::class),
                 );
             });
+
+
+        //Instructor ⬇    
+        $this->app->bind(
+        InstructorServiceContract::class,
+        InstructorService::class
+        );
+        $this->app->bind(
+            InstructorRepositoryPort::class,
+            InstructorMySQLAdapter::class
+        );
     }
 
     /**
