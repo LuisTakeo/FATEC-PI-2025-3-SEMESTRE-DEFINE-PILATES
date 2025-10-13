@@ -9,21 +9,19 @@ export default function LoginPage() {
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
 
-  // Função para formatar o telefone no padrão brasileiro
   const formatPhone = (value: string): string => {
-    let digits = value.replace(/\D/g, "").slice(0, 11); // até 11 dígitos
+    let digits = value.replace(/\D/g, "").slice(0, 11); 
     digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
     digits = digits.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
     return digits;
   };
 
   const handleLogin = () => {
-    // Validação simulada
     if (telefone !== "(12) 34567-8901" || senha !== "1234") {
       setError("Telefone ou senha incorretos");
     } else {
       setError("");
-      navigate("/cadastro"); // página de destino
+      navigate("/cadastro"); 
     }
   };
 
@@ -45,7 +43,6 @@ export default function LoginPage() {
           <p className="text-[var(--destaque)] text-lg font-semibold">Acessar</p>
 
           <div className="flex flex-col gap-3">
-            {/* Campo telefone com máscara */}
             <label className="text-sm">Escreva seu telefone</label>
             <input
               type="tel"
@@ -65,7 +62,6 @@ export default function LoginPage() {
                 className="bg-[var(--input-background)] px-4 py-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] pr-10"
               />
 
-              {/* Olhinho aparece apenas quando há algo digitado */}
               {senha && (
                 <button
                   type="button"
@@ -78,6 +74,10 @@ export default function LoginPage() {
             <a
               href="#"
               className="text-[var(--destaque)] text-sm underline hover:opacity-90"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/recupera-senha/"); // navega para RecoveryPhonePage
+              }}
             >
               Esqueci a minha senha
             </a>
