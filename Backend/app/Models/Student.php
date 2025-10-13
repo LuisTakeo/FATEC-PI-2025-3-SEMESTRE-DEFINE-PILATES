@@ -18,13 +18,21 @@ class Student extends Model
         'namestudent',
         'cpf',
         'Id_classprofessions',
+        'Id_users', // ✅ FK para UserTgi compartilhado
     ];
+
+    // ✅ Student PERTENCE a um UserTgi (BelongsTo)
+    public function userTgi(): BelongsTo
+    {
+        return $this->belongsTo(UserTgi::class, 'Id_users', 'Id_users');
+    }
 
     public function professionClassification(): BelongsTo
     {
         return $this->belongsTo(ProfessionClassification::class, 'Id_classprofessions');
     }
 
+    // ✅ Relacionamentos existentes
     public function plans(): HasMany
     {
         return $this->hasMany(Plan::class, 'Id_students');

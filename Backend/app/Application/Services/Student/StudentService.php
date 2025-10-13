@@ -92,7 +92,7 @@ class StudentService implements StudentServiceContract
         {
             $studentDTOFiltered = $this->sanitizeStudentData($studentDTO);
             $hasSave = $this->sqlAdapter->create($studentDTOFiltered);
-            if (!$hasSave)
+            if (!$hasSave->status)
             {
                 return [
                     'message' => 'Failed to register student',
