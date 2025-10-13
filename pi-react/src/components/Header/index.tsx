@@ -1,52 +1,58 @@
 import "../../index.css";
-import "./stylesHeader.css"
+import "./stylesHeader.css";
 "use client";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
+function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-function Header(){
+  const currentPath = location.pathname.toLowerCase().replace(/\/$/, "");
 
-    const navigate = useNavigate();
+  const shouldHideButton =
+    currentPath === "/user/login" || currentPath === "/admin/home";
 
-    return(
-    <header className="text-black-600 body-font bg-transparent">
-    <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+  return (
+    <header className="bg-transparent body-font text-[var(--foreground)]">
+      <div className="container mx-auto flex flex-col md:flex-row items-center md:justify-between p-5">
 
-        <Link to="/">
-        <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]">
-            Página Inicial
-        </a>
-        </Link>
+        <div className="order-1 md:order-2 w-full md:w-auto flex justify-center mb-4 md:mb-0">
+          <span className="text-[2rem] italiana-regular font-bold text-[var(--destaque)]">
+            Define Pilates
+          </span>
+        </div>
 
-        <Link to="/">
-        <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]">
-            Calendário
-        </a>
-        </Link>
-
-        <Link to="/">
-        <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]">
-            Contato
-        </a>
-        </Link>        
+        <nav className="order-2 md:order-1 w-full md:w-2/5 flex flex-col md:flex-row items-center md:items-center text-base mb-4 md:mb-0 gap-2 md:gap-8">
+          <Link to="/">
+            <span className="text-[0.9rem] md:text-[1.3rem] cursor-pointer hover:text-[var(--destaque)]">
+              Página Inicial
+            </span>
+          </Link>
+          <Link to="/">
+            <span className="text-[0.9rem] md:text-[1.3rem] cursor-pointer hover:text-[var(--destaque)]">
+              Calendário
+            </span>
+          </Link>
+          <Link to="/">
+            <span className="text-[0.9rem] md:text-[1.3rem] cursor-pointer hover:text-[var(--destaque)]">
+              Contato
+            </span>
+          </Link>
         </nav>
 
-        <a className="text-bold flex order-first lg:order-none lg:w-1/5 italiana-regular text-[var(--destaque)] lg:items-center lg:justify-center mb-4 md:mb-0">
-        <span className="ml-3 text-[2rem]">Define Pilates</span>
-        </a>
-        <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-
-        <button className="text-[1.2rem] tracking-[.2px] inline-flex items-center border-0 py-1 px-3 rounded text-[var(--background)] text-base mt-4 md:mt-0 bg-[var(--rosa-segundario)] hover:bg-[var(--destaque)]"
-        onClick={() => navigate("/")}
-        >
-            Acessar Conta
-        </button>
-
-        </div>
-    </div>
+        {!shouldHideButton && (
+          <div className="order-3 w-full md:order-3 md:w-2/5 flex justify-center md:justify-end">
+            <button
+              className="!bg-[var(--azul-segundario)] !text-white text-[1rem] md:text-[1.2rem] tracking-[.2px] py-1.5 px-4 md:py-2 md:px-5 rounded-md font-semibold transition-all duration-200 hover:!bg-[var(--destaque)]"
+              onClick={() => navigate("/user/login")}
+            >
+              Acessar Conta
+            </button>
+          </div>
+        )}
+      </div>
     </header>
-    );
+  );
 }
 
 export default Header;
