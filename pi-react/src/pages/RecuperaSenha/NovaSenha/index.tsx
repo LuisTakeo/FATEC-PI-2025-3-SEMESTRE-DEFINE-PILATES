@@ -6,6 +6,8 @@ export default function NewPasswordPage() {
   const [senha, setSenha] = useState("");
   const [confirmar, setConfirmar] = useState("");
   const [erro, setErro] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
   const validarSenha = () => {
     const temMaiuscula = /[A-Z]/.test(senha);
@@ -39,7 +41,6 @@ export default function NewPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      {/* Main */}
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-6">
         <div className="w-full max-w-sm">
           <h2 className="text-2xl font-bold text-[var(--destaque)] mb-2">
@@ -49,33 +50,51 @@ export default function NewPasswordPage() {
             A senha deve ter caracteres <b>maiúsculos</b>, <b>minúsculos</b> e <b>números</b>.
           </p>
 
-          <input
-            type="password"
-            placeholder="Nova senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            className={`w-full px-4 py-3 rounded-md mb-4 focus:outline-none focus:ring-2 transition-all ${
-              erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-            }`}
-            style={{
-              backgroundColor: "var(--input-background)",
-              color: "var(--color-foreground)",
-            }}
-          />
+          <div className="relative mb-4">
+            <input
+              type={mostrarSenha ? "text" : "password"}
+              placeholder="Nova senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              className={`w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 transition-all ${
+                erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
+              } pr-10`}
+              style={{
+                backgroundColor: "var(--input-background)",
+                color: "var(--color-foreground)",
+              }}
+            />
+            {senha && (
+              <button
+                type="button"
+                className="absolute right-0 top-0 w-10 h-full opacity-0"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+              />
+            )}
+          </div>
 
-          <input
-            type="password"
-            placeholder="Escreva a nova senha novamente"
-            value={confirmar}
-            onChange={(e) => setConfirmar(e.target.value)}
-            className={`w-full px-4 py-3 rounded-md mb-2 focus:outline-none focus:ring-2 transition-all ${
-              erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-            }`}
-            style={{
-              backgroundColor: "var(--input-background)",
-              color: "var(--color-foreground)",
-            }}
-          />
+          <div className="relative mb-2">
+            <input
+              type={mostrarConfirmar ? "text" : "password"}
+              placeholder="Escreva a nova senha novamente"
+              value={confirmar}
+              onChange={(e) => setConfirmar(e.target.value)}
+              className={`w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 transition-all ${
+                erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
+              } pr-10`}
+              style={{
+                backgroundColor: "var(--input-background)",
+                color: "var(--color-foreground)",
+              }}
+            />
+            {confirmar && (
+              <button
+                type="button"
+                className="absolute right-0 top-0 w-10 h-full opacity-0"
+                onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
+              />
+            )}
+          </div>
 
           {erro && (
             <p className="text-red-500 text-sm mb-4 text-center">{erro}</p>
@@ -89,7 +108,6 @@ export default function NewPasswordPage() {
           </button>
         </div>
       </main>
-
     </div>
   );
 }
