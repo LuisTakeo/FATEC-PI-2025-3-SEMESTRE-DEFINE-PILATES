@@ -9,7 +9,7 @@ export default function RecoveryPhonePage() {
   const [error, setError] = useState<string>("");
 
   const formatPhone = (value: string): string => {
-    let digits = value.replace(/\D/g, "").slice(0, 11); 
+    let digits = value.replace(/\D/g, "").slice(0, 11);
     digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
     digits = digits.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
     return digits;
@@ -25,7 +25,7 @@ export default function RecoveryPhonePage() {
       return;
     }
     setError("");
-    navigate("/recupera-senha/code"); 
+    navigate("/recupera-senha/code");
   };
 
   const inputClass =
@@ -33,12 +33,13 @@ export default function RecoveryPhonePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      {/* Main */}
-      <main className="flex flex-col items-center justify-center flex-1 px-6 py-3">
+      <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px] max-sm:mt-[-40px] transition-all duration-300">
+
+        {/* Imagem responsiva */}
         <img
           src="/envelope.png"
           alt="Telefone"
-          className="w-32 h-32 object-contain mb-6"
+          className="w-32 h-32 max-sm:w-24 max-sm:h-24 object-contain mb-6 transition-all duration-300"
         />
 
         <div className="w-full max-w-sm flex flex-col">
