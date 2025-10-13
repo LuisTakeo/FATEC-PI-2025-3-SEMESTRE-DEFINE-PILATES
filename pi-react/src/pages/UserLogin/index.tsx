@@ -9,9 +9,17 @@ export default function LoginPage() {
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
 
+  // Função para formatar o telefone no padrão brasileiro
+  const formatPhone = (value: string): string => {
+    let digits = value.replace(/\D/g, "").slice(0, 11); // até 11 dígitos
+    digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
+    digits = digits.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+    return digits;
+  };
+
   const handleLogin = () => {
     // Validação simulada
-    if (telefone !== "1234567890" || senha !== "1234") {
+    if (telefone !== "(12) 34567-8901" || senha !== "1234") {
       setError("Telefone ou senha incorretos");
     } else {
       setError("");
@@ -37,11 +45,14 @@ export default function LoginPage() {
           <p className="text-[var(--destaque)] text-lg font-semibold">Acessar</p>
 
           <div className="flex flex-col gap-3">
+            {/* Campo telefone com máscara */}
             <label className="text-sm">Escreva seu telefone</label>
             <input
               type="tel"
+              placeholder="(99) 99999-9999"
+              maxLength={15}
               value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
+              onChange={(e) => setTelefone(formatPhone(e.target.value))}
               className="bg-[var(--input-background)] px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)]"
             />
 
@@ -60,9 +71,7 @@ export default function LoginPage() {
                   type="button"
                   className="absolute right-3 top-1/2 -translate-y-1/2"
                   onClick={() => setShowPassword(!showPassword)}
-                >
-
-                </button>
+                ></button>
               )}
             </div>
 
