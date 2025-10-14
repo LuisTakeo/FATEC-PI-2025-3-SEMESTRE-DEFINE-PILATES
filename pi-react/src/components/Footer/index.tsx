@@ -8,7 +8,7 @@ function Footer(){
             <div className=" w-64 flex-shrink-0 md:mx-0 mx-auto text-left md:mt-0 mt-10">
                 <a className="flex title-font font-medium items-start justify-start text-gray-900 w-full">
                     <span className="text-[2.2rem] kaisei-tokumin-regular font-extrabold text-[var(--destaque)] tracking-[-0.1px] flex items-end leading-none">
-                        Defina Pilates
+                        Defıne Pilates
                         <span className="text-[2.8rem] leading-none ml-1">.</span>
                     </span>
                 </a>
