@@ -7,7 +7,7 @@ export default function RecoveryPhonePage() {
   const [phone, setPhone] = useState<string>("");
   const [confirmPhone, setConfirmPhone] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [submitted, setSubmitted] = useState<boolean>(false); // flag de envio
+  const [submitted, setSubmitted] = useState<boolean>(false); 
 
   const formatPhone = (value: string): string => {
     let digits = value.replace(/\D/g, "").slice(0, 11);
@@ -17,7 +17,7 @@ export default function RecoveryPhonePage() {
   };
 
   const handleSubmit = (): void => {
-    setSubmitted(true); // marcar como enviado
+    setSubmitted(true); 
     if (phone.length < 15 || confirmPhone.length < 15) {
       setError("O telefone está incompleto.");
       return;
