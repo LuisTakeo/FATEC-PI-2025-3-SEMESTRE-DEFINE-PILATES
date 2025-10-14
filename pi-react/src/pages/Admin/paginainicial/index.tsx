@@ -5,12 +5,10 @@ export default function CadastroInicialPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      {/* Header */}
       <header className="flex items-center justify-between px-6 py-4">
         <div className="flex flex-col gap-2 w-[140px]" />
       </header>
 
-      {/* Main */}
       <main className="flex flex-col items-center px-6 pt-24 pb-8 bg-[var(--color-background)]">
         <div className="w-full max-w-sm flex flex-col">
           <h2 className="text-2xl text-[var(--destaque)] font-bold font-inter mb-8 text-center">

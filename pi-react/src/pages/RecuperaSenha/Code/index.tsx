@@ -22,7 +22,7 @@ export default function RecoveryCodePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      <main className="flex flex-col items-center justify-center flex-1 px-6 py-3">
+      <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px]">
         <div className="w-full max-w-sm flex flex-col">
           <h2 className="text-2xl font-bold text-[var(--destaque)] mb-2 text-left">
             Digite o código

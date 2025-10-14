@@ -17,6 +17,7 @@ export default function LoginPage() {
   };
 
   const handleLogin = () => {
+    console.log ("Tentando logar com:", { telefone, senha });
     if (telefone !== "(12) 34567-8901" || senha !== "1234") {
       setError("Telefone ou senha incorretos");
     } else {
@@ -27,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
-      <main className="flex flex-col items-center justify-start flex-1 px-6 pt-24">
+      <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px]">
         <div className="flex w-full max-w-sm justify-between items-end mb-6">
           <h2 className="text-2xl text-[var(--destaque)] font-bold leading-tight">
             Entre <br /> na sua conta
