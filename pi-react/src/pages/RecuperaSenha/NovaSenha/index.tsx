@@ -33,11 +33,28 @@ export default function NewPasswordPage() {
     return true;
   };
 
+  const handleSenhaChange = (value: string) => {
+    setSenha(value);
+    setErro("");
+  };
+
+  const handleConfirmarChange = (value: string) => {
+    setConfirmar(value);
+    setErro("");
+  };
+
   const handleSubmit = () => {
     if (validarSenha()) {
       navigate("/user/login");
     }
   };
+
+  const getInputClass = (campo: string) =>
+    `w-full px-4 py-3 rounded-md focus:outline-none focus:ring-1 focus:ring-[var(--destaque)] transition-all pr-10 bg-[var(--input-background)] text-[var(--color-foreground)] ${
+      erro && ((campo === "senha" && (!senha || senha !== confirmar)) || (campo === "confirmar" && (!confirmar || senha !== confirmar)))
+        ? "border-2 border-red-500"
+        : ""
+    }`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
@@ -47,7 +64,8 @@ export default function NewPasswordPage() {
             Escreva sua nova senha
           </h2>
           <p className="mb-6">
-            A senha deve ter caracteres <b>maiúsculos</b>, <b>minúsculos</b> e <b>números</b>.
+            A senha deve ter caracteres <b>maiúsculos</b>, <b>minúsculos</b> e{" "}
+            <b>números</b>.
           </p>
 
           <div className="relative mb-4">
@@ -55,14 +73,8 @@ export default function NewPasswordPage() {
               type={mostrarSenha ? "text" : "password"}
               placeholder="Nova senha"
               value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              className={`w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 transition-all ${
-                erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-              } pr-10`}
-              style={{
-                backgroundColor: "var(--input-background)",
-                color: "var(--color-foreground)",
-              }}
+              onChange={(e) => handleSenhaChange(e.target.value)}
+              className={getInputClass("senha")}
             />
             {senha && (
               <button
@@ -78,14 +90,8 @@ export default function NewPasswordPage() {
               type={mostrarConfirmar ? "text" : "password"}
               placeholder="Escreva a nova senha novamente"
               value={confirmar}
-              onChange={(e) => setConfirmar(e.target.value)}
-              className={`w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 transition-all ${
-                erro ? "focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-              } pr-10`}
-              style={{
-                backgroundColor: "var(--input-background)",
-                color: "var(--color-foreground)",
-              }}
+              onChange={(e) => handleConfirmarChange(e.target.value)}
+              className={getInputClass("confirmar")}
             />
             {confirmar && (
               <button

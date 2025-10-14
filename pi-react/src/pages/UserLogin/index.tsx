@@ -10,20 +10,41 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const formatPhone = (value: string): string => {
-    let digits = value.replace(/\D/g, "").slice(0, 11); 
+    let digits = value.replace(/\D/g, "").slice(0, 11);
     digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
     digits = digits.replace(/(\d{5})(\d{1,4})$/, "$1-$2");
     return digits;
   };
 
   const handleLogin = () => {
-    console.log ("Tentando logar com:", { telefone, senha });
+    console.log("Tentando logar com:", { telefone, senha });
     if (telefone !== "(12) 34567-8901" || senha !== "1234") {
       setError("Telefone ou senha incorretos");
     } else {
       setError("");
-      navigate("/cadastro"); 
+      navigate("/cadastro");
     }
+  };
+
+  const handleTelefoneChange = (value: string) => {
+    setTelefone(formatPhone(value));
+    if (error) setError("");
+  };
+
+  const handleSenhaChange = (value: string) => {
+    setSenha(value);
+    if (error) setError("");
+  };
+
+  const getInputClass = () => {
+    const isErro = error !== "";
+    return `
+      bg-[var(--input-background)] px-4 py-3 rounded-md w-full
+      border ${isErro ? "border-red-500" : "border-gray-300"}
+      text-[var(--color-foreground)]
+      focus:outline-none ${!isErro ? "focus:ring-1 focus:ring-[var(--destaque)]" : ""}
+      transition-all
+    `;
   };
 
   return (
@@ -50,8 +71,8 @@ export default function LoginPage() {
               placeholder="(99) 99999-9999"
               maxLength={15}
               value={telefone}
-              onChange={(e) => setTelefone(formatPhone(e.target.value))}
-              className="bg-[var(--input-background)] px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)]"
+              onChange={(e) => handleTelefoneChange(e.target.value)}
+              className={getInputClass()}
             />
 
             <label className="text-sm">Escreva sua senha</label>
@@ -59,8 +80,8 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                className="bg-[var(--input-background)] px-4 py-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] pr-10"
+                onChange={(e) => handleSenhaChange(e.target.value)}
+                className={`${getInputClass()} pr-10`}
               />
 
               {senha && (
@@ -77,7 +98,7 @@ export default function LoginPage() {
               className="text-[var(--destaque)] text-sm underline hover:opacity-90"
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/recupera-senha/"); 
+                navigate("/recupera-senha/");
               }}
             >
               Esqueci a minha senha
