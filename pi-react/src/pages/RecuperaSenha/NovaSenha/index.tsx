@@ -9,10 +9,6 @@ export default function NewPasswordPage() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
-  // Flags para controlar se o usuário saiu do input
-  const [touchedSenha, setTouchedSenha] = useState(false);
-  const [touchedConfirmar, setTouchedConfirmar] = useState(false);
-
   const validarSenha = () => {
     const temMaiuscula = /[A-Z]/.test(senha);
     const temMinuscula = /[a-z]/.test(senha);
@@ -40,29 +36,21 @@ export default function NewPasswordPage() {
   const handleSenhaChange = (value: string) => {
     setSenha(value);
     setErro("");
-    setTouchedSenha(false); // remove borda vermelha enquanto digita
   };
 
   const handleConfirmarChange = (value: string) => {
     setConfirmar(value);
     setErro("");
-    setTouchedConfirmar(false); // remove borda vermelha enquanto digita
   };
 
   const handleSubmit = () => {
-    setTouchedSenha(true);
-    setTouchedConfirmar(true);
-
     if (validarSenha()) {
       navigate("/user/login");
     }
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 transition-all pr-10";
-
-  const senhaHasError = touchedSenha && (!senha || !/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/\d/.test(senha));
-  const confirmarHasError = touchedConfirmar && (confirmar !== senha || !confirmar);
+    "w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all pr-10 bg-[var(--input-background)] text-[var(--color-foreground)]";
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
@@ -72,7 +60,8 @@ export default function NewPasswordPage() {
             Escreva sua nova senha
           </h2>
           <p className="mb-6">
-            A senha deve ter caracteres <b>maiúsculos</b>, <b>minúsculos</b> e <b>números</b>.
+            A senha deve ter caracteres <b>maiúsculos</b>, <b>minúsculos</b> e{" "}
+            <b>números</b>.
           </p>
 
           <div className="relative mb-4">
@@ -81,14 +70,7 @@ export default function NewPasswordPage() {
               placeholder="Nova senha"
               value={senha}
               onChange={(e) => handleSenhaChange(e.target.value)}
-              onBlur={() => setTouchedSenha(true)}
-              className={`${inputClass} ${
-                senhaHasError ? "border-2 border-red-500 focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-              }`}
-              style={{
-                backgroundColor: "var(--input-background)",
-                color: "var(--color-foreground)",
-              }}
+              className={inputClass}
             />
             {senha && (
               <button
@@ -105,14 +87,7 @@ export default function NewPasswordPage() {
               placeholder="Escreva a nova senha novamente"
               value={confirmar}
               onChange={(e) => handleConfirmarChange(e.target.value)}
-              onBlur={() => setTouchedConfirmar(true)}
-              className={`${inputClass} ${
-                confirmarHasError ? "border-2 border-red-500 focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-              }`}
-              style={{
-                backgroundColor: "var(--input-background)",
-                color: "var(--color-foreground)",
-              }}
+              className={inputClass}
             />
             {confirmar && (
               <button

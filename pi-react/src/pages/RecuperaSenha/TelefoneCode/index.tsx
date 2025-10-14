@@ -8,9 +8,6 @@ export default function RecoveryPhonePage() {
   const [confirmPhone, setConfirmPhone] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const [touchedPhone, setTouchedPhone] = useState<boolean>(false);
-  const [touchedConfirm, setTouchedConfirm] = useState<boolean>(false);
-
   const formatPhone = (value: string): string => {
     let digits = value.replace(/\D/g, "").slice(0, 11);
     digits = digits.replace(/^(\d{2})(\d)/, "($1) $2");
@@ -21,19 +18,14 @@ export default function RecoveryPhonePage() {
   const handlePhoneChange = (value: string) => {
     setPhone(formatPhone(value));
     setError("");
-    setTouchedPhone(false); 
   };
 
   const handleConfirmChange = (value: string) => {
     setConfirmPhone(formatPhone(value));
     setError("");
-    setTouchedConfirm(false); 
   };
 
   const handleSubmit = (): void => {
-    setTouchedPhone(true);
-    setTouchedConfirm(true);
-
     if (phone.length < 15 || confirmPhone.length < 15) {
       setError("O telefone está incompleto.");
       return;
@@ -45,13 +37,6 @@ export default function RecoveryPhonePage() {
     setError("");
     navigate("/recupera-senha/code");
   };
-
-  const inputClass =
-    "w-full px-4 py-3 rounded-md mb-4 focus:outline-none focus:ring-2 transition-all";
-
-  const phoneHasError = touchedPhone && phone.length < 15;
-  const confirmHasError =
-    touchedConfirm && (confirmPhone.length < 15 || confirmPhone !== phone);
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
@@ -76,12 +61,7 @@ export default function RecoveryPhonePage() {
             maxLength={15}
             value={phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            onBlur={() => setTouchedPhone(true)}
-            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] ${
-              phoneHasError
-                ? "border-2 border-red-500 focus:ring-red-500"
-                : "focus:ring-[var(--destaque)]"
-            }`}
+            className="w-full px-4 py-3 rounded-md mb-4 bg-[var(--input-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
           />
 
           <input
@@ -90,12 +70,7 @@ export default function RecoveryPhonePage() {
             maxLength={15}
             value={confirmPhone}
             onChange={(e) => handleConfirmChange(e.target.value)}
-            onBlur={() => setTouchedConfirm(true)}
-            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] ${
-              confirmHasError
-                ? "border-2 border-red-500 focus:ring-red-500"
-                : "focus:ring-[var(--destaque)]"
-            }`}
+            className="w-full px-4 py-3 rounded-md mb-4 bg-[var(--input-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
           />
 
           {error && (

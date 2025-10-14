@@ -39,9 +39,7 @@ export default function RecoveryCodePage() {
             placeholder="Digite o código"
             value={codigo}
             onChange={handleChange}
-            className={`w-full bg-[var(--input-background)] px-4 py-3 rounded-md mb-2 focus:outline-none focus:ring-2 transition-all ${
-              erro ? "border-2 border-red-500 focus:ring-red-500" : "focus:ring-[var(--destaque)]"
-            }`}
+            className="w-full bg-[var(--input-background)] px-4 py-3 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
           />
 
           {erro && <p className="text-red-500 text-sm mb-4">{erro}</p>}
