@@ -7,7 +7,9 @@ export default function RecoveryPhonePage() {
   const [phone, setPhone] = useState<string>("");
   const [confirmPhone, setConfirmPhone] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [submitted, setSubmitted] = useState<boolean>(false); 
+
+  const [touchedPhone, setTouchedPhone] = useState<boolean>(false);
+  const [touchedConfirm, setTouchedConfirm] = useState<boolean>(false);
 
   const formatPhone = (value: string): string => {
     let digits = value.replace(/\D/g, "").slice(0, 11);
@@ -16,8 +18,22 @@ export default function RecoveryPhonePage() {
     return digits;
   };
 
+  const handlePhoneChange = (value: string) => {
+    setPhone(formatPhone(value));
+    setError("");
+    setTouchedPhone(false); 
+  };
+
+  const handleConfirmChange = (value: string) => {
+    setConfirmPhone(formatPhone(value));
+    setError("");
+    setTouchedConfirm(false); 
+  };
+
   const handleSubmit = (): void => {
-    setSubmitted(true); 
+    setTouchedPhone(true);
+    setTouchedConfirm(true);
+
     if (phone.length < 15 || confirmPhone.length < 15) {
       setError("O telefone está incompleto.");
       return;
@@ -33,10 +49,13 @@ export default function RecoveryPhonePage() {
   const inputClass =
     "w-full px-4 py-3 rounded-md mb-4 focus:outline-none focus:ring-2 transition-all";
 
+  const phoneHasError = touchedPhone && phone.length < 15;
+  const confirmHasError =
+    touchedConfirm && (confirmPhone.length < 15 || confirmPhone !== phone);
+
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px] max-sm:mt-[-40px] transition-all duration-300">
-
         <img
           src="/envelope.png"
           alt="Telefone"
@@ -56,15 +75,13 @@ export default function RecoveryPhonePage() {
             placeholder="(99) 99999-9999"
             maxLength={15}
             value={phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPhone(formatPhone(e.target.value))
-            }
-            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] 
-              ${
-                !submitted || (phone.length === 15)
-                  ? "focus:ring-[var(--destaque)]"
-                  : "border-2 border-red-500 focus:ring-red-500"
-              }`}
+            onChange={(e) => handlePhoneChange(e.target.value)}
+            onBlur={() => setTouchedPhone(true)}
+            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] ${
+              phoneHasError
+                ? "border-2 border-red-500 focus:ring-red-500"
+                : "focus:ring-[var(--destaque)]"
+            }`}
           />
 
           <input
@@ -72,15 +89,13 @@ export default function RecoveryPhonePage() {
             placeholder="Confirme seu telefone"
             maxLength={15}
             value={confirmPhone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setConfirmPhone(formatPhone(e.target.value))
-            }
-            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] 
-              ${
-                !submitted || (confirmPhone.length === 15 && confirmPhone === phone)
-                  ? "focus:ring-[var(--destaque)]"
-                  : "border-2 border-red-500 focus:ring-red-500"
-              }`}
+            onChange={(e) => handleConfirmChange(e.target.value)}
+            onBlur={() => setTouchedConfirm(true)}
+            className={`${inputClass} bg-[var(--input-background)] text-[var(--color-foreground)] ${
+              confirmHasError
+                ? "border-2 border-red-500 focus:ring-red-500"
+                : "focus:ring-[var(--destaque)]"
+            }`}
           />
 
           {error && (
