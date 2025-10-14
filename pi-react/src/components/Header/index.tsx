@@ -18,7 +18,7 @@ function Header() {
 
         <div className="order-1 md:order-2 w-full md:w-auto flex justify-center mb-4 md:mb-0">
           <span className="text-[2.2rem] max-sm:text-[1.8rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] transition-all duration-300">
-            Define Pilates
+            Defıne Pilates
             <span className="font-extrabold text-[3rem] max-sm:text-[2.4rem]">.</span>
           </span>
         </div>
