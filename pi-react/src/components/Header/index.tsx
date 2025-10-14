@@ -17,9 +17,9 @@ function Header() {
       <div className="container mx-auto flex flex-col md:flex-row items-center md:justify-between p-5">
 
         <div className="order-1 md:order-2 w-full md:w-auto flex justify-center mb-4 md:mb-0">
-          <span className="text-[2.2rem] max-sm:text-[1.8rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] transition-all duration-300">
+          <span className="flex items-baseline gap-1 whitespace-nowrap text-[2.2rem] max-sm:text-[1.8rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] transition-all duration-300">
             Defıne Pilates
-            <span className="font-extrabold text-[3rem] max-sm:text-[2.4rem]">.</span>
+           <span className="font-extrabold text-[3rem] max-sm:text-[2.4rem] leading-none">.</span>
           </span>
         </div>
 
