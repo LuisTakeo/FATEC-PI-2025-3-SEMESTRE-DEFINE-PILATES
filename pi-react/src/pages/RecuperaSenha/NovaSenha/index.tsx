@@ -49,8 +49,12 @@ export default function NewPasswordPage() {
     }
   };
 
-  const inputClass =
-    "w-full px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all pr-10 bg-[var(--input-background)] text-[var(--color-foreground)]";
+  const getInputClass = (campo: string) =>
+    `w-full px-4 py-3 rounded-md focus:outline-none focus:ring-1 focus:ring-[var(--destaque)] transition-all pr-10 bg-[var(--input-background)] text-[var(--color-foreground)] ${
+      erro && ((campo === "senha" && (!senha || senha !== confirmar)) || (campo === "confirmar" && (!confirmar || senha !== confirmar)))
+        ? "border-2 border-red-500"
+        : ""
+    }`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
@@ -70,7 +74,7 @@ export default function NewPasswordPage() {
               placeholder="Nova senha"
               value={senha}
               onChange={(e) => handleSenhaChange(e.target.value)}
-              className={inputClass}
+              className={getInputClass("senha")}
             />
             {senha && (
               <button
@@ -87,7 +91,7 @@ export default function NewPasswordPage() {
               placeholder="Escreva a nova senha novamente"
               value={confirmar}
               onChange={(e) => handleConfirmarChange(e.target.value)}
-              className={inputClass}
+              className={getInputClass("confirmar")}
             />
             {confirmar && (
               <button

@@ -9,7 +9,7 @@ export default function RecoveryCodePage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "").slice(0, 6);
     setCodigo(value);
-    if (erro) setErro(""); 
+    if (erro) setErro("");
   };
 
   const handleSubmit = () => {
@@ -18,6 +18,18 @@ export default function RecoveryCodePage() {
       return;
     }
     navigate("/recupera-senha/nova-senha");
+  };
+
+  const getInputClass = () => {
+    const isErro = erro !== "";
+    return `
+      w-full px-4 py-3 rounded-md mb-1 
+      border ${isErro ? "border-red-500" : "border-gray-300"} 
+      bg-[var(--input-background)] text-[var(--color-foreground)] 
+      focus:outline-none 
+      ${!isErro ? "focus:ring-1 focus:ring-[var(--destaque)]" : ""} 
+      transition-all
+    `;
   };
 
   return (
@@ -39,7 +51,7 @@ export default function RecoveryCodePage() {
             placeholder="Digite o código"
             value={codigo}
             onChange={handleChange}
-            className="w-full bg-[var(--input-background)] px-4 py-3 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
+            className={getInputClass()}
           />
 
           {erro && <p className="text-red-500 text-sm mb-4">{erro}</p>}

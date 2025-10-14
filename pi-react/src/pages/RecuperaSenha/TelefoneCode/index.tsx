@@ -38,6 +38,21 @@ export default function RecoveryPhonePage() {
     navigate("/recupera-senha/code");
   };
 
+  const getInputClass = (campo: "phone" | "confirm") => {
+    const isInvalid =
+      error &&
+      ((campo === "phone" && (phone.length < 15 || phone !== confirmPhone)) ||
+        (campo === "confirm" && (confirmPhone.length < 15 || phone !== confirmPhone)));
+
+    return `
+      w-full px-4 py-3 rounded-md mb-4 
+      border ${isInvalid ? "border-red-500" : "border-gray-300"} 
+      bg-[var(--input-background)] text-[var(--color-foreground)] 
+      focus:outline-none focus:ring-1 focus:ring-[var(--destaque)] 
+      transition-all
+    `;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-inter">
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-3 mt-[-80px] max-sm:mt-[-40px] transition-all duration-300">
@@ -61,7 +76,7 @@ export default function RecoveryPhonePage() {
             maxLength={15}
             value={phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            className="w-full px-4 py-3 rounded-md mb-4 bg-[var(--input-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
+            className={getInputClass("phone")}
           />
 
           <input
@@ -70,7 +85,7 @@ export default function RecoveryPhonePage() {
             maxLength={15}
             value={confirmPhone}
             onChange={(e) => handleConfirmChange(e.target.value)}
-            className="w-full px-4 py-3 rounded-md mb-4 bg-[var(--input-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] transition-all"
+            className={getInputClass("confirm")}
           />
 
           {error && (
