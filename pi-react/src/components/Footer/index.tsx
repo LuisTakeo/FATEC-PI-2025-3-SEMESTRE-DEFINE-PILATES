@@ -7,10 +7,12 @@ function Footer(){
         <div className="container  px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
             <div className=" w-64 flex-shrink-0 md:mx-0 mx-auto text-left md:mt-0 mt-10">
                 <a className="flex title-font font-medium items-start justify-start text-gray-900 w-full">
-                    <span className="text-[2.2rem] kaisei-tokumin-regular font-extrabold text-[var(--destaque)] tracking-[-0.1px]">
-                    Defıne Pilates<span className="text-[3rem]">.</span>
+                    <span className="text-[2.2rem] kaisei-tokumin-regular font-extrabold text-[var(--destaque)] tracking-[-0.1px] flex items-end leading-none">
+                        Defina Pilates
+                        <span className="text-[2.8rem] leading-none ml-1">.</span>
                     </span>
                 </a>
+
                 <p className="text-sm text-gray-700 text-[1.2rem] flex justify-start items-start mt-2">
                     Pilates é para você: construa força, aumente sua flexibilidade e domine sua energia
                 </p>
