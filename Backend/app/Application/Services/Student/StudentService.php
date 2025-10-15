@@ -5,6 +5,7 @@ namespace App\Application\Services\Student;
 
 use App\Application\DTOs\StudentDTO;
 use App\Application\Ports\NoSQLPort;
+use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
 use Exception;
@@ -13,7 +14,7 @@ use Str;
 class StudentService implements StudentServiceContract
 {
     private StudentRepositoryPort $sqlAdapter;
-    private NoSQLPort $noSQLAdapter;
+    private StudentNoSQLPort $noSQLAdapter;
 
     /**
      * @OA\Post(
@@ -74,7 +75,7 @@ class StudentService implements StudentServiceContract
      */
     public function __construct(
         StudentRepositoryPort $sqlAdapter, 
-        NoSQLPort $noSQLAdapter)
+        StudentNoSQLPort $noSQLAdapter)
     {
         $this->sqlAdapter = $sqlAdapter;
         $this->noSQLAdapter = $noSQLAdapter;
@@ -88,40 +89,63 @@ class StudentService implements StudentServiceContract
 
     public function registerStudent(StudentDTO $studentDTO): array
     {
-        try
-        {
-            $studentDTOFiltered = $this->sanitizeStudentData($studentDTO);
-            $hasSave = $this->sqlAdapter->create($studentDTOFiltered);
-            if (!$hasSave)
-            {
+        try {
+            // 1. Salvar dados básicos no MySQL
+            $sqlResult = $this->sqlAdapter->create($studentDTO);
+            
+            if (!($sqlResult['status'] ?? false)) {
                 return [
-                    'message' => 'Failed to register student',
-                    'error' => 'Could not save to database',
+                    'message' => 'Não foi possível cadastrar o aluno',
+                    'error' => 'Falha ao salvar no banco principal',
                     'status' => 'error'
                 ];
             }
 
-        } catch (Exception $e)
-        {
+            // 2. Criar DTO com ID para salvar no MongoDB
+            $studentWithId = new StudentDTO(
+                name: $studentDTO->name,
+                phone: $studentDTO->phone,
+                password: $studentDTO->password,
+                cpf: $studentDTO->cpf,
+                profession: $studentDTO->profession,
+                birthDate: $studentDTO->birthDate,
+                fotos: $studentDTO->fotos,
+                contatos: $studentDTO->contatos,
+                enderecos: $studentDTO->enderecos,
+                id: $sqlResult['id'] // ID retornado do MySQL
+            );
 
+            // 3. Salvar dados extras no MongoDB (não crítico)
+            $mongoResult = $this->noSQLAdapter->saveStudentData($studentWithId);
+            
+            // Log se MongoDB falhou, mas não falha o registro
+            if ($mongoResult['status'] !== StudentNoSQLPort::SUCCESS) {
+                \Log::warning('MongoDB save failed but student was created', [
+                    'student_id' => $sqlResult['id'],
+                    'mongo_error' => $mongoResult['error'] ?? 'Unknown error'
+                ]);
+            }
+
+            return [
+                'message' => 'Aluno cadastrado com sucesso!',
+                'data' => array_merge($studentDTO->withoutPassword(), [
+                    'id' => $sqlResult['id'],
+                    'mongo_saved' => $mongoResult['status'] === StudentNoSQLPort::SUCCESS
+                ]),
+                'status' => 'success'
+            ];
+
+        } catch (Exception $e) {
+            \Log::error('Failed to register student', [
+                'error' => $e->getMessage(),
+                'student_data' => $studentDTO->withoutPassword()
+            ]);
+
+            return [
+                'message' => 'Erro interno do servidor',
+                'error' => $e->getMessage(),
+                'status' => 'error'
+            ];
         }
-        return [
-        'message' => 'Acessando a Service',
-        'data' => $studentDTOFiltered->toArray(),
-        'status' => 'success'
-        ];
-    }
-
-    private function sanitizeStudentData(StudentDTO $dto): StudentDTO
-    {
-        return new StudentDTO(
-            id: $dto->id,
-            name: Str::title(trim(strip_tags($dto->name))),                    // Remove tags, trim, capitaliza
-            phone: preg_replace('/[^0-9]/', '', $dto->phone),                  // Só números
-            password: password_hash($dto->password, PASSWORD_DEFAULT),                                          // Não sanitizar senha (será hasheada)
-            cpf: preg_replace('/[^0-9]/', '', $dto->cpf),                     // Só números
-            profession: Str::title(trim(strip_tags($dto->profession))),
-            birthDate: $dto->birthDate
-        );
     }
 }

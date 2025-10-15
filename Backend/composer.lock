@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "878d1ed4ef9e05534fcdf4d5d51104ca",
+    "content-hash": "6ac02aed49d1de81cdb9095b7b1c55c9",
     "packages": [
         {
             "name": "brick/math",
@@ -2228,28 +2228,29 @@
         },
         {
             "name": "mongodb/laravel-mongodb",
-            "version": "4.9.0",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mongodb/laravel-mongodb.git",
-                "reference": "486ec44d7a796c4333155bda46ea55d451a0e260"
+                "reference": "c483b99a69ea9916d17719b86e7e5ea2f8b44c8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/486ec44d7a796c4333155bda46ea55d451a0e260",
-                "reference": "486ec44d7a796c4333155bda46ea55d451a0e260",
+                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/c483b99a69ea9916d17719b86e7e5ea2f8b44c8a",
+                "reference": "c483b99a69ea9916d17719b86e7e5ea2f8b44c8a",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0.0",
                 "ext-mongodb": "^1.21|^2",
-                "illuminate/cache": "^10.36|^11",
-                "illuminate/container": "^10.0|^11",
-                "illuminate/database": "^10.30|^11",
-                "illuminate/events": "^10.0|^11",
-                "illuminate/support": "^10.0|^11",
+                "illuminate/cache": "^10.36|^11|^12",
+                "illuminate/container": "^10.0|^11|^12",
+                "illuminate/database": "^10.30|^11|^12",
+                "illuminate/events": "^10.0|^11|^12",
+                "illuminate/support": "^10.0|^11|^12",
                 "mongodb/mongodb": "^1.21|^2",
-                "php": "^8.1"
+                "php": "^8.1",
+                "symfony/http-foundation": "^6.4|^7"
             },
             "conflict": {
                 "illuminate/bus": "< 10.37.2"
@@ -2259,25 +2260,24 @@
             },
             "require-dev": {
                 "doctrine/coding-standard": "12.0.x-dev",
+                "laravel/scout": "^10.3",
                 "league/flysystem-gridfs": "^3.28",
                 "league/flysystem-read-only": "^3.0",
                 "mockery/mockery": "^1.4.4",
-                "mongodb/builder": "^0.2",
-                "orchestra/testbench": "^8.0|^9.0",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.3",
-                "spatie/laravel-query-builder": "^5.6"
+                "phpunit/phpunit": "^10.3|^11.5.3",
+                "rector/rector": "^1.2",
+                "spatie/laravel-query-builder": "^5.6|^6"
             },
             "suggest": {
-                "league/flysystem-gridfs": "Filesystem storage in MongoDB with GridFS",
-                "mongodb/builder": "Provides a fluent aggregation builder for MongoDB pipelines"
+                "league/flysystem-gridfs": "Filesystem storage in MongoDB with GridFS"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
                         "MongoDB\\Laravel\\MongoDBServiceProvider",
-                        "MongoDB\\Laravel\\MongoDBQueueServiceProvider",
                         "MongoDB\\Laravel\\MongoDBBusServiceProvider"
                     ]
                 }
@@ -2296,6 +2296,11 @@
                     "name": "Andreas Braun",
                     "email": "andreas.braun@mongodb.com",
                     "role": "Leader"
+                },
+                {
+                    "name": "Pauline Vos",
+                    "email": "pauline.vos@mongodb.com",
+                    "role": "Maintainer"
                 },
                 {
                     "name": "Jérôme Tamarelle",
@@ -2326,9 +2331,9 @@
             "support": {
                 "issues": "https://www.mongodb.com/support",
                 "security": "https://www.mongodb.com/security",
-                "source": "https://github.com/mongodb/laravel-mongodb/tree/4.9.0"
+                "source": "https://github.com/mongodb/laravel-mongodb/tree/5.5.0"
             },
-            "time": "2025-04-14T12:42:15+00:00"
+            "time": "2025-08-12T05:06:10+00:00"
         },
         {
             "name": "mongodb/mongodb",

@@ -44,72 +44,255 @@
                 "tags": [
                     "Students"
                 ],
-                "summary": "Cadastro de novo estudante",
+                "summary": "Cadastro completo de novo estudante",
                 "operationId": "registerStudent",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "11999999999"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "abc123A"
-                                    },
-                                    "cpf": {
-                                        "type": "string",
-                                        "example": "12345678901"
-                                    },
-                                    "profession": {
-                                        "type": "string",
-                                        "example": "Professor"
-                                    },
-                                    "birth_date": {
-                                        "type": "string",
-                                        "example": "15-01-1990"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/StudentRegisterRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Success",
+                        "description": "Sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/StudentSuccessResponse"
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
                     }
                 }
             }
         }
     },
-    "tags": [
-        {
-            "name": "Students",
-            "description": "Student management operations"
-        }
-    ],
     "components": {
+        "schemas": {
+            "Contato": {
+                "title": "Contact Information",
+                "required": [
+                    "tipo",
+                    "valor"
+                ],
+                "properties": {
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "telefone",
+                            "email",
+                            "whatsapp",
+                            "emergencia"
+                        ],
+                        "example": "email"
+                    },
+                    "valor": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "joao@email.com"
+                    },
+                    "observacao": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "example": "Email pessoal",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Endereco": {
+                "title": "Address Information",
+                "required": [
+                    "tipo",
+                    "rua",
+                    "numero",
+                    "bairro",
+                    "cidade",
+                    "estado",
+                    "cep"
+                ],
+                "properties": {
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "residencial",
+                            "comercial",
+                            "cobranca"
+                        ]
+                    },
+                    "rua": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Rua das Flores"
+                    },
+                    "numero": {
+                        "type": "string",
+                        "maxLength": 10,
+                        "example": "123"
+                    },
+                    "complemento": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Apto 45",
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Centro"
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "São Paulo"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "maxLength": 2,
+                        "example": "SP"
+                    },
+                    "cep": {
+                        "type": "string",
+                        "example": "01234-567"
+                    },
+                    "principal": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StudentRegisterRequest": {
+                "title": "Student Register Request",
+                "description": "Request body for student registration",
+                "required": [
+                    "name",
+                    "phone",
+                    "password",
+                    "cpf",
+                    "profession",
+                    "birth_date"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nome completo do estudante",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "João Silva"
+                    },
+                    "phone": {
+                        "description": "Telefone principal (usado como login)",
+                        "type": "string",
+                        "example": "(11)99999-9999"
+                    },
+                    "password": {
+                        "description": "Senha de acesso (mínimo 6 caracteres)",
+                        "type": "string",
+                        "minLength": 6,
+                        "example": "abc123A"
+                    },
+                    "cpf": {
+                        "description": "CPF do estudante (apenas números)",
+                        "type": "string",
+                        "maxLength": 11,
+                        "minLength": 11,
+                        "example": "12345678901"
+                    },
+                    "profession": {
+                        "description": "Profissão do estudante",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Engenheiro"
+                    },
+                    "birth_date": {
+                        "description": "Data de nascimento (formato DD-MM-YYYY)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "15-01-1990"
+                    },
+                    "fotos": {
+                        "description": "Fotos do estudante em Base64 (máximo 5 fotos, 3MB cada)",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "base64",
+                            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+                        },
+                        "maxItems": 5,
+                        "nullable": true
+                    },
+                    "contatos": {
+                        "description": "Contatos adicionais do estudante (máximo 3)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Contato"
+                        },
+                        "maxItems": 3,
+                        "nullable": true
+                    },
+                    "enderecos": {
+                        "description": "Endereços do estudante (máximo 2)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Endereco"
+                        },
+                        "maxItems": 2,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StudentSuccessResponse": {
+                "title": "Success Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Student registered successfully"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "João Silva"
+                            },
+                            "phone": {
+                                "type": "string",
+                                "example": "(11)99999-9999"
+                            },
+                            "has_photos": {
+                                "type": "boolean",
+                                "example": true
+                            },
+                            "has_additional_data": {
+                                "type": "boolean",
+                                "example": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "sanctum": {
                 "type": "apiKey",
@@ -118,5 +301,11 @@
                 "in": "header"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Students",
+            "description": "Student management operations"
+        }
+    ]
 }

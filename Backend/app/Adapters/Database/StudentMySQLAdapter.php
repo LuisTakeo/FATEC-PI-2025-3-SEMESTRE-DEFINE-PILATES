@@ -20,7 +20,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
     }
 
 
-    public function create(StudentDTO $studentDTO): bool
+    public function create(StudentDTO $studentDTO): array
     {
         try {
             return DB::transaction(function () use ($studentDTO) {                
@@ -41,7 +41,8 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                 $student = Student::create([
                     'namestudent' => $studentDTO->name,
                     'cpf' => $studentDTO->cpf,
-                    'Id_classprofessions' => $professionClassId
+                    'Id_classprofessions' => $professionClassId,
+                    'Id_users' => $userTgi->Id_users,
                 ]);
                 
                 Log::info('Student created', [
@@ -49,7 +50,11 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                     'user_id' => $userTgi->Id_users
                 ]);
                 
-                return true;
+                return [
+                    'status' => true, 
+                    'id' => $student->Id_students,
+                    'id_user' => $userTgi->Id_users
+                ];  
             });
             
         } catch (Exception $e) {
@@ -62,7 +67,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                 ]
             ]);
             
-            return false;
+            return ['status'=> false,''=> $e->getMessage()];
         }
     }
     
