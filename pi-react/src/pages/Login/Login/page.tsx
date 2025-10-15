@@ -13,14 +13,12 @@ export default function LoginPage() {
   const handleLogin = () => {
     let valido = true;
 
-    // Validação telefone
     const digits = telefone.replace(/\D/g, "");
     if (digits.length !== 11) {
       setErroTelefone("Telefone inválido");
       valido = false;
     } else setErroTelefone("");
 
-    // Validação senha
     if (senha.trim() === "") {
       setErroSenha("Senha não pode ser vazia");
       valido = false;
@@ -28,7 +26,6 @@ export default function LoginPage() {
 
     if (valido) {
       console.log("Login válido!", { telefone, senha });
-      // Chamada à API aqui
     }
   };
 
