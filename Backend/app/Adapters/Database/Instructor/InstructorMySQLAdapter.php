@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Adapters\Database\Instructor;
+
+use App\Application\DTOs\InstructorDTO;
+use App\Application\Ports\Instructor\InstructorRepositoryPort;
+use App\Models\Collaborator;
+use App\Models\Instructor;
+use App\Models\UserTgi;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Log;
+
+class InstructorMySQLAdapter implements InstructorRepositoryPort
+{
+    public function create(InstructorDTO $instructorDTO): ?Instructor
+    {
+        try {
+            return DB::transaction(function () use ($instructorDTO) {
+                
+                $userTgi = UserTgi::create([
+                'nameuser' => $instructorDTO->phone,
+                'passworduser' => $instructorDTO->password,
+                'typeuser' => 'instructor',
+                'statususer' => 'active',
+                'birthdate' => $instructorDTO->birthDate->format('Y-m-d')
+            ]);
+
+            // 2. Cria o Collaborator PRIMEIRO para obter o ID
+            $collaborator = Collaborator::create([
+                'namecollaborator' => $instructorDTO->name,
+                'typecollaborator' => 'Instructor',
+                'fulladdress' => $instructorDTO->fulladdress,
+                'hiring' => $instructorDTO->hiring->format('Y-m-d'),
+                'classification' => $instructorDTO->classification,
+                'Id_users' => $userTgi->Id_users,
+            ]);
+
+            // 3. Cria o Instructor, agora PASSANDO o Id_collaborators
+            $instructor = Instructor::create([
+                'nameinstructor' => $instructorDTO->name,
+                'hiring' => $instructorDTO->hiring->format('Y-m-d'),
+                'classification' => $instructorDTO->classification,
+                'cref' => $instructorDTO->cref,
+                'crefito' => $instructorDTO->crefito,
+                'Id_users' => $userTgi->Id_users,
+                'Id_collaborators' => $collaborator->Id_collaborators, // <-- A CHAVE DA SOLUÇÃO
+            ]);
+
+            Log::info('Instructor and associated Collaborator created successfully', [
+                'instructor_id' => $instructor->Id_instructors,
+                'collaborator_id' => $collaborator->Id_collaborators,
+                'user_tgi_id' => $userTgi->Id_users
+            ]);
+                
+                return $instructor;
+            });
+
+        } catch (Exception $e) {
+            Log::error('Failed to create instructor', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'instructor_data' => [
+                    'name' => $instructorDTO->name,
+                    'phone' => $instructorDTO->phone,
+                    'classification' => $instructorDTO->classification
+                ]
+            ]);
+            
+            return null;
+        }
+    }
+}
+

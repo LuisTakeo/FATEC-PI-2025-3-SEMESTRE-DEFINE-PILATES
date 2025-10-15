@@ -4,12 +4,14 @@ import "./globals.css";
 import Header from "./components/layout/Header/Header"
 import Footer from "./components/layout/Footer/Footer"
 
-const dmSans = DM_Sans({
+const geistSans = Geist({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-geist-sans",
 });
-const inter = Inter({
+
+const geistMono = Geist_Mono({
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 const inter = Inter({
