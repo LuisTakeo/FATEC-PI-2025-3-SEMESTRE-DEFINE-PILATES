@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+cd /var/www
+
+echo "[dev] Checando vendor..."
+if [ ! -f vendor/autoload.php ]; then
+  echo "[dev] vendor vazio: executando composer install"
+  composer install
+fi
+
+# Gera key se necessário
+if grep -q "APP_KEY=" .env 2>/dev/null; then
+  php artisan key:generate --force >/dev/null 2>&1 || true
+fi
+
+echo "[dev] Executando migrations (ignorado se falhar)"
+php artisan migrate --force || true
+
+echo "[dev] Iniciando servidor artisan em 0.0.0.0:8000"
+exec php artisan serve --host=0.0.0.0 --port=8000

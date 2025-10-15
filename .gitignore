@@ -2,5 +2,12 @@
 .DS_Store
 Thumbs.db
 .env
+Backend/.env
+Backend/.env.local
+# Backend/.env.*
+frontend/.env.local
+# frontend/.env.*
 node_modules/
 vendor/
+/Backend-Rails/
+/Backend-Spring/

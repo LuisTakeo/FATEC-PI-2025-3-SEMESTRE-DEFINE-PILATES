@@ -413,4 +413,20 @@ class PilatesController extends BaseController
             ], 500);
         }
     }
+
+    /**
+     * Simple hello endpoint for smoke testing and development.
+     *
+     * @OA\\Get(
+     *     path="/api/hello",
+     *     summary="Hello world endpoint",
+     *     @OA\\Response(response="200", description="Hello world")
+     * )
+     */
+    public function hello(): JsonResponse
+    {
+        return response()->json([
+            'message' => 'Hello World from PilatesController'
+        ], 200);
+    }
 }
