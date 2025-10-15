@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\UserTgi;
 use DB;
 use Exception;
+use Hash;
 use Log;
 
 class StudentMySQLAdapter implements StudentRepositoryPort
@@ -19,6 +20,25 @@ class StudentMySQLAdapter implements StudentRepositoryPort
         // Inject dependencies here
     }
 
+    public function getStudentByLoginName(String $nameuser) : array
+    {
+        try
+        {
+            $student = Student::where("nameuser", $nameuser)->first();
+            if (!$student)
+                throw new Exception("Dados inválidos");
+            return [
+                'status' => true,
+                'data' => $student->toArray()];
+        }
+        catch (Exception $e)
+        {
+            Log::error("". $e->getMessage());
+            return ['status'=> false,'message'=> $e->getMessage()];
+        }
+        
+    }
+
 
     public function create(StudentDTO $studentDTO): array
     {
@@ -26,9 +46,11 @@ class StudentMySQLAdapter implements StudentRepositoryPort
             return DB::transaction(function () use ($studentDTO) {                
                 $professionClassId = $this->getOrCreateProfessionClassification($studentDTO->profession);
                 
+                $hashedPassword = Hash::make($studentDTO->password);
+
                 $userTgi = UserTgi::create([
                     'nameuser' => $studentDTO->phone,        
-                    'passworduser' => $studentDTO->password,
+                    'passworduser' => $hashedPassword,
                     'typeuser' => 'student',
                     'statususer' => 'active',
                     'message_sent' => false,
