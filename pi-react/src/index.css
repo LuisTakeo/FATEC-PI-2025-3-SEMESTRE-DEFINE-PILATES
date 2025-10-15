@@ -2,6 +2,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Italiana&family=Kaisei+Tokumin&display=swap');
+
 :root {
   --background: #EBEBEB;
   --foreground: #171717;
@@ -27,6 +28,10 @@ body {
 }
 
 
+.bg-azul-important {
+  background-color: var(--azul-segundario) !important;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -35,7 +40,5 @@ body {
   a:hover {
     color: #747bff;
   }
-  button {
-    background-color: #f9f9f9;
-  }
-} 
+ 
+}
