@@ -50,7 +50,11 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                     'user_id' => $userTgi->Id_users
                 ]);
                 
-                return ['status' => true, 'id' => $student->Id_students];  
+                return [
+                    'status' => true, 
+                    'id' => $student->Id_students,
+                    'id_user' => $userTgi->Id_users
+                ];  
             });
             
         } catch (Exception $e) {

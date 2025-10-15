@@ -17,9 +17,9 @@ class StudentMongo extends Model
     ];
 
     protected $casts = [
-        'fotos' => 'array',
-        'contatos' => 'array',
-        'enderecos' => 'array',
+        // 'fotos' => 'array',
+        // 'contatos' => 'array',
+        // 'enderecos' => 'array',
     ];
 
     protected $attributes = [
@@ -92,6 +92,26 @@ class StudentMongo extends Model
             ->toArray();
     }
 
+    protected function extrairMimeType(string $dataUri): ?string
+    {
+        // Match data:image/jpeg;base64, or data:image/png;base64, etc.
+        if (preg_match('/^data:([^;]+);base64,/', $dataUri, $matches)) {
+            return $matches[1];
+        }
+        
+        return null;
+    }
 
+    /**
+     * Alternative: Extract from decoded image data
+     *
+     * @param string $imageData
+     * @return string|null
+     */
+    protected function extrairMimeTypeFromData(string $imageData): ?string
+    {
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        return $finfo->buffer($imageData);
+    }
 
 }

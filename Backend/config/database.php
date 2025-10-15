@@ -115,20 +115,11 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGO_DSN'), // Para conexão completa
-            'host' => env('MONGO_HOST', '127.0.0.1'),
-            'port' => env('MONGO_PORT', 27017),
-            'database' => env('MONGO_DATABASE', 'define_pilates'),
-            'username' => env('MONGO_USERNAME'),
-            'password' => env('MONGO_PASSWORD'),
+            'dsn' => env('MONGO_DSN', 'mongodb://mongodb:27017/'),
+            'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
             'options' => [
+                'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
                 'appName' => env('APP_NAME', 'Laravel'),
-                // ✅ Opções adicionais para produção
-                'connectTimeoutMS' => 10000,
-                'serverSelectionTimeoutMS' => 5000,
-                'maxPoolSize' => 10,
-                'retryWrites' => true,
-                'retryReads' => true,
             ],
         ],
 
