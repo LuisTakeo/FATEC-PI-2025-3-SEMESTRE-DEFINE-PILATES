@@ -5,12 +5,14 @@ import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
 
-const dmSans = DM_Sans({
+const geistSans = Geist({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-geist-sans",
 });
-const inter = Inter({
+
+const geistMono = Geist_Mono({
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 const inter = Inter({

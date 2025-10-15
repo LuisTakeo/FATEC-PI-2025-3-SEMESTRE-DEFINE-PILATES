@@ -113,6 +113,16 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGO_DSN', 'mongodb://mongodb:27017/'),
+            'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
+            'options' => [
+                'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
+                'appName' => env('APP_NAME', 'Laravel'),
+            ],
+        ],
+
     ],
 
     /*

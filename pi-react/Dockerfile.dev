@@ -1,0 +1,35 @@
+# Dockerfile.dev - Ambiente exclusivamente de desenvolvimento para pi-react
+# Uso sem docker-compose
+# Build da imagem (instala dependências):
+#   docker build -f Dockerfile.dev -t pi-react-dev .
+# Rodar com hot reload (PowerShell Windows):
+#   docker run --rm -it -p 5173:5173 ^
+#     -v ${PWD}:/app ^
+#     -v pi_react_node_modules:/app/node_modules ^
+#     pi-react-dev
+# (Em bash/WSL substitua ^ por \ e ${PWD} funciona igual)
+# A separação do volume node_modules evita sobrescrever dependências ao montar o código.
+
+ARG NODE_VERSION=22.14.0
+FROM node:${NODE_VERSION}-alpine
+
+WORKDIR /app
+ENV NODE_ENV=development
+
+# Instala pacotes de sistema básicos (git útil para dependências via repositório)
+RUN apk add --no-cache git bash
+
+# Copiamos apenas manifests para cache de dependências
+COPY package*.json ./
+
+# Instala dependências (dev incluídas)
+RUN --mount=type=cache,target=/root/.npm npm install
+
+# (Opcional) Copiar código agora para permitir rodar sem bind mount
+# COPY . .
+# Como preferência: vamos depender do bind mount para código fonte, mantendo a imagem mínima.
+
+EXPOSE 5173
+
+# Comando padrão: Vite com host 0.0.0.0 para acesso externo
+CMD ["npm","run","dev","--","--host","0.0.0.0"]

@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ portNamespace }}\{{ portClass }};
+
+class {{ class }} implements {{ portClass }}
+{
+    public function __construct()
+    {
+        // Inject dependencies (Repositories / Other Ports) here
+    }
+
+    // Example method (adjust/remove):
+    public function example(array $input): array
+    {
+        return ['ok' => true];
+    }
+}
