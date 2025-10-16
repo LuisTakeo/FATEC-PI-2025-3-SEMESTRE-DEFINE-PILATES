@@ -5,12 +5,12 @@ const config: Config = {
     "./index.html",
     "./src/pages/**/*.{ts,tsx,js,jsx,mdx}",
     "./src/components/**/*.{ts,tsx,js,jsx,mdx}",
-    "./src/app/**/*.{ts,tsx,js,jsx,mdx}", // se tiver App Router
+    "./src/app/**/*.{ts,tsx,js,jsx,mdx}", 
   ],
   theme: {
     extend: {
       fontFamily: {
-        italiana: ["Italiana", "sans-serif"], // adiciona sua font
+        italiana: ["Italiana", "sans-serif"], 
       },
     },
   },
