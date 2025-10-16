@@ -27,7 +27,6 @@ body {
   background-color: var(--background);
 }
 
-
 .bg-azul-important {
   background-color: var(--azul-segundario) !important;
 }
@@ -37,8 +36,4 @@ body {
     color: #213547;
     background-color: #ffffff;
   }
-  a:hover {
-    color: #747bff;
-  }
- 
 }

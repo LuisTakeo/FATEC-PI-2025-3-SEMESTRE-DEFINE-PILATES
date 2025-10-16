@@ -1,3 +1,4 @@
+// Header.js - VERSÃO FINAL (Mobile First)
 import "../../index.css";
 import "./stylesHeader.css";
 "use client";
@@ -18,27 +19,29 @@ function Header() {
     const permissao: boolean = !paginasSemBotao.includes(location.pathname);
 
     return (
-        <header className="text-black-600 body-font bg-transparent">
+        <header className="text-black-600 body-font bg-[var(--background)]"> 
             <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
                 
                 <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+                    
+                    
                     <Link
                         to="/"
-                        className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]"
+                        className="mr-3 md:mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-lg md:text-[1.3rem]"
                     >
                         Página Inicial
                     </Link>
 
                     <Link
                         to="/"
-                        className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]"
+                        className="mr-3 md:mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-lg md:text-[1.3rem]"
                     >
                         Calendário
                     </Link>
 
                     <Link
                         to="/"
-                        className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem]"
+                        className="mr-3 md:mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-lg md:text-[1.3rem]"
                     >
                         Contato
                     </Link>

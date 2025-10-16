@@ -6,7 +6,7 @@ import Estilizacoes from "../../model/Estilizacoes"
 export default function RecebimentoCodigo(){
 
     const [codigo, setCodigo] = useState("")
-
+    const [contador, setContador] = useState(30)
     return(
         <>
         <main className="w-full h-150 flex">
@@ -40,7 +40,7 @@ export default function RecebimentoCodigo(){
                     <br />
                     Retorne à tela anterior e reescreva seu telefone e clique em solicitar
                     código novamente em{" "}
-                    <span className="text-[var(--destaque)] font-semibold">30</span>
+                    <span className="text-[var(--destaque)] font-semibold">{contador}</span>
                     <span className="text-[var(--destaque)] font-semibold"> segundos</span>
                 </p>
             </section>
