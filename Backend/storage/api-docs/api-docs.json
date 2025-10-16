@@ -2,183 +2,310 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Define Pilates API",
-        "description": "API documentation for Define Pilates (generated).",
+        "description": "API documentation for Define Pilates management system",
         "version": "1.0.0"
     },
     "servers": [
         {
             "url": "http://localhost:8000",
-            "description": "Local server"
+            "description": "Development Server"
         }
     ],
     "paths": {
-        "/api/users": {
+        "/api/students": {
             "get": {
-                "summary": "Get all users",
-                "operationId": "f94626a07af90577e39a22acf8cee1cf",
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Test endpoint",
+                "operationId": "getStudents",
                 "responses": {
                     "200": {
-                        "description": "Users list"
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "It works INDEX EEEEEEEEE"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/api/students/save": {
             "post": {
-                "summary": "Create new user",
-                "operationId": "690baa20e7558a0a2a66b65b6be9f895",
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Cadastro completo de novo estudante",
+                "operationId": "registerStudent",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "email",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/StudentRegisterRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
-                    }
-                }
-            }
-        },
-        "/api/users/{id}": {
-            "get": {
-                "summary": "Get user by ID",
-                "operationId": "16e454195e54364b09ba4ac1116a8e0a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StudentSuccessResponse"
+                                }
+                            }
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User found"
-                    }
-                }
-            },
-            "put": {
-                "summary": "Update user",
-                "operationId": "1d952e99ac98a8da1cc942ca5f7f8566",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User updated"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete user",
-                "operationId": "7342b6673b02b4f331d9d2fc0c0ed1f9",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User deleted"
-                    }
-                }
-            }
-        },
-        "/api/classes": {
-            "get": {
-                "summary": "Get all Pilates classes",
-                "operationId": "50b97475998a7e9e27cb2c699ee48b3f",
-                "responses": {
-                    "200": {
-                        "description": "Classes list"
-                    }
-                }
-            },
-            "post": {
-                "summary": "Create new Pilates class",
-                "operationId": "c0c123040a6280c0283e7a69b42790fd",
-                "responses": {
-                    "201": {
-                        "description": "Class created successfully"
-                    }
-                }
-            }
-        },
-        "/api/classes/{id}": {
-            "get": {
-                "summary": "Get Pilates class by ID",
-                "operationId": "8a823e1466db63453a74c8da6abcd637",
-                "responses": {
-                    "200": {
-                        "description": "Class found"
-                    }
-                }
-            }
-        },
-        "/api/classes/available": {
-            "get": {
-                "summary": "Get available Pilates classes",
-                "operationId": "e119564472db83127ac17172e5d08fc2",
-                "responses": {
-                    "200": {
-                        "description": "Available classes list"
-                    }
-                }
-            }
-        },
-        "/api/bookings": {
-            "post": {
-                "summary": "Book user to class",
-                "operationId": "a163d7a0c7af13208c24563535b514f2",
-                "responses": {
-                    "201": {
-                        "description": "Booking created successfully"
-                    }
-                }
-            }
-        },
-        "/api/users/{userId}/classes": {
-            "get": {
-                "summary": "Get classes by user",
-                "operationId": "3f94f5061fca80b379e9441d90b51398",
-                "responses": {
-                    "200": {
-                        "description": "User classes list"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
                     }
                 }
             }
         }
-    }
+    },
+    "components": {
+        "schemas": {
+            "Contato": {
+                "title": "Contact Information",
+                "required": [
+                    "tipo",
+                    "valor"
+                ],
+                "properties": {
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "telefone",
+                            "email",
+                            "whatsapp",
+                            "emergencia"
+                        ],
+                        "example": "email"
+                    },
+                    "valor": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "joao@email.com"
+                    },
+                    "observacao": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "example": "Email pessoal",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Endereco": {
+                "title": "Address Information",
+                "required": [
+                    "tipo",
+                    "rua",
+                    "numero",
+                    "bairro",
+                    "cidade",
+                    "estado",
+                    "cep"
+                ],
+                "properties": {
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "residencial",
+                            "comercial",
+                            "cobranca"
+                        ]
+                    },
+                    "rua": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Rua das Flores"
+                    },
+                    "numero": {
+                        "type": "string",
+                        "maxLength": 10,
+                        "example": "123"
+                    },
+                    "complemento": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Apto 45",
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Centro"
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "São Paulo"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "maxLength": 2,
+                        "example": "SP"
+                    },
+                    "cep": {
+                        "type": "string",
+                        "example": "01234-567"
+                    },
+                    "principal": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StudentRegisterRequest": {
+                "title": "Student Register Request",
+                "description": "Request body for student registration",
+                "required": [
+                    "name",
+                    "phone",
+                    "password",
+                    "cpf",
+                    "profession",
+                    "birth_date"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nome completo do estudante",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "João Silva"
+                    },
+                    "phone": {
+                        "description": "Telefone principal (usado como login)",
+                        "type": "string",
+                        "example": "(11)99999-9999"
+                    },
+                    "password": {
+                        "description": "Senha de acesso (mínimo 6 caracteres)",
+                        "type": "string",
+                        "minLength": 6,
+                        "example": "abc123A"
+                    },
+                    "cpf": {
+                        "description": "CPF do estudante (apenas números)",
+                        "type": "string",
+                        "maxLength": 11,
+                        "minLength": 11,
+                        "example": "12345678901"
+                    },
+                    "profession": {
+                        "description": "Profissão do estudante",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Engenheiro"
+                    },
+                    "birth_date": {
+                        "description": "Data de nascimento (formato DD-MM-YYYY)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "15-01-1990"
+                    },
+                    "fotos": {
+                        "description": "Fotos do estudante em Base64 (máximo 5 fotos, 3MB cada)",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "base64",
+                            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+                        },
+                        "maxItems": 5,
+                        "nullable": true
+                    },
+                    "contatos": {
+                        "description": "Contatos adicionais do estudante (máximo 3)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Contato"
+                        },
+                        "maxItems": 3,
+                        "nullable": true
+                    },
+                    "enderecos": {
+                        "description": "Endereços do estudante (máximo 2)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Endereco"
+                        },
+                        "maxItems": 2,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StudentSuccessResponse": {
+                "title": "Success Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Student registered successfully"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "João Silva"
+                            },
+                            "phone": {
+                                "type": "string",
+                                "example": "(11)99999-9999"
+                            },
+                            "has_photos": {
+                                "type": "boolean",
+                                "example": true
+                            },
+                            "has_additional_data": {
+                                "type": "boolean",
+                                "example": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Students",
+            "description": "Student management operations"
+        }
+    ]
 }

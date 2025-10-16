@@ -11,7 +11,7 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "mongodb/laravel-mongodb": "^4.9"
+        "mongodb/laravel-mongodb": "^5.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

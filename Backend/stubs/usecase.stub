@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }};
+
+class {{ class }}
+{
+    public function __construct()
+    {
+        // Inject dependencies (Ports / Repositories / Services) here
+    }
+
+    public function __invoke(array $input = []): mixed
+    {
+        // Execute use case logic
+        return null;
+    }
+}
