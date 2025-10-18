@@ -1,26 +1,30 @@
-import { Link } from 'react-router-dom';
-import "../index.css"
+import { Link } from "react-router-dom";
 
 interface BotaoProps {
     texto: string;
-    link: string;
+    link?: string;  
+    onClick?: () => void;
+    type?: "button" | "submit" | "reset"; 
 }
 
-// <button className="text-[1.2rem] tracking-[.2px] inline-flex items-center border-0 py-1 px-3 rounded text-[var(--background)] text-base mt-4 md:mt-0 bg-[var(--rosa-segundario)] hover:bg-[var(--destaque)]"
+export default function Botao({ texto, link, onClick, type = "button" }: BotaoProps) {
+    const classesBase = `
+        w-full flex justify-center items-center bg-azul-important
+        text-[var(--background)] font-semibold text-center tracking-[1px]
+        rounded-md mb-5 mt-5 h-[50px] hover:bg-[var(--destaque)]
+    `;
 
+    if (link) {
+        return (
+            <Link to={link} className={classesBase}>
+                {texto}
+            </Link>
+        );
+    }
 
-export default function Botao({texto, link}: BotaoProps){ 
-    return(  
-        <Link 
-            className='w-full flex justify-center items-center bg-[var(--rosa-segundario)] 
-            text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mb-5 mt-5
-            h-[50px]
-            '
-            
-            to={link}
-        >
+    return (
+        <button type={type} onClick={onClick} className={classesBase}>
             {texto}
-        </Link>
-    )
+        </button>
+    );
 }
-
