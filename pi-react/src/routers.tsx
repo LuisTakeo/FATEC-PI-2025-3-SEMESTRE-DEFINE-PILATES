@@ -7,12 +7,14 @@ import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
 import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone_1"
 import RecebimentoCodigo from "./pages/RecuperarSenha/RecebimentoCodigo_2"
 import AlterarSenha from "./pages/RecuperarSenha/AlterarSenha_3"
+import CadastroInicialPage from "./pages/Admin/CadastroInicial";
 
 function MainRoutes() {
     return (
         <Routes>
             {/* Rotas públicas ou acesso a todos */}
             <Route path="/" element={<PaginaInicio />} />
+            <Route path="/admin/cadastro-inicial" element={<CadastroInicialPage />} />
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>

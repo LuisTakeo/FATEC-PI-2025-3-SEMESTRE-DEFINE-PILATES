@@ -72,6 +72,7 @@ export default function LoginPage() {
                 <div className="w-full max-w-sm flex flex-col gap-8"> 
                     <p className={`${Estilizacoes.segundo_titulo_principal} w-full text-left`}>Acessar</p>
 
+                    {/* GRUPO DE INPUTS E LINK (usando gap-8 para o espaçamento amplo) */}
                     <div className="flex flex-col gap-8">
                         <InputTelefone
                             id="telefone-login"
@@ -80,9 +81,8 @@ export default function LoginPage() {
                             onChange={handleTelefoneChange} 
                             erro={erroTelefone}
                         />
-                    </div>
                     
-                    <div className="mt-8"> 
+                        {/* Removida a div 'mt-8' que separava o telefone da senha */}
                         <Input
                             id="senha-login"
                             label="Senha"
@@ -94,16 +94,18 @@ export default function LoginPage() {
                             erro={erroSenha}
                             mostrarSenhaToggle={true}
                         />
+
+                        <a
+                            href="/recuperarsenha/dados"
+                            // Removido o mt-[-16px] para usar o espaçamento do gap-8
+                            className="text-[var(--destaque)] text-sm underline self-start" 
+                        >
+                            Esqueci a minha senha
+                        </a>
                     </div>
 
-                    <a
-                        href="/recuperarsenha/dados"
-                        className="text-[var(--destaque)] text-sm underline self-start mt-4" 
-                    >
-                        Esqueci a minha senha
-                    </a>
-
-                    <div className="flex flex-col gap-7 mt-6"> 
+                    {/* GRUPO DE BOTÕES (usando gap-8 e mt-8 para o espaçamento amplo) */}
+                    <div className="flex flex-col gap-8 mt-8"> 
                         <Botao texto="Acessar conta" onClick={handleLogin} />
 
                         <a
