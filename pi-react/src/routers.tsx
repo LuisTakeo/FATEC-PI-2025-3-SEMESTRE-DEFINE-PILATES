@@ -15,15 +15,16 @@ function MainRoutes() {
     return (
         <Routes>
             {/* Rotas públicas ou acesso a todos */}
-            <Route path="/admin/Home" element={<CadastroInicialPage />} />
+            <Route path="/" element={<PaginaInicio />} />
             <Route path="/recupera-senha/code" element={<RecoveryCodePage />} />
             <Route path="/recupera-senha/" element={<RecoveryPhonePage />} /> 
             <Route path="/recupera-senha/nova-senha" element={<NewPasswordPage/>} />
             <Route path="/user/Login" element={<LoginPage />} />
-            <Route path="/" element={<PaginaInicio />} />
+            
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
             <Route path="/Cadastro_Instrutor" element={<Cadastro_Instrutor />} />
 
+            <Route path="/admin/Home" element={<CadastroInicialPage />} />
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
 

@@ -150,6 +150,7 @@ function PaginaInicio(){
 
     </main>
     )
+    
 }
 
 export default PaginaInicio;
