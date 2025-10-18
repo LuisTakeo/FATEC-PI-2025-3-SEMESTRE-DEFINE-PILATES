@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import PaginaInicio from "./pages/PaginaInicio/index";
+import PaginaInicio from "./pages/PaginaInicio/HomeDeslogada/page";
 import Cadastro_Aluno from "./pages/Cadastros/Cadastro_Aluno/"
 import CadastroInicialPage from "./pages/Admin/paginainicial";
 import RecoveryCodePage from "./pages/RecuperaSenha/Code";
