@@ -31,13 +31,13 @@ function Header() {
     );
 
  return(
-        <header className="text-black-600 body-font bg-[var(--background] py-[3%]">
+        <header className={`text-black-600 body-font bg-[var(--background] ${window.location.href === 'http://localhost:5173/' ? "" : "py-[3%]"}`}>
             <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
 
               <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto  ">
                 <Link to="/">
                 <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
-                    Página Inicial
+                    Planos
                 </a>
                 </Link>
 
