@@ -1,307 +1,416 @@
-import"./stylesCadastroAluno.css"
-import OptionsForm from "./optionsForm"
+import Options_categprofis from "./Options_categprofis"
+import Estilizacoes from "../../../model/Estilizacoes";
+import Input_Arquivo from "../../../components/Cadastros/Input_Arquivo";
+import Botao from "../../../components/Cadastros/Botao"
+import Input from "../../../components/Cadastros/Input"
+import inputCPF from "../../../services/inputCPF"
+import { useState } from "react";
+import type { Aluno, Endereco, Contato } from "../../../services/aluno/cadastroservice";
+import ContatoComplem from "../../../components/Cadastros/ContatoComplem"
+import OutroEndereco from "../../../components/Cadastros/OutroEndereco";
 
 function Cadastro_Aluno(){
+    
 
-    let estilizacao_input: string = "bg-[var(--input-background)] rounded-[7px] p-3 text-lg h-[50px] focus:border-none"
-    // let estilizacao_input_file: string = ""
+    const [nome, setNome] = useState("")
+    const [cpf, setCPF] = useState("");
+    const [data, setData] = useState("");
+    const [ddd, setDDD] = useState("");
+    const [telefone, setTelefone] = useState("");
+
+    const [cep, setCEP] = useState("");
+    const [rua, setRua] = useState("");
+    const [numero, setNumero] = useState("");
+    const [bairro, setBairro] = useState("");
+    const [complemento, setComplemento] = useState("")
+
+    const [cepComplementar, setCEPComplementar] = useState("");
+    const [ruaComplementar, setRuaComplementar] = useState("");
+    const [numeroComplementar, setNumeroComplementar] = useState("");
+    const [bairroComplementar, setBairroComplementar] = useState("");
+    const [complementoComplementar, setComplementoComplementar] = useState("")
+    const [isPrincipal, setIsPrincipal] = useState(false)
+
+    const [permissao_medica, setPermissao_medica] = useState(false);
+    const [medicamento, setMedicamento] = useState("")
+    const [tratProposto, setTratProposto] = useState("")
+    const [categoria, setCategoria] = useState("")
+    
+    const [observacoes, setObservacoes] = useState("")
+    const [email, setEmail] = useState("");
+    const [outro_telefone, setOutro_telefone] = useState("")
+    const [outro_DDD, setOutroDDD] = useState("")
+    const [ativo, setAtivo] = useState("")
+
+    const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: File}>({})
+
+  
+
+    function permitirInputs(state: boolean){
+        setPermissao_medica(state);
+    }
+
+    async function submitAluno(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        const contato: Contato = {
+            tipo: ativo === "email_opcao" ? "email" : "outro telefone",
+            valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
+            observacao: observacoes,
+        }
+
+        const endereco: Endereco[]= [{
+            tipo: "numero",
+            rua: rua, 
+            numero: numero,
+            complemente: complemento,
+            bairro: bairro,
+            cidade: "São Paulo",
+            estado: "SP",
+            cep: cep,
+            principal: isPrincipal,
+        },
+        {
+            tipo: "numero",
+            rua: ruaComplementar, 
+            numero: numeroComplementar,
+            complemente: complementoComplementar,
+            bairro: bairroComplementar,
+            cidade: "São Paulo",
+            estado: "SP",
+            cep: cepComplementar,
+            principal: isPrincipal, 
+        }]
+        
+        const aluno: Aluno = {
+                name: nome,
+                phone: ddd + telefone,
+                password: "123",
+                cpf: cpf,
+                profession: categoria,
+                birth_date: data,
+                fotos: arquivoComprimido,
+                contatos: [
+                    contato
+                ],
+                enderecos: endereco
+                ,
+        }
+
+        console.log(aluno)
+        return aluno
+
+    }
+
+
+    console.log("Quantidade de arquivos:", Object.keys(arquivoComprimido).length);
+    console.log("Arquivos:", arquivoComprimido);
 
     return(
-        <div className="flex flex-col items-center justify-center w-full">
-            <main className="flex flex-col  w-[80vw]">
+        <div className="flex flex-col items-center justify-center w-full mt-10">
+            <main className="flex flex-col  w-[80vw] px-[2%]">
                 <header className="flex justify-start flex-col mb-10">
                     <div>
-                        <h1 className="text-[2rem] font-bold text-[var(--destaque)]">Cadastro de Aluno</h1>
+                        <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>Cadastro de Aluno</h1>
                     </div>
                     <div>
-                        <h1 className="text-[1.5rem] font-semibold">Informe os dados abaixo para criar o acesso</h1>
+                        <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--foreground)]`}>Informe os dados abaixo para criar o acesso</h1>
                     </div>
                 </header>
-                    <form>
+                    <form onSubmit={(e) => submitAluno(e)}>
                         <section id="info-pessoais-section" className="flex justify-start items-start flex-col gap-5 w-full  ">
                             <div>
-                                <h1 className="text-[1.3rem] font-bold text-[var(--destaque)]">Informações pessoais</h1>
-                            </div>
-                            <div id="nome" className="flex flex-col gap-3 w-full">
-                                <label htmlFor="nome-input" className="text-[1.2rem]">
-                                    Nome
-                                </label>
-                                <div className="flex">
-                                    <input 
-                                    id="nome-input"
-                                    type="text"
-                                    pattern="[a-zA-Z]+"
-                                    placeholder="Digite o nome" 
-                                    autoComplete="off"
-                                    className={`${estilizacao_input}  w-full`}
-                                    />
-                                </div>
+                                <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)]`}>Informações pessoais</h1>
                             </div>
 
-                            <div id="email" className="flex flex-col gap-3 w-full">
-                                <label htmlFor="email-input" className="text-[1.2rem]">
-                                    E-mail
-                                </label>
-                                <div className="flex">
-                                    <input 
-                                    id="email-input"
-                                    type="email"
-                                    pattern="[a-zA-Z0-9/-]+"
-                                    placeholder="Digite o e-mail" 
-                                    className={`${estilizacao_input}  w-full`}
-                                    />
-                                </div>
+                            <div className="w-full">
+                                <Input
+                                    id="nome"
+                                    label="Nome"
+                                    value={nome}
+                                    onChange={setNome}
+                                    type = "text"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Digite o nome"
+                                    size = "w-full"
+                                />
+                                
                             </div>
 
                             <div id="campo-numero" className="flex justify-start items-start flex-row w-full  gap-4">
-                                <div id="ddd" className="flex flex-col w-1/5 gap-3">
-                                    <label htmlFor="ddd-input" className="text-[1.2rem]">
-                                        DDD
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="ddd-input"
-                                        type="text"
-                                        inputMode="numeric"
-                                        pattern="[0-9]+"
+                                <div className="w-1/5">
+                                    <Input
+                                        id="ddd"
+                                        label="DDD"
+                                        value={ddd}
+                                        onChange={setDDD}
+                                        type = "numeric"
+                                        pattern=".*"
+                                        placeholder = "DDD"
+                                        size = "w-full"
                                         maxLength={4}
-                                        className={`${estilizacao_input} w-full`}
-                                        />
-                                    </div>
+                                    />
                                 </div>
 
-                                <div id="telefone" className="flex flex-col w-full gap-3">
-                                    <label htmlFor="telefone-input" className="text-[1.2rem] ">
-                                        Telefone
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="telefone-input"
-                                        type="text"
-                                        inputMode="text"
+                                <div className="w-full">
+                                    <Input
+                                        id="telefone"
+                                        label="Telefone"
+                                        value={telefone}
+                                        onChange={setTelefone}
+                                        type = "text"
                                         pattern="[0-9]+"
-                                        maxLength={20}
-                                        placeholder="Telefone"
-                                        className={`${estilizacao_input} w-full`}
-                                        />
-                                    </div>
+                                        placeholder = "Digite o Telefone"
+                                        size = "w-full"
+                                    />
                                 </div>
+
                             </div>
 
-                            <div id="cpf-dtnascimento" className="flex justify-start items-start flex-col gap-4">
+                            <ContatoComplem
+                                ativo={ativo}
+                                setAtivo={setAtivo}
+                                observacoes={observacoes}
+                                setObservacoes={setObservacoes}
+                                email={email}
+                                setEmail={setEmail}
+                                outro_telefone={outro_telefone}
+                                setOutro_telefone={setOutro_telefone}
+                                outro_DDD={outro_DDD}
+                                setOutroDDD={setOutroDDD}
+                            />
 
-                                <div id="cpf" className="flex flex-col gap-3">
-                                    <label htmlFor="cpf-input" className="text-[1.2rem]">
-                                        CPF
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="cpf-input"
-                                        type="text"
-                                        inputMode="numeric"
-                                        pattern="[0-9]+"
-                                        maxLength={11}
-                                        placeholder="CPF"
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
-                                </div>
+                            
+                        <div id="cpf-dtnascimento" className="flex justify-start items-start flex-row gap-4 w-full">
 
-                                <div id="dtnascimento" className="flex flex-col gap-3">
-                                    <label htmlFor="dtnascimento-input" className="text-[1.2rem]">
-                                        Data de Nascimento
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="dtnascimento-input"
-                                        type="date"
-                                        inputMode="numeric"
-                                        pattern="[0-9]+"
-                                        maxLength={8}
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <OptionsForm/>
-                        </section>
-
-                        <section id="ft-postura" className="flex justify-start items-start flex-col">
-                            <div>
-                                <h1>Foto da postura</h1>
-                            </div>
-                            <div className="flex justify-start items-start flex-col">
-                                <label htmlFor="img-postura">
-                                    Selecione um documento ou imagem 
-                                </label>
-                                <input 
-                                className=""
-                                id="img-postura" 
-                                type="file"
-                                accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            <div className="w-full">
+                                <Input
+                                    id="cpf"
+                                    label="CPF"
+                                    value={cpf}
+                                    onChange={(valor) =>{
+                                        setCPF(inputCPF(valor));
+                                    }}
+                                    type = "text"
+                                    pattern="[.-0-9]+"
+                                    placeholder = "Digite o CPF"
+                                    size = "w-full"
+                                    maxLength={11}
                                 />
                             </div>
+
+                            <div className="w-full">
+                                <Input
+                                    id="data"
+                                    label="Data de Nacimento"
+                                    value={data}
+                                    onChange={setData}
+                                    type = "date"
+                                    pattern="[0-9]+"
+                                    size = "w-full"
+                                    maxLength={8}
+                                />
+                            </div>
+                        </div>
+                            <Options_categprofis value={categoria} onChange={setCategoria}/>
                         </section>
 
-                        <section id="endereço" className="flex justify-start items-start flex-col">
+                        <div className="w-full mt-8">
+                            <Input_Arquivo
+                            id="ft-postura"
+                            titulo="Foto da Postura"
+                            label="Selecione uma imagem dos seus arquivos"
+                            texto_input="Clique aqui para selecionar"
+                            onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["ft-postura"]: arquivoComprimido }))}
+                            />
+                        </div>
+
+                        <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-5">
                             <div>
-                                <h1 className="text-[1.5rem]">Endereço</h1>
+                                <h1 className={Estilizacoes.segundo_titulo_principal}>Endereço</h1>
                             </div>
 
                             {/* aplicar api */}
-                            <div id="cep" className="flex flex-col">
-                                <label htmlFor="cep-input" className="">
-                                    CEP
-                                </label>
-                                <div className="flex">
-                                    <input 
-                                    id="cep-input"
-                                    type="text"
-                                    inputMode="numeric"
-                                    pattern="[0-9]+"
-                                    maxLength={10}
-                                    className={estilizacao_input}
+                           <div className="w-full">
+                                <Input
+                                    id="cep"
+                                    label="CEP"
+                                    value={cep}
+                                    onChange={setCEP}
+                                    type = "text"
+                                    pattern="[-0-9]+"
+                                    placeholder = "CEP"
+                                    size = "w-full"
+                                    maxLength={8}
+                                />
+                            </div>
+
+                            <div className="flex justify-start items-start w-full gap-4">
+                                <div className="w-[75%]">
+                                    <Input
+                                        id="rua"
+                                        label="Rua"
+                                        value={rua}
+                                        onChange={setRua}
+                                        type = "text"
+                                        pattern=".*"
+                                        placeholder = "Digite a Rua"
+                                        size = "w-full"
+                                    />
+                                </div>
+
+                                <div className="w-[25%]">
+                                    <Input
+                                        id="numero"
+                                        label="Número"
+                                        value={numero}
+                                        onChange={setNumero}
+                                        type = "text"
+                                        pattern=".*"
+                                        placeholder = "Número"
+                                        size = "w-full"
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex justify-start items-start flex-row">
-                                <div id="rua" className="flex flex-col">
-                                    <label htmlFor="rua-input" className="">
-                                        Rua
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="rua-input"
-                                        type="text"
-                                        inputMode="numeric"
-                                        pattern="[a-zA-Z0-9/-]+"
-                                        maxLength={15}
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
-                                </div>
-                                <div id="numero" className="flex flex-col">
-                                    <label htmlFor="numero-input" className="">
-                                        Número
-                                    </label>
-                                    <div className="flex">
-                                        <input 
-                                        id="numero-input"
-                                        type="text"
-                                        inputMode="text"
-                                        pattern="[a-zA-Z0-9/-]+"
-                                        maxLength={15}
-                                        className={estilizacao_input}
-                                        />
-                                    </div>
-                                </div>
+                            <div className="w-full">
+                                <Input
+                                    id="bairro"
+                                    label="Bairro"
+                                    value={bairro}
+                                    onChange={setBairro}
+                                    type = "text"
+                                    pattern=".*"
+                                    placeholder = "Digite o Bairro"
+                                    size = "w-full"
+                                />
                             </div>
 
-                            <div id="bairro" className="flex flex-col">
-                                <label htmlFor="bairro-input" className="">
-                                    Bairro
-                                </label>
-                                <div className="flex">
-                                    <input 
-                                    id="bairro-input"
-                                    type="text"
-                                    inputMode="numeric"
-                                    pattern="[0-9]+"
-                                    maxLength={15}
-                                    className={estilizacao_input}
-                                    />
-                                </div>
+                            <div className="w-full">
+                                <Input
+                                    id="complemento"
+                                    label="Complemento"
+                                    value={complemento}
+                                    onChange={setComplemento}
+                                    type = "text"
+                                    pattern=".*"
+                                    placeholder = "Ex: Apartamento 156"
+                                    size = "w-full"
+                                />
                             </div>
 
-                            <div className="flex justify-start items-start flex-row">
-                                <div>
 
-                                </div>
-                                <div>
-
-                                </div>
-                            </div>
                         </section>
 
-                        <section id="info-medicas" className="flex justify-start items-start flex-col">
-                            <div>
-                                <label>Informações médicas</label>
-                                <h1>Este aluno vai fazer acompanhamento médico no pilates?</h1>
+                        <OutroEndereco
+                            cepComplementar={cepComplementar}
+                            setCEPComplementar={setCEPComplementar}
+                            ruaComplementar={ruaComplementar}
+                            setRuaComplementar={setRuaComplementar}
+                            numeroComplementar={numeroComplementar}
+                            setNumeroComplementar={setNumeroComplementar}
+                            bairroComplementar={bairroComplementar}
+                            setBairroComplementar={setBairroComplementar}
+                            complementoComplementar={complementoComplementar}
+                            setComplementoComplementar={setComplementoComplementar}
+                            isPrincipal={isPrincipal}
+                            setIsPrincipal={setIsPrincipal}
+                        />
+
+
+                        <section id="info-medicas" className="flex justify-start items-start flex-col gap-5 mt-8">
+                            <div id="option-info-medica" className="flex flex-col gap-3">
+                                <label className={Estilizacoes.segundo_titulo_principal}>Informações médicas</label>
+                                <h1 className={Estilizacoes.titulo_segundario}>Este aluno vai fazer acompanhamento médico no pilates?</h1>
                                     <div>
-                                        <input type="radio" id="nao-info-medicas" name="info-medicas" defaultChecked />
-                                        <label htmlFor="nao-info-medicas">Não</label>
+                                        <input type="radio" id="nao-info-medicas" name="info-medicas" required
+                                        onClick={() => permitirInputs(false)}
+                                        className="scale-150 accent-[var(--destaque)]"
+                                        />
+                                        <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
                                     </div>
                                     
                                     <div>
-                                        <input type="radio" id="sim-info-medicas" name="info-medicas" />
-                                        <label htmlFor="sim-info-medicas">Sim, ele(a) tem acompanhamento médico</label>
+                                        <input type="radio" id="sim-info-medicas" name="info-medicas" required
+                                        className="scale-150 accent-[var(--destaque)]" 
+                                        onClick={() => permitirInputs(true)}
+                                        />
+                                        <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
                                     </div>
                             </div>
 
-                            <div>
-                                <div>
-                                    <h1>Historico Médico</h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="img-hist-medico-input">
-                                        Selecione um documento ou imagem 
-                                    </label>
-                                    <input 
-                                    className=""
-                                    id="img-hist-medico-input" 
-                                    type="file"
-                                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    />
-                                </div>
-                            </div>
+                            {permissao_medica && (
+                                <div className="flex flex-col gap-5 mt-5">                        
+                                    <div className="w-full">
+                                        <Input_Arquivo
+                                        id="histico-medico"
+                                        titulo="Histórico Médico"
+                                        label="Selecione uma imagem dos seus arquivos"
+                                        texto_input="Clique aqui para selecionar"
+                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["histico-medico"]: arquivoComprimido }))}
 
-                            <div>
-                                <div>
-                                    <h1>Diagnóstico</h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="img-diagnostico-input">
-                                        Selecione um documento ou imagem 
-                                    </label>
-                                    <input 
-                                    className=""
-                                    id="img-diagnostico-input" 
-                                    type="file"
-                                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    />
-                                </div>
-                            </div>
+                                        />
+                                    </div>
 
-                            <div>
-                                <div>
-                                    <h1>Medicamentos </h1>
-                                </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="medicamentos-boxarea">
-                                        Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele utiliza
-                                    </label>
-                                    <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
-                                </div>
-                            </div>
+                                    <div className="w-full">
+                                        <Input_Arquivo
+                                        id="diagnostico"
+                                        titulo="Diagnóstico"
+                                        label="Selecione uma imagem dos seus arquivos"
+                                        texto_input="Clique aqui para selecionar"
+                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["diagnostico"]: arquivoComprimido }))}
 
-                            <div className="flex justify-start items-start flex-col">
-                                <div>
-                                    <h1>Tratamento proposto  </h1>
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col gap-3 w-full">
+                                        <div>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Medicamentos </h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col gap-3">
+                                            <label htmlFor="medicamentos-boxarea"
+                                            className="text-[1.3rem] font-semibold text-[var(--foreground)]"
+                                            >
+                                                Caso o aluno(a) utilize algum medicamento prescrito, escreva abaixo quais medicamentos ele(a) utiliza
+                                            </label>
+                                            <textarea 
+                                            name="medicamentos" 
+                                            id="medicamentos-boxarea"
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] focus:border-none" 
+                                            onChange={(e) => setMedicamento(e.target.value)}
+                                            ></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-3 w-full">
+                                        <div>
+                                            <h1
+                                            className={Estilizacoes.segundo_titulo_principal}
+                                            >Tratamento Proposto</h1>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col gap-3">
+                                            <label htmlFor="medicamentos-boxarea"
+                                            className="text-[1.3rem] font-semibold text-[var(--foreground)]"
+                                            >
+                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                            
+                                            </label>
+                                            <textarea 
+                                            name="medicamentos" 
+                                            id="medicamentos-boxarea"
+                                            className="border rounded-[5px] w-full h-40 px-5 py-3 text-[1.2rem] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--destaque)] focus:border-none" 
+                                            onChange={(e) => setTratProposto(e.target.value)}
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex justify-start items-start flex-col">
-                                    <label htmlFor="medicamentos-boxarea">
-                                        Escreva abaixo qual é o tratamento proposto pelo seu medico(a) do aluno(a)
-                                    </label>
-                                    <textarea name="medicamentos" id="medicamentos-boxarea"></textarea>
-                                </div>
-                            </div>     
+                            )}     
                         </section>
 
-                        <section>
-                            <div>
-                                <button type="submit">Cadastrar</button>
-                            </div>
+                        <section 
+                        className="mt-10">
+                            <Botao texto="Cadastrar" type="submit"/>
                         </section>
 
                     </form>

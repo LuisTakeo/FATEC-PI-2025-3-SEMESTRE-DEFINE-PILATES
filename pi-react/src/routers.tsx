@@ -6,6 +6,9 @@ import RecoveryCodePage from "./pages/RecuperaSenha/Code";
 import NewPasswordPage from "./pages/RecuperaSenha/NovaSenha";
 import RecoveryPhonePage from "./pages/RecuperaSenha/TelefoneCode";
 import LoginPage from "./pages/UserLogin";
+import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
+import Login from "./pages/Login/Login/page"
+import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
 import Cadastro_Instrutor from "./pages/Cadastros/Cadastro_Instrutor";
 
 function MainRoutes() {
@@ -18,8 +21,14 @@ function MainRoutes() {
             <Route path="/recupera-senha/nova-senha" element={<NewPasswordPage/>} />
             <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/" element={<PaginaInicio />} />
-            <Route path="/Cadastro_Aluno" element={<Cadastro_Aluno />} />
+            <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
             <Route path="/Cadastro_Instrutor" element={<Cadastro_Instrutor />} />
+
+
+            <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
+
+            <Route path="/login/aluno" element={<Login/>}/>
+            <Route path="/login/funcionario" element={<Login_Funcionario/>}/>
         </Routes>
 
         // {/* SÓ ADMIN LOGADO */}
