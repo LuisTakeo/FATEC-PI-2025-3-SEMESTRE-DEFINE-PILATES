@@ -13,7 +13,7 @@ export default function AlterarSenha() {
     const [erroSenha, setErroSenha] = useState(""); 
     const [erroConfirmacao, setErroConfirmacao] = useState(""); 
     const [isLoading, setIsLoading] = useState(false); 
-
+    
     const handleSenhaChange = (val: string) => {
         setSenha(val);
         setErroSenha(""); 
@@ -99,61 +99,67 @@ export default function AlterarSenha() {
         }
     };
 
+
     return (
         
         <div className="min-h-screen w-full font-sans overflow-x-hidden"> 
-
             <main 
                 className="w-full flex justify-center py-20 md:py-32"
                 style={{ backgroundColor: 'var(--background)' }}
             >
-                
                 <div className="w-full max-w-md mx-auto px-4"> 
                     
                     <form onSubmit={handleSave} className="w-full" noValidate>
-                        
                         <div className="flex flex-col items-start w-full gap-8">
-                            <div className="flex flex-col gap-3">
+                            
+                            <header className="flex flex-col gap-3 w-full">
                                 <h2 className={Estilizacoes.titulo_principal}>
                                     Nova senha
                                 </h2>
                                 <p className={Estilizacoes.titulo_segundario}>
                                     Escreva sua nova senha abaixo e, em seguida, digite-a novamente para confirmar que você se lembrará dela.
                                 </p>
-                            </div>
+                            </header>
 
-                            <div className="w-full flex flex-col gap-1">
-                                <Input
-                                    id="senha"
-                                    label="Digite sua nova senha"
-                                    value={senha}
-                                    onChange={handleSenhaChange}
-                                    type="password" 
-                                    placeholder="Digite a senha"
-                                    size="w-full"
-                                />
-                                {erroSenha && ( 
-                                    <span className="text-red-500 text-sm mt-1">
-                                        {erroSenha}
-                                    </span>
-                                )}
-                            </div>
+                            <div className="w-full flex flex-col gap-4"> 
+                                
+                                <div className="flex flex-col gap-0">
+                                    <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
+                                        Senha
+                                    </p>
+                                    <Input
+                                        id="senha"
+                                        value={senha}
+                                        onChange={handleSenhaChange}
+                                        type="password" 
+                                        placeholder="Digite a senha"
+                                        size="w-full"
+                                    />
+                                    {erroSenha && ( 
+                                        <span className="text-red-500 text-sm mt-1">
+                                            {erroSenha}
+                                        </span>
+                                    )}
+                                </div>
 
-                            <div className="w-full flex flex-col gap-1 mt-4">
-                                <Input
-                                    id="senhaconfirmacao"
-                                    label="Digite sua nova senha novamente"
-                                    value={senhaConfirmacao}
-                                    onChange={handleSenhaConfirmacaoChange}
-                                    type="password" 
-                                    placeholder="Digite a senha novamente"
-                                    size="w-full"
-                                />
-                                {erroConfirmacao && ( 
-                                    <span className="text-red-500 text-sm mt-1">
-                                        {erroConfirmacao}
-                                    </span>
-                                )}
+                                <div className="flex flex-col gap-0"> 
+                                    <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
+                                        Confirme a Senha
+                                    </p>
+                                    <Input
+                                        id="senhaconfirmacao"
+                                        value={senhaConfirmacao}
+                                        onChange={handleSenhaConfirmacaoChange}
+                                        type="password" 
+                                        placeholder="Digite a senha novamente"
+                                        size="w-full"
+                                    />
+                                    {erroConfirmacao && ( 
+                                        <span className="text-red-500 text-sm mt-1">
+                                            {erroConfirmacao}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
 
                             <Botao 
@@ -165,7 +171,6 @@ export default function AlterarSenha() {
                     </form>
                 </div>
             </main>
-            
         </div>
     )
 }

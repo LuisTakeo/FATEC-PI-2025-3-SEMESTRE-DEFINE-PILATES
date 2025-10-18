@@ -28,12 +28,13 @@ export default function RecebimentoCodigo(){
     const handleReenviarCodigo = useCallback(() => {
         console.log(`Reenviando código para ${telefoneRecebido}.`); 
         
+        // Lógica de API
 
         setContador(30);
         setReenviarHabilitado(false);
         setTentativaReenvio(prev => prev + 1);
         setTimeout(() => { setContador(30); }, 5000); 
-    }, [tentativaReenvio, telefoneRecebido]);
+    }, [telefoneRecebido]);
 
     useEffect(() => {
         let timerId: NodeJS.Timeout | null = null;
@@ -60,7 +61,7 @@ export default function RecebimentoCodigo(){
     }, [tentativaReenvio]);
 
 
-    const handleConfirmarCodigo = async (e: React.FormEvent<HTMLFormElement>) => { 
+    const handleConfirmarCodigo = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
         setErroCodigo(""); 
 
@@ -77,7 +78,7 @@ export default function RecebimentoCodigo(){
         }
         
         setIsLoading(true);
-        // ... (Lógica de API) ...
+        // ... (Lógica de API para confirmação) ...
         setIsLoading(false);
     };
 
@@ -91,7 +92,7 @@ export default function RecebimentoCodigo(){
                 <div className="w-full max-w-md mx-auto px-4"> 
                     
                     <form onSubmit={handleConfirmarCodigo} className="w-full" noValidate>
-                        <section className="flex flex-col items-start w-full gap-3"> 
+                        <section className="flex flex-col items-start w-full gap-8"> 
                             <div className="flex flex-col gap-3">
                                 <h2 className={Estilizacoes.titulo_principal}>Código de segurança</h2>
                                 <p className={Estilizacoes.titulo_segundario}>
@@ -99,10 +100,15 @@ export default function RecebimentoCodigo(){
                                 </p>
                             </div>
 
-                            <div className="w-full flex flex-col gap-1 mt-3">
+                            <div className="w-full flex flex-col gap-0"> 
+                                
+                                <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
+                                    Digite o código de segurança
+                                </p>
+
+                                {/* 2. Input sem a prop 'label' */}
                                 <Input
                                     id="codigo"
-                                    label="Digite o código de segurança"
                                     value={codigo}
                                     onChange={handleCodigoChange}
                                     type="text"
@@ -135,7 +141,7 @@ export default function RecebimentoCodigo(){
                                         Solicitar reenvio do código
                                     </button>
                                 ) : (
-                                    <p className="text-[1.2rem] text-black text-left">
+                                    <p className={Estilizacoes.titulo_segundario}>
                                         <span className="text-[var(--destaque)] font-semibold">
                                             Não recebeu seu código?
                                         </span>
