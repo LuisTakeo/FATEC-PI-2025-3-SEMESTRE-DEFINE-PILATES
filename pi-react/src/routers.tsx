@@ -9,6 +9,7 @@ import LoginPage from "./pages/UserLogin";
 import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
 import Login from "./pages/Login/Login/page"
 import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
+import Cadastro_Instrutor from "./pages/Cadastros/Cadastro_Instrutor";
 
 function MainRoutes() {
     return (
@@ -21,6 +22,8 @@ function MainRoutes() {
             <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/" element={<PaginaInicio />} />
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
+            <Route path="/Cadastro_Instrutor" element={<Cadastro_Instrutor />} />
+
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
 
