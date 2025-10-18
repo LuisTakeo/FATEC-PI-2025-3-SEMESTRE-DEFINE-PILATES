@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
-import Botao from "../../components/Cadastros/Botao"
-import Input from "../../components/Cadastros/Input" 
+import Botao from "../../components/Botao/Botao"
+import Input from "../../components/Input/Input" 
 import Estilizacoes from "../../model/Estilizacoes"
 import { useLocation } from 'react-router-dom';
 import React from 'react';

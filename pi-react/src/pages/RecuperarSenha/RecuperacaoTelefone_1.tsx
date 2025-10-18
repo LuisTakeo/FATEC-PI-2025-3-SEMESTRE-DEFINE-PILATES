@@ -2,7 +2,7 @@ import { useState } from "react"
 import React from 'react';
 import Estilizacoes from "../../model/Estilizacoes"
 import InputTelefone from "../../components/Erro/InputTelefone"; 
-import Botao from "../../components/Cadastros/Botao" 
+import Botao from "../../components/Botao/Botao" 
 
 export default function RecuperacaoTelefone(){
 

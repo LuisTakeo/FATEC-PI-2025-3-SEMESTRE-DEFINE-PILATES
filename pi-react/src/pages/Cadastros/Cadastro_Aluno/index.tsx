@@ -1,13 +1,13 @@
 import Options_categprofis from "./Options_categprofis"
 import Estilizacoes from "../../../model/Estilizacoes";
-import Input_Arquivo from "../../../components/Cadastros/Input_Arquivo";
-import Botao from "../../../components/Cadastros/Botao"
-import Input from "../../../components/Cadastros/Input"
+import Input_Arquivo from "../../../components/Input/Input_Arquivo";
+import Botao from "../../../components/Botao/Botao"
+import Input from "../../../components/Input/Input"
 import inputCPF from "../../../services/inputCPF"
 import { useState } from "react";
 import type { Aluno, Endereco, Contato } from "../../../services/aluno/cadastroservice";
-import ContatoComplem from "../../../components/Cadastros/ContatoComplem"
-import OutroEndereco from "../../../components/Cadastros/OutroEndereco";
+import ContatoComplem from "../../../components/Section/ContatoComplem"
+import OutroEndereco from "./../../../components/Section/OutroEndereco";
 
 function Cadastro_Aluno(){
     
@@ -128,11 +128,11 @@ function Cadastro_Aluno(){
                                     id="nome"
                                     label="Nome"
                                     value={nome}
-                                    onChange={setNome}
+                                    onChange={(e) => setNome(e.target.value)}
                                     type = "text"
                                     pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite o nome"
-                                    size = "w-full"
+                                    
                                 />
                                 
                             </div>
@@ -143,11 +143,11 @@ function Cadastro_Aluno(){
                                         id="ddd"
                                         label="DDD"
                                         value={ddd}
-                                        onChange={setDDD}
+                                        onChange={(e) => setDDD(e.target.value)}
                                         type = "numeric"
                                         pattern=".*"
                                         placeholder = "DDD"
-                                        size = "w-full"
+                                        
                                         maxLength={4}
                                     />
                                 </div>
@@ -157,11 +157,11 @@ function Cadastro_Aluno(){
                                         id="telefone"
                                         label="Telefone"
                                         value={telefone}
-                                        onChange={setTelefone}
+                                        onChange={(e) => setTelefone(e.target.value)}
                                         type = "text"
                                         pattern="[0-9]+"
                                         placeholder = "Digite o Telefone"
-                                        size = "w-full"
+                                        
                                     />
                                 </div>
 
@@ -188,13 +188,11 @@ function Cadastro_Aluno(){
                                     id="cpf"
                                     label="CPF"
                                     value={cpf}
-                                    onChange={(valor) =>{
-                                        setCPF(inputCPF(valor));
-                                    }}
+                                    onChange={(e) => {setCPF(inputCPF(e.target.value))}}
                                     type = "text"
                                     pattern="[.-0-9]+"
                                     placeholder = "Digite o CPF"
-                                    size = "w-full"
+                                    
                                     maxLength={11}
                                 />
                             </div>
@@ -204,10 +202,10 @@ function Cadastro_Aluno(){
                                     id="data"
                                     label="Data de Nacimento"
                                     value={data}
-                                    onChange={setData}
+                                    onChange={(e) => setData(e.target.value)}
                                     type = "date"
                                     pattern="[0-9]+"
-                                    size = "w-full"
+                                    
                                     maxLength={8}
                                 />
                             </div>
@@ -236,11 +234,11 @@ function Cadastro_Aluno(){
                                     id="cep"
                                     label="CEP"
                                     value={cep}
-                                    onChange={setCEP}
+                                    onChange={(e) => setCEP(e.target.value)}
                                     type = "text"
                                     pattern="[-0-9]+"
                                     placeholder = "CEP"
-                                    size = "w-full"
+                                    
                                     maxLength={8}
                                 />
                             </div>
@@ -251,11 +249,11 @@ function Cadastro_Aluno(){
                                         id="rua"
                                         label="Rua"
                                         value={rua}
-                                        onChange={setRua}
+                                        onChange={(e) => setRua(e.target.value)}
                                         type = "text"
                                         pattern=".*"
                                         placeholder = "Digite a Rua"
-                                        size = "w-full"
+                                        
                                     />
                                 </div>
 
@@ -264,11 +262,11 @@ function Cadastro_Aluno(){
                                         id="numero"
                                         label="Número"
                                         value={numero}
-                                        onChange={setNumero}
+                                        onChange={(e) => setNumero(e.target.value)}
                                         type = "text"
                                         pattern=".*"
                                         placeholder = "Número"
-                                        size = "w-full"
+                                        
                                     />
                                 </div>
                             </div>
@@ -278,11 +276,11 @@ function Cadastro_Aluno(){
                                     id="bairro"
                                     label="Bairro"
                                     value={bairro}
-                                    onChange={setBairro}
+                                    onChange={(e) => setBairro(e.target.value)}
                                     type = "text"
                                     pattern=".*"
                                     placeholder = "Digite o Bairro"
-                                    size = "w-full"
+                                    
                                 />
                             </div>
 
@@ -291,11 +289,11 @@ function Cadastro_Aluno(){
                                     id="complemento"
                                     label="Complemento"
                                     value={complemento}
-                                    onChange={setComplemento}
+                                    onChange={(e) => setComplemento(e.target.value)}
                                     type = "text"
                                     pattern=".*"
                                     placeholder = "Ex: Apartamento 156"
-                                    size = "w-full"
+                                    
                                 />
                             </div>
 

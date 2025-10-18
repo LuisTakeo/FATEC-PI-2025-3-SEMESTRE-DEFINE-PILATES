@@ -1,4 +1,4 @@
-import Botao from "../../../components/Cadastros/Botao"
+import Botao from "../../../components/Botao/Botao"
 import Estilizacoes from "../../../model/Estilizacoes";
 import Calendario from "../../../components/Calendario/Calendario"
 

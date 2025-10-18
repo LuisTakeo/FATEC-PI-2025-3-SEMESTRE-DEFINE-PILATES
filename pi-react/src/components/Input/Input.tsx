@@ -1,15 +1,21 @@
-import { ChangeEvent, FocusEvent, HTMLInputTypeAttribute, useState } from "react";
+import { useState } from "react";
+import type { HTMLInputTypeAttribute } from "react";
+import type { ChangeEvent } from "react";
+import type { FocusEvent } from "react";
 
-interface FormFieldProps {
-    id: string;
-    name: string;
-    label: string;
-    value: string;
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
-    onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+
+interface InputProps {
+    id?: string;
+    name?: string;
+    label?: string;
+    value?: string;
+    onChange?: ((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void);
+
+    onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     type?: HTMLInputTypeAttribute;
     as?: 'input' | 'select' | 'textarea';
     placeholder?: string;
+    pattern?: string;
     required?: boolean;
     options?: { value: string; label: string }[];
     rows?: number;
@@ -17,10 +23,10 @@ interface FormFieldProps {
     maxLength?: number;
 }
 
-function FormField({
+function Input({
     id, name, label, value, onChange, onBlur, type = 'text', as = 'input',
-    placeholder, required = false, options = [], rows = 3, disabled = false, maxLength
-}: FormFieldProps) {
+    placeholder, pattern, required = false, options = [], rows = 4, disabled = false, maxLength
+}: InputProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const togglePasswordVisibility = () => {
@@ -28,14 +34,31 @@ function FormField({
     };
 
     const renderInput = () => {
-        const commonProps = { id, name, placeholder, required, value, onChange, onBlur, disabled, maxLength, autoComplete: "off" };
-        if (as === 'textarea') {
-            return <textarea {...commonProps} className="form-textarea" rows={rows}></textarea>;
-        }
+        
+        const commonProps = { id, name, placeholder, pattern, required, value, onChange, onBlur, disabled, maxLength, autoComplete: "off" };
+        const baseProps = { id, name, placeholder, required, value, onChange, onBlur, disabled };
+
+
+    if (as === 'textarea') {
+        return (
+            <textarea
+                id={id}
+                name={name}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange} 
+                onBlur={onBlur}
+                rows={rows}
+                disabled={disabled}
+                className="form-textarea"
+            />
+        );
+    }
+
 
         if (as === 'select') {
             return (
-                <select {...commonProps} className="form-input">
+                <select {...baseProps} className="form-input">
                     <option value="" disabled>Selecione uma opção</option>
                     {options.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -71,4 +94,4 @@ function FormField({
     );
 }
 
-export default FormField;
+export default Input;

@@ -28,7 +28,6 @@ export default function Input_Arquivo({
             const arquivoComprimido = await comprimirImagem(arquivoOriginal);
             
             setArquivoSelecionado(arquivoComprimido)
-
             onArquivoComprimido?.(arquivoComprimido)
             
         }

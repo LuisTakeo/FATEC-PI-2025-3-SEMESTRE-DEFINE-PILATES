@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Estilizacoes from "../../model/Estilizacoes";
-import Input from "./Input";
+import Input from "./../Input/Input";
 
 
 interface ContatoComplemProps {
@@ -60,11 +60,11 @@ export default function OutroEndereco({
                     id="cep"
                     label="CEP"
                     value={cepComplementar}
-                    onChange={setCEPComplementar}
+                    onChange={(e) => setCEPComplementar(e.target.value)}
                     type = "text"
                     pattern="[-0-9]+"
                     placeholder = "CEP"
-                    size = "w-full"
+                    
                     maxLength={8}
                 />
             </div>
@@ -75,11 +75,11 @@ export default function OutroEndereco({
                         id="rua"
                         label="Rua"
                         value={ruaComplementar}
-                        onChange={setRuaComplementar}
+                        onChange={(e) => setRuaComplementar(e.target.value)}
                         type = "text"
                         pattern=".*"
                         placeholder = "Digite a Rua"
-                        size = "w-full"
+                        
                     />
                 </div>
 
@@ -88,11 +88,11 @@ export default function OutroEndereco({
                         id="numero"
                         label="Número"
                         value={numeroComplementar}
-                        onChange={setNumeroComplementar}
+                        onChange={(e) => setNumeroComplementar(e.target.value)}
                         type = "text"
                         pattern=".*"
                         placeholder = "Número"
-                        size = "w-full"
+                        
                     />
                 </div>
             </div>
@@ -102,11 +102,11 @@ export default function OutroEndereco({
                     id="bairro"
                     label="Bairro"
                     value={bairroComplementar}
-                    onChange={setBairroComplementar}
+                    onChange={(e) => setBairroComplementar(e.target.value)}
                     type = "text"
                     pattern=".*"
                     placeholder = "Digite o Bairro"
-                    size = "w-full"
+                    
                 />
             </div>
 
@@ -115,11 +115,11 @@ export default function OutroEndereco({
                     id="complemento"
                     label="Complemento"
                     value={complementoComplementar}
-                    onChange={setComplementoComplementar}
+                    onChange={(e) => setComplementoComplementar(e.target.value)}
                     type = "text"
                     pattern=".*"
                     placeholder = "Ex: Apartamento 156"
-                    size = "w-full"
+                    
                 />
             </div>
 

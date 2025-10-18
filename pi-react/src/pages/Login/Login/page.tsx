@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import Estilizacoes from "../../../model/Estilizacoes";
 import Input from "../../../components/Erro/Input";
 import InputTelefone from "../../../components/Erro/InputTelefone";
-import Botao from "../../../components/Cadastros/Botao";
+import Botao from "../../../components/Botao/Botao";
 
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 10;

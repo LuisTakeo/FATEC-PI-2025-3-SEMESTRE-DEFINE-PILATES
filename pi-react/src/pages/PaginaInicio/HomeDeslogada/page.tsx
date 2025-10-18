@@ -1,5 +1,5 @@
 import Estilizacoes from "../../../model/Estilizacoes";
-import Botao from "../../../components/Cadastros/Botao"
+import Botao from "../../../components/Botao/Botao"
 import { AiOutlineHeart } from "react-icons/ai";
 
 function PaginaInicio(){

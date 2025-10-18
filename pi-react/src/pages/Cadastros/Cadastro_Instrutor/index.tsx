@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent, FocusEvent } from "react";
 import "./stylesCadastroInstrutor.css";
-import FormField from "../../../components/FormField";
+import FormField from "../../../components/Input/Input";
 import { registerInstructor } from "../../../services/instructorService";
 
 interface FormData {
@@ -131,8 +131,6 @@ function Cadastro_Instrutor(){
                         <h3 className="form-section-title">Informações Pessoais e Acesso</h3>
 
                         <FormField id="name" name="name" label="Nome" placeholder="Digite o nome completo" required value={formData.name} onChange={handleChange} />
-
-                        <FormField id="password" name="password" label="Senha" type="password" placeholder="Crie uma senha forte" required value={formData.password} onChange={handleChange} />
 
                         <FormField id="phone" name="phone" label="Telefone" type="tel" placeholder="(11) 99999-9999" required value={formData.phone} onChange={handleChange} />
 

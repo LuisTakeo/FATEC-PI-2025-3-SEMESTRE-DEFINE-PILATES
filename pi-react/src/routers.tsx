@@ -22,7 +22,7 @@ function MainRoutes() {
             <Route path="/user/Login" element={<LoginPage />} />
             
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
-            <Route path="/Cadastro_Instrutor" element={<Cadastro_Instrutor />} />
+            <Route path="/cadastro/instrutor" element={<Cadastro_Instrutor />} />
 
             <Route path="/admin/Home" element={<CadastroInicialPage />} />
 

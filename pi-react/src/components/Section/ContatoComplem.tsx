@@ -1,5 +1,5 @@
 import Estilizacoes from "../../model/Estilizacoes";
-import Input from "./Input";
+import Input from "../Input/Input";
 
 interface ContatoComplemProps {
   ativo: string;

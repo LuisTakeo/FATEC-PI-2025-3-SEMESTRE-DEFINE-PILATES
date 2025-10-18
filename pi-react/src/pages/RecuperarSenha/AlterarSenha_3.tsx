@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Botao from "../../components/Cadastros/Botao"
+import Botao from "../../components/Botao/Botao"
 import Input from "../../components/Erro/Input" 
 import Estilizacoes from "../../model/Estilizacoes"
 import React from 'react'; 
