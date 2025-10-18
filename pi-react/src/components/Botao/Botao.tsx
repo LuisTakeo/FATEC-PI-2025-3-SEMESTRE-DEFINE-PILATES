@@ -10,7 +10,11 @@ interface BotaoProps {
 
 export default function Botao({texto, link, onClick, type}: BotaoProps){
     
-    const estilo: string = 'w-full flex justify-center items-center bg-[var(--azul-segundario)] text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mb-5 mt-5 h-[50px] cursor-poiter'
+    const estilo: string = "w-full flex justify-center items-center bg-[var(--azul-segundario)]" +
+    "text-white text-[1.2rem] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap h-[50px] cursor-poiter" +
+    "transition-all duration-200 hover:!bg-[var(--destaque)]"
+// className="!bg-[var(--azul-segundario)] !text-white text-[1.2rem] max-sm:text-[1rem] tracking-[.2px] py-1.5 px-4 md:py-2 md:px-5 rounded-md font-semibold transition-all duration-200 hover:!bg-[var(--destaque)] max-sm:py-1 max-sm:px-3 relative z-50"
+
 
     if (!link){
     return(  

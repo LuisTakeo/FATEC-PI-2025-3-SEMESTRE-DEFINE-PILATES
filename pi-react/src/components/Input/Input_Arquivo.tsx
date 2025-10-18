@@ -49,7 +49,7 @@ export default function Input_Arquivo({
                     <div className="w-full h-[50px] mb-8 cursor-poiter" >
                         <label htmlFor={id}
                             className="w-full flex justify-center items-center bg-[var(--azul-segundario)] 
-                                    text-[var(--background)] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mt-5
+                                    text-white font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap mt-5
                                     h-[50px]"
                             >
                             {texto_input}
