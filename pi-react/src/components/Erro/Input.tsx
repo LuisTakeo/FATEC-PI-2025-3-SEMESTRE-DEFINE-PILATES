@@ -1,5 +1,3 @@
-// input.tsx (dentro de components/Erro/)
-
 import React, { useState, useRef } from "react";
 
 export interface InputProps {
@@ -17,7 +15,6 @@ export interface InputProps {
     erro?: string; 
     mostrarSenhaToggle?: boolean; 
     
-    // ✅ ADICIONADO: Propriedade para limitar o número de caracteres
     maxLength?: number; 
 }
 
@@ -33,7 +30,6 @@ export default function Input({
     erro,
     mostrarSenhaToggle = false,
     inputRef,
-    // ✅ ADICIONADO: Destruturar a nova propriedade
     maxLength,
 }: InputProps) {
     
@@ -55,7 +51,6 @@ export default function Input({
                     onBlur={onBlur} 
                     type={inputType} 
                     placeholder={placeholder}
-                    // ✅ APLICADO: Passar a prop para o elemento nativo
                     maxLength={maxLength} 
                     className={`
                         w-full px-4 ${mostrarSenhaToggle ? "pr-9" : "pr-4"} h-12
@@ -67,7 +62,6 @@ export default function Input({
                     `}
                 />
 
-                {/* --- LÓGICA E SVGS DO TOGGLE DE SENHA --- */}
                 {mostrarSenhaToggle && (
                     <div
                         className="absolute right-2 top-0 bottom-0 flex items-center px-1 cursor-pointer text-gray-500 hover:text-[var(--destaque)]"
