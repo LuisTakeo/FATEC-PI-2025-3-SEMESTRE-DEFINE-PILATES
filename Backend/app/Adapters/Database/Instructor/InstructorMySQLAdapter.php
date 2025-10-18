@@ -26,7 +26,6 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 'birthdate' => $instructorDTO->birthDate->format('Y-m-d')
             ]);
 
-            // 2. Cria o Collaborator PRIMEIRO para obter o ID
             $collaborator = Collaborator::create([
                 'namecollaborator' => $instructorDTO->name,
                 'typecollaborator' => 'Instructor',
@@ -36,7 +35,6 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 'Id_users' => $userTgi->Id_users,
             ]);
 
-            // 3. Cria o Instructor, agora PASSANDO o Id_collaborators
             $instructor = Instructor::create([
                 'nameinstructor' => $instructorDTO->name,
                 'hiring' => $instructorDTO->hiring->format('Y-m-d'),
@@ -44,7 +42,7 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 'cref' => $instructorDTO->cref,
                 'crefito' => $instructorDTO->crefito,
                 'Id_users' => $userTgi->Id_users,
-                'Id_collaborators' => $collaborator->Id_collaborators, // <-- A CHAVE DA SOLUÇÃO
+                'Id_collaborators' => $collaborator->Id_collaborators,
             ]);
 
             Log::info('Instructor and associated Collaborator created successfully', [
@@ -67,8 +65,7 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 ]
             ]);
             
-            return null;
+            throw $e;
         }
     }
 }
-
