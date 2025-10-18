@@ -13,3 +13,4 @@ Route::get('/', function () {
 
 require __DIR__.'/api/students.php';
 require __DIR__.'/api/instructors.php';
+require __DIR__.'/api/admin_receptionist.php';
