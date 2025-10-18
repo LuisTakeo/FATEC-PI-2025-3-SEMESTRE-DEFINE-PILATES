@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Botao from "../../components/Cadastros/Botao"
-import Input from "../../components/Cadastros/Input"
+import Input from "../../components/Erro/Input" 
 import Estilizacoes from "../../model/Estilizacoes"
 import React from 'react'; 
 
@@ -13,16 +13,18 @@ export default function AlterarSenha() {
     const [erroSenha, setErroSenha] = useState(""); 
     const [erroConfirmacao, setErroConfirmacao] = useState(""); 
     const [isLoading, setIsLoading] = useState(false); 
-    
-    const handleSenhaChange = (val: string) => {
+ 
+    // @ts-ignore
+    const handleSenhaChange = (val) => {
         setSenha(val);
         setErroSenha(""); 
         if (erroConfirmacao && val === senhaConfirmacao) {
             setErroConfirmacao(""); 
         }
-    };
+};
 
-    const handleSenhaConfirmacaoChange = (val: string) => {
+    // @ts-ignore
+    const handleSenhaConfirmacaoChange = (val) => {
         setSenhaConfirmacao(val);
         setErroConfirmacao(""); 
         if (erroSenha && val === senha) {
@@ -30,24 +32,36 @@ export default function AlterarSenha() {
         }
     };
 
-    const validarConteudoSenha = (s: string) => {
-        const temLetra = /[a-zA-Z]/.test(s);
+    // @ts-ignore
+    const validarConteudoSenha = (s) => {
         const temNumero = /[0-9]/.test(s);
+        const temMinuscula = /[a-z]/.test(s);
+        const temMaiuscula = /[A-Z]/.test(s);
+        const temEspecial = /[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~`]/.test(s);
         
-        if (!temLetra || !temNumero) {
-            return "A senha deve conter letras e números.";
+        let erros = [];
+
+        if (!temMinuscula) { erros.push("minúscula"); }
+        if (!temMaiuscula) { erros.push("maiúscula"); }
+        if (!temNumero) { erros.push("número"); }
+        if (!temEspecial) { erros.push("caractere especial"); }
+
+        if (erros.length > 0) {
+            return `A senha deve conter: ${erros.join(", ")}.`;
         }
         return null;
     }
 
-    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => { 
+    // @ts-ignore
+    const handleSave = async (e) => {
         e.preventDefault();
-        
+
         let hasError = false;
 
         setErroSenha("");
         setErroConfirmacao("");
 
+        // [Validação da Nova Senha]
         if (!senha.trim()) {
             setErroSenha("Campo obrigatório.");
             hasError = true;
@@ -62,6 +76,7 @@ export default function AlterarSenha() {
             }
         }
 
+        // [Validação da Confirmação]
         if (!senhaConfirmacao.trim()) {
             setErroConfirmacao("Campo obrigatório.");
             hasError = true;
@@ -76,6 +91,7 @@ export default function AlterarSenha() {
             }
         }
 
+        // [Validação de Coincidência]
         if (!hasError && senha !== senhaConfirmacao) {
             const mensagemErro = "As senhas não coincidem.";
             setErroSenha(mensagemErro);
@@ -91,81 +107,73 @@ export default function AlterarSenha() {
         console.log("Tentativa de salvar nova senha:", { senha, senhaConfirmacao });
         
         try {
-            // Lógica de API
+            await new Promise(resolve => setTimeout(resolve, 1500)); 
+            console.log("Senha salva com sucesso!");
+
         } catch (error) {
-            // Tratar erro da API
+            console.error("Erro ao salvar senha:", error);
         } finally {
             setIsLoading(false);
         }
     };
 
-
     return (
-        
-        <div className="min-h-screen w-full font-sans overflow-x-hidden"> 
-            <main 
-                className="w-full flex justify-center py-20 md:py-32"
-                style={{ backgroundColor: 'var(--background)' }}
+    <div className="min-h-screen w-full font-sans overflow-x-hidden"> 
+    <main 
+        className="w-full flex justify-center py-20 md:py-32"
+            style={{ backgroundColor: 'var(--background)' }}
             >
                 <div className="w-full max-w-md mx-auto px-4"> 
-                    
+ 
                     <form onSubmit={handleSave} className="w-full" noValidate>
                         <div className="flex flex-col items-start w-full gap-8">
-                            
+
                             <header className="flex flex-col gap-3 w-full">
                                 <h2 className={Estilizacoes.titulo_principal}>
                                     Nova senha
-                                </h2>
+                                    </h2>
                                 <p className={Estilizacoes.titulo_segundario}>
-                                    Escreva sua nova senha abaixo e, em seguida, digite-a novamente para confirmar que você se lembrará dela.
+                                    Defina sua nova senha (máx. 10 caracteres). Para ser válida, ela deve combinar letras maiúsculas, minúsculas, números e um símbolo especial.
                                 </p>
                             </header>
 
                             <div className="w-full flex flex-col gap-4"> 
-                                
+
                                 <div className="flex flex-col gap-0">
-                                    <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
-                                        Senha
-                                    </p>
                                     <Input
                                         id="senha"
+                                        label="Nova Senha" 
                                         value={senha}
                                         onChange={handleSenhaChange}
-                                        type="password" 
+                                        type="password"
                                         placeholder="Digite a senha"
                                         size="w-full"
-                                    />
-                                    {erroSenha && ( 
-                                        <span className="text-red-500 text-sm mt-1">
-                                            {erroSenha}
-                                        </span>
-                                    )}
+                                        maxLength={MAX_LENGTH}
+                                        mostrarSenhaToggle={true} 
+                                        erro={erroSenha} 
+                                     />
                                 </div>
 
                                 <div className="flex flex-col gap-0"> 
-                                    <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
-                                        Confirme a Senha
-                                    </p>
                                     <Input
-                                        id="senhaconfirmacao"
+                                    id="senhaconfirmacao"
+                                        label="Confirme a Senha" 
                                         value={senhaConfirmacao}
                                         onChange={handleSenhaConfirmacaoChange}
-                                        type="password" 
+                                        type="password"
                                         placeholder="Digite a senha novamente"
                                         size="w-full"
-                                    />
-                                    {erroConfirmacao && ( 
-                                        <span className="text-red-500 text-sm mt-1">
-                                            {erroConfirmacao}
-                                        </span>
-                                    )}
+                                        maxLength={MAX_LENGTH}
+                                        mostrarSenhaToggle={true} 
+                                        erro={erroConfirmacao} // 👈 Adicionado!
+                                 />
                                 </div>
                             </div>
 
                             <Botao 
                                 texto={isLoading ? "Salvando..." : "Salvar nova senha"} 
                                 type="submit"
-                            />
+                                />
 
                         </div>
                     </form>

@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
 import Estilizacoes from "../../../model/Estilizacoes";
-import Input from "../../../components/Erro/Input";
+import Input from "../../../components/Erro/Input"; 
 import InputTelefone from "../../../components/Erro/InputTelefone"; 
 import Botao from "../../../components/Cadastros/Botao";
+
+// Constantes de tamanho de senha
+const MIN_LENGTH = 6; 
+const MAX_LENGTH = 10; 
 
 export default function LoginFuncionario() {
     const [telefone, setTelefone] = useState("");
@@ -30,6 +34,19 @@ export default function LoginFuncionario() {
         const digits = tel.replace(/\D/g, "");
         return digits.length === 10 || digits.length === 11;
     };
+    
+    const validarConteudoSenha = (s: string) => {
+        const temMinuscula = /[a-z]/.test(s);
+        const temMaiuscula = /[A-Z]/.test(s);
+        const temNumero = /[0-9]/.test(s);
+        const temEspecial = /[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~`]/.test(s);
+        
+        if (!temMinuscula || !temMaiuscula || !temNumero || !temEspecial) {
+            return "Senha inválida."; 
+        }
+        return null;
+    }
+
 
     const handleLogin = () => {
         clearAllErrors(); 
@@ -46,10 +63,22 @@ export default function LoginFuncionario() {
         if (!senha.trim()) {
             setErroSenha("Campo obrigatório.");
             hasError = true;
+        } 
+        else if (senha.length < MIN_LENGTH || senha.length > MAX_LENGTH) {
+            setErroSenha(`A senha deve ter entre ${MIN_LENGTH} e ${MAX_LENGTH} caracteres.`);
+            hasError = true;
+        } 
+        else {
+            const erroConteudo = validarConteudoSenha(senha);
+            if (erroConteudo) {
+                setErroSenha("Senha inválida."); 
+                hasError = true;
+            }
         }
 
         if (!hasError) {
             console.log("Login funcionário válido!", { telefone, senha });
+            // Adicionar lógica de chamada à API de login de funcionário aqui
         }
     };
 
@@ -84,6 +113,7 @@ export default function LoginFuncionario() {
                         size="w-full"
                         erro={erroSenha}
                         mostrarSenhaToggle={true} 
+                        maxLength={MAX_LENGTH} 
                     />
 
                     <a
