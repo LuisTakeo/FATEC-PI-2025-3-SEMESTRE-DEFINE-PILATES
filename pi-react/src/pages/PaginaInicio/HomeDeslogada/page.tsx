@@ -1,6 +1,8 @@
 import Estilizacoes from "../../../model/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import { AiOutlineHeart } from "react-icons/ai";
+import Mapa from "./../../../components/Mapa/Mapa"
+
 
 function PaginaInicio(){
 
@@ -144,10 +146,9 @@ function PaginaInicio(){
             </div>
         </section>
 
-        <section>
-            
-        </section>
-
+        
+        <Mapa />
+                    
     </main>
     )
     

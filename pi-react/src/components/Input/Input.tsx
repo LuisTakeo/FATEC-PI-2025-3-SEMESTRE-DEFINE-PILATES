@@ -10,7 +10,6 @@ interface InputProps {
     label?: string;
     value?: string;
     onChange?: ((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void);
-
     onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     type?: HTMLInputTypeAttribute;
     as?: 'input' | 'select' | 'textarea';
