@@ -10,16 +10,19 @@ import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
 import Login from "./pages/Login/Login/page"
 import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
 import Cadastro_Instrutor from "./pages/Cadastros/Cadastro_Instrutor";
+import HomeFuncionario from "./pages/PaginaInicio/Funcionario/page";
 
 function MainRoutes() {
     return (
         <Routes>
             {/* Rotas públicas ou acesso a todos */}
             <Route path="/" element={<PaginaInicio />} />
+            <Route path="/home/funcionario" element={<HomeFuncionario/>}/>
+
             <Route path="/recupera-senha/code" element={<RecoveryCodePage />} />
             <Route path="/recupera-senha/" element={<RecoveryPhonePage />} /> 
             <Route path="/recupera-senha/nova-senha" element={<NewPasswordPage/>} />
-            <Route path="/user/Login" element={<LoginPage />} />
+
             
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
             <Route path="/cadastro/instrutor" element={<Cadastro_Instrutor />} />
@@ -28,6 +31,7 @@ function MainRoutes() {
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
 
+            <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/login/aluno" element={<Login/>}/>
             <Route path="/login/funcionario" element={<Login_Funcionario/>}/>
         </Routes>

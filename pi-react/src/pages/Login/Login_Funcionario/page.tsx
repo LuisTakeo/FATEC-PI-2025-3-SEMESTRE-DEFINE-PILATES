@@ -17,6 +17,7 @@ export default function LoginFuncionario() {
   const [erroTelefone, setErroTelefone] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [authSuccess, setAuthSuccess] = useState(false);
 
   const clearAllErrors = () => {
     setErroTelefone("");
@@ -85,10 +86,12 @@ export default function LoginFuncionario() {
       setIsLoading(true);
 
       setTimeout(() => {
-        const authSuccess = true;
-        const cargoRecebido = ""; // aguardando integração com backend
+        setAuthSuccess(true)
+        const cargoRecebido = "adm"; // aguardando integração com backend
 
-        if (authSuccess && typeof window !== "undefined") {
+        if (authSuccess 
+          // && typeof window !== "undefined" //tirado só pra conseguir entrar
+        ) {
           localStorage.setItem(KEY_IS_LOGGED, "true");
           localStorage.setItem(KEY_USER_ROLE, cargoRecebido);
           console.log("✅ Login de funcionário bem-sucedido. LocalStorage atualizado.");
@@ -97,6 +100,7 @@ export default function LoginFuncionario() {
         }
 
         setIsLoading(false);
+
       }, 1500);
     }
   };
@@ -144,6 +148,7 @@ export default function LoginFuncionario() {
           <Botao
             texto={isLoading ? "Acessando..." : "Acessar conta"}
             type="submit"
+            link={authSuccess ? "/home/funcionario" : ""}
           />
         </div>
       </form>
