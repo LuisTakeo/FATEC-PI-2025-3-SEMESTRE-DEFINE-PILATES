@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import Input from "./../../components/Input/Input"
 import { useState } from 'react';
 import { useEffect } from 'react';
+import Estilizacoes from '../../model/Estilizacoes';
 
 export default function Mapa(){
 
@@ -20,12 +21,56 @@ export default function Mapa(){
     return null;
     }
 
+    const Logadouro = () => {
+
+        if (JSON.stringify(center)===JSON.stringify([-23.50505456997555,-46.45550671873131])){
+            return(
+                <div className='flex flex-col gap-5'>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'><span className='font-bold'>Logadouro: </span>R. José Aldo Piassi, 165 - São Miguel Paulista, São Paulo - SP, 08011-300</h1>
+                    </div>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem] font-bold'>Horário de serviço das nossas unidades:</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Segunda a sexta: 14h até 21h</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Domingo: fechado</h1>
+                    </div>
+                </div>
+            )
+        }else if(JSON.stringify(center)===JSON.stringify([-23.505189956028758,-46.45554670523834])){
+            return(
+                <div className='flex flex-col gap-5'>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'><span className='font-bold'>Logadouro: </span>Rua Santana de Pirapama, 91 - Vila Jacuí, São Paulo - SP, 08060-370</h1>
+                    </div>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem] font-bold'>Horário de serviço das nossas unidades:</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Segunda a sexta: 14h até 21h</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Domingo: fechado</h1>
+                    </div>
+                </div>
+            )
+        }else if(JSON.stringify(center)===JSON.stringify([-23.53042485224035,-46.443679847565896])){
+            return(
+                <div className='flex flex-col gap-5'>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'><span className='font-bold'>Logadouro: </span>Estrada Itaquera Guaianazes, 45 - Parada XV de Novembro, São Paulo - SP, 08246-000</h1>
+                    </div>
+                    <div>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem] font-bold'>Horário de serviço das nossas unidades:</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Segunda a sexta: 14h até 21h</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Domingo: fechado</h1>
+                    </div>
+                </div>
+            )
+        }
+    }
+
 
     return(
-        <section className="w-full h-[800px] px-[9%]">
-            <div>
-                <h1>Endereço das nossas unidades </h1>
-                <h1>Selecione a unidade que você quer conhecer</h1>
+        <section className="w-full h-[900px] px-[10%] mb-[5%] flex flex-col gap-8">
+            <div className='flex flex-col gap-5'>
+                <h1 className={Estilizacoes.titulo_principal}>Endereço das nossas unidades </h1>
+                <h1 className={Estilizacoes.titulo_segundario}>Selecione a unidade que você quer conhecer</h1>
             </div>
 
             <div>
@@ -36,8 +81,8 @@ export default function Mapa(){
                 as="select"
                 options={[
                     {value:"-23.50505456997555,-46.45550671873131", label:"São Miguel Paulista"},
-                    {value:"-23.552064890825484,-46.44188109617867", label:"Itaquera"}
-                    
+                    {value:"-23.53042485224035,-46.443679847565896", label:"Itaquera"},
+                    {value:"-23.505189956028758,-46.45554670523834", label:"Vla Jacuí"} 
                 ]}
                 onChange={(e) => {
                     const valorSelecionado = e.target.value;
@@ -48,9 +93,11 @@ export default function Mapa(){
                 />
             </div>
 
+            <Logadouro/>
+
 
             <div
-                className="w-full h-[500px]"
+                className="w-full h-full shadow-2xl"
                 >
                 <MapContainer 
                 center={center} 
@@ -65,6 +112,8 @@ export default function Mapa(){
                 <AtualizaCentro center={center}/>
                 </MapContainer>
             </div>
+
+
         </section>
 
     )
