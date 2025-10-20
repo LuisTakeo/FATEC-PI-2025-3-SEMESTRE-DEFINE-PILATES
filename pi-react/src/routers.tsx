@@ -2,15 +2,18 @@ import { Routes, Route } from "react-router-dom";
 import PaginaInicio from "./pages/PaginaInicio/HomeDeslogada/page";
 import Cadastro_Aluno from "./pages/Cadastros/Cadastro_Aluno/"
 import CadastroInicialPage from "./pages/Admin/paginainicial";
-import RecoveryCodePage from "./pages/RecuperaSenha/Code";
-import NewPasswordPage from "./pages/RecuperaSenha/NovaSenha";
-import RecoveryPhonePage from "./pages/RecuperaSenha/TelefoneCode";
+// import RecoveryCodePage from "./pages/RecuperaSenha/Code";
+// import NewPasswordPage from "./pages/RecuperaSenha/NovaSenha";
+// import RecoveryPhonePage from "./pages/RecuperaSenha/TelefoneCode";
 import LoginPage from "./pages/UserLogin";
 import Calendario_Aluno from "./pages/Calendarios/Calendario_Aluno/page"
 import Login from "./pages/Login/Login/page"
 import Login_Funcionario from "./pages/Login/Login_Funcionario/page"
 import Cadastro_Instrutor from "./pages/Cadastros/Cadastro_Instrutor";
 import HomeFuncionario from "./pages/PaginaInicio/Funcionario/page";
+import AlterarSenha from "./pages/RecuperarSenha/AlterarSenha_3";
+import RecebimentoCodigo from "./pages/RecuperarSenha/RecebimentoCodigo_2";
+import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone_1";
 
 function MainRoutes() {
     return (
@@ -19,9 +22,13 @@ function MainRoutes() {
             <Route path="/" element={<PaginaInicio />} />
             <Route path="/home/funcionario" element={<HomeFuncionario/>}/>
 
-            <Route path="/recupera-senha/code" element={<RecoveryCodePage />} />
+            {/* <Route path="/recupera-senha/code" element={<RecoveryCodePage />} />
             <Route path="/recupera-senha/" element={<RecoveryPhonePage />} /> 
-            <Route path="/recupera-senha/nova-senha" element={<NewPasswordPage/>} />
+            <Route path="/recupera-senha/nova-senha" element={<NewPasswordPage/>} /> */}
+
+            <Route path="/recuperarsenha/AlterarSenha" element={<AlterarSenha/>} />
+            <Route path="/recuperarsenha/RecebimentoCodigo" element={<RecebimentoCodigo />} />
+            <Route path="/recuperarsenha/RecuperacaoTelefone" element={<RecuperacaoTelefone />} />
 
             
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />

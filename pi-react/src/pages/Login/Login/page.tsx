@@ -143,7 +143,7 @@ export default function LoginPage() {
             />
 
             <a
-              href="/recuperarsenha/dados"
+              href="/recuperarsenha/RecuperacaoTelefone"
               className="text-[var(--destaque)] text-sm underline self-start"
             >
               Esqueci a minha senha
