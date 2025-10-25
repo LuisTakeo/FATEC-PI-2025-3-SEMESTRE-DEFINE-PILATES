@@ -83,11 +83,40 @@ export default function Cadastro_Aula(){
                         </div>
                     </div>
 
+                    
+                     <div>
+                        <p>Quais planos contém esta aula?</p>
+                        <label htmlFor="">
+                            <input type="checkbox" name="recorrente" value="sim"/>
+                            Plano anual
+                        </label>
+                        <label htmlFor="">
+                            <input type="checkbox" name="recorrente" value="nao"/>
+                            Plano trimestral
+                        </label>
+                        <label htmlFor="">
+                            <input type="checkbox" name="recorrente" value="nao"/>
+                            Plano semestral
+                        </label>
+                        <label htmlFor="">
+                            <input type="checkbox" name="recorrente" value="nao"/>
+                            Plano mensal
+                        </label>
+                        <label htmlFor="">
+                            <input type="checkbox" name="recorrente" value="nao"/>
+                            Plano semanal
+                        </label>
+                    </div>
+
                     <div>
                         <p>Tornar recorrente?</p>
                         <label htmlFor="">
                             <input type="radio" name="recorrente" value="sim"/>
                             Sim
+                        </label>
+                        <label htmlFor="">
+                            <input type="radio" name="recorrente" value="nao"/>
+                            Não
                         </label>
                         {/* ao clicar em se tornar recorrente, perguntar se deve se repetir em quais dias e por quanto tempo */}
                     </div>
