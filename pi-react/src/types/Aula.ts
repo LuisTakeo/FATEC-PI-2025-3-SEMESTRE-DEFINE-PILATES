@@ -1,7 +1,10 @@
+
+
 export interface Aula {
   id: number;
   unidade: string;
   instrutor: string;
-  data: string; // string do backend
+  alunos: string[];
+  data: string | number | Date | any
   horario: { inicio: string; fim: string };
 }

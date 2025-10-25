@@ -11,7 +11,7 @@ export default function Cadastro_Aula(){
                 <div>
                     <h1>Cadastrar aula</h1>
                 </div>
-                <div>
+                <div className="w-full">
                     <Botao texto="Voltar a página anterior" type="button" onClick={() => navigate(-1)}/>
                 </div>
             </header>

@@ -1,36 +1,29 @@
-
-export interface Endereco{
-    tipo: string;
-    rua: string; 
-    numero: string;
-    complemente: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-    cep: string;
-    principal: boolean;
-}
-
-export interface Contato{
-    tipo: string;
-    valor: string;
-    observacao?: string;
-}
-
-export interface Aluno{
-    name: string;
-    phone: string;
-    password: string;
-    cpf: string;
-    profession: string;
-    birth_date: string;
-    fotos: {[key: string]: File}
-    contatos: Contato[];
-    enderecos: Endereco[];
-}
+import type {Aluno} from "./../../types/Aluno"
 
 export async function cadastrar_aluno(aluno: Aluno) {
-    
+    try{
+        const response = await fetch("http://localhost:8080/api/students/save", 
+            {
+                method: "POST",
+                headers:{
+                    "Content-Type": "aplication/json",
+                    "Accept": "aplication/json"
+                },
+                body: JSON.stringify(aluno)
+            }
+        )
+        console.log(response)
+        const data = await response.json()
+        console.log(data)
+
+        return true
+
+    }catch(error){
+        console.log(error)
+        return false
+    }
+
+    return true
 }
 
 

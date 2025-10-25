@@ -5,12 +5,12 @@ import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"
 import inputCPF from "../../../../services/inputCPF"
 import { useState } from "react";
-import type { Aluno, Endereco, Contato } from "../../../../services/aluno/cadastroservice";
+import { type Aluno, type Endereco, type Contato, cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
 import OutroEndereco from "../../../../components/Section/OutroEndereco";
 
 function Cadastro_Aluno(){
-    
+    console.log("carregando")
 
     const [nome, setNome] = useState("")
     const [cpf, setCPF] = useState("");
@@ -53,6 +53,8 @@ function Cadastro_Aluno(){
     async function submitAluno(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
+        console.log("chego")
+
         const contato: Contato = {
             tipo: ativo === "email_opcao" ? "email" : "outro telefone",
             valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
@@ -85,7 +87,7 @@ function Cadastro_Aluno(){
         const aluno: Aluno = {
                 name: nome,
                 phone: ddd + telefone,
-                password: "123",
+                password: "123Ab!",
                 cpf: cpf,
                 profession: categoria,
                 birth_date: data,
@@ -94,10 +96,10 @@ function Cadastro_Aluno(){
                     contato
                 ],
                 enderecos: endereco
-                ,
         }
 
-        console.log(aluno)
+        const response = await cadastrar_aluno(aluno);
+
         return aluno
 
     }
@@ -193,7 +195,7 @@ function Cadastro_Aluno(){
                                     pattern="[.-0-9]+"
                                     placeholder = "Digite o CPF"
                                     
-                                    maxLength={11}
+                                    // maxLength={15}
                                 />
                             </div>
 

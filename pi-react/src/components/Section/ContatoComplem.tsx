@@ -32,7 +32,7 @@ export default function ContatoComplem({
             type="radio"
             id="desabilitado"
             value="desabilitado"
-            onClick={() => setAtivo("")}
+            onChange={() => setAtivo("")}
             checked={ativo === ""}
             className="scale-200 accent-[var(--destaque)]"
           />
@@ -45,7 +45,7 @@ export default function ContatoComplem({
             id="email_opcao"
             name="email_opcao"
             value="email_opcao"
-            onClick={() => setAtivo("email_opcao")}
+            onChange={() => setAtivo("email_opcao")}
             checked={ativo === "email_opcao"}
             className="scale-200 accent-[var(--destaque)]"
           />
@@ -58,7 +58,7 @@ export default function ContatoComplem({
             id="outro_telefone_opcao"
             name="outro_telefone_opcao"
             value="outro_telefone_opcao"
-            onClick={() => setAtivo("outro_telefone_opcao")}
+            onChange={() => setAtivo("outro_telefone_opcao")}
             checked={ativo === "outro_telefone_opcao"}
             className="scale-200 accent-[var(--destaque)]"
           />
@@ -73,10 +73,9 @@ export default function ContatoComplem({
             id="email"
             label="E-mail"
             value={email}
-            onChange={setEmail}
+            onChange={(e) => {setEmail(e.target.value); setOutroDDD(""); setOutro_telefone("")}}
             type="email"
             placeholder="Digite o email"
-            size="w-full"
           />
           <div className="flex flex-col gap-3 w-full">
             <h1 className="text-[1.2rem] font-semibold text-[var(--foreground)]">Observação</h1>
@@ -100,9 +99,8 @@ export default function ContatoComplem({
                 id="ddd"
                 label="DDD"
                 value={outro_DDD}
-                onChange={setOutroDDD}
+                onChange={(e) => {setOutroDDD(e.target.value); setEmail("")}}
                 placeholder="DDD"
-                size="w-full"
                 maxLength={4}
               />
             </div>
@@ -111,9 +109,8 @@ export default function ContatoComplem({
                 id="telefone"
                 label="Telefone"
                 value={outro_telefone}
-                onChange={setOutro_telefone}
+                onChange={(e) => {setOutro_telefone(e.target.value); setEmail("")}}
                 placeholder="Digite o telefone"
-                size="w-full"
               />
             </div>
           </div>

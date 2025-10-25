@@ -1,4 +1,6 @@
-import { useState, ChangeEvent, FormEvent, FocusEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent } from "react";
+import type { FormEvent } from "react";
 import "./stylesCadastroInstrutor.css";
 import Input from "../../../../components/Input/Input";
 import { registerInstructor } from "../../../../services/instructorService";
