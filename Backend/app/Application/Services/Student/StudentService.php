@@ -9,6 +9,7 @@ use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
 use Exception;
+use Hash;
 use Str;
 
 class StudentService implements StudentServiceContract
@@ -85,6 +86,26 @@ class StudentService implements StudentServiceContract
     public function example(array $input): array
     {
         return ['ok' => true];
+    }
+
+    public function loginStudent(string $nameuser, string $password){
+        $responseUser = $this->sqlAdapter->getStudentByLoginName($nameuser);
+        if ($responseUser["status"] == false)
+            return ["status"=> false,
+                "message"=> "error",
+                "error" => "Usuário não cadastrado no sistema"
+            ];
+        $isPasswordValid = Hash::check($password, $responseUser["passworduser"]);
+        if (! $isPasswordValid)
+        {
+            return ["status"=> false,
+            "message"=> "error",
+            "error"=> "Usuário ou senha inválidos"
+            ];
+        }
+        return ["status"=> true,
+        "message"=> "Usuário logado!"
+        ];
     }
 
     public function registerStudent(StudentDTO $studentDTO): array

@@ -61,4 +61,30 @@ class StudentControllerAdapter extends BaseController
         
         return response()->json($result, $status);
     }
+
+    #[OA\Post(
+    path: "/api/students/login",
+    operationId: "loginStudent",
+    tags: ["Students"],
+    summary: "Login de estudante"
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["nameuser", "password"],
+            properties: [
+                new OA\Property(property: "nameuser", type: "string", example: "11951999999"),
+                new OA\Property(property: "password", type: "string", example: "abc123A")
+            ]
+        )
+    )]
+    public function login(Request $request): JsonResponse
+    {
+        $result = $this->studentService->loginStudent(
+            $request->input('nameuser'),
+            $request->input('password')
+        );
+        
+        return response()->json($result, $result['status'] ? 200 : 401);
+    }
 }
