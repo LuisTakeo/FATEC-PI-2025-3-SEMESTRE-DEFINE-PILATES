@@ -5,7 +5,10 @@ import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"
 import inputCPF from "../../../../services/inputCPF"
 import { useState } from "react";
-import { type Aluno, type Endereco, type Contato, cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
+import { cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
+import type {Aluno} from "../../../../types/Aluno"
+import type {Endereco} from "../../../../types/Aluno"
+import type {Contato} from "../../../../types/Aluno"
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
 import OutroEndereco from "../../../../components/Section/OutroEndereco";
 

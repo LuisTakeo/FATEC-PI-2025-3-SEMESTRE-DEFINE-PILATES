@@ -82,9 +82,8 @@ export default function Cadastro_Aula(){
                             </div>
                         </div>
                     </div>
-
                     
-                     <div>
+                     {/* <div>
                         <p>Quais planos contém esta aula?</p>
                         <label htmlFor="">
                             <input type="checkbox" name="recorrente" value="sim"/>
@@ -118,8 +117,10 @@ export default function Cadastro_Aula(){
                             <input type="radio" name="recorrente" value="nao"/>
                             Não
                         </label>
-                        {/* ao clicar em se tornar recorrente, perguntar se deve se repetir em quais dias e por quanto tempo */}
+                        {/* ao clicar em se tornar recorrente, perguntar se deve se repetir em quais dias e por quanto tempo 
                     </div>
+                        */}
+                    
 
                     <div>
                         <Input
