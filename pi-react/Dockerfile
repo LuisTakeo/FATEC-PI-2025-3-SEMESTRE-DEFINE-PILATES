@@ -14,13 +14,17 @@ WORKDIR /app
 ENV NODE_ENV=development
 
 # Dependências de sistema úteis (git para pacotes e bash para scripts)
-RUN apk add --no-cache git bash
+# RUN apk add --no-cache git bash
 
 # Copiamos manifests primeiro para cache das dependências
-COPY package*.json ./
+COPY package.json package-lock.json* ./
 
 # Instala dependências incluindo dev
-RUN --mount=type=cache,target=/root/.npm npm install
+# RUN --mount=type=cache,target=/root/.npm npm install
+
+RUN npm ci --prefer-offline --no-audit
+
+COPY . .
 
 # (Opcional) Copiar código. Mantemos comentado para usar bind mount e rebuild instantâneo.
 # COPY . .
