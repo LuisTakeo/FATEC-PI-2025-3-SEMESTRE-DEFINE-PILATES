@@ -2,12 +2,13 @@ import type {Aluno} from "./../../types/Aluno"
 
 export async function cadastrar_aluno(aluno: Aluno) {
     try{
-        const response = await fetch("http://localhost:8080/api/students/save", 
+        console.log(aluno);
+        const response = await fetch("http://localhost:8000/api/students/save", 
             {
                 method: "POST",
                 headers:{
-                    "Content-Type": "aplication/json",
-                    "Accept": "aplication/json"
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 },
                 body: JSON.stringify(aluno)
             }
