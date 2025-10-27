@@ -22,7 +22,7 @@ COPY package.json package-lock.json* ./
 # Instala dependências incluindo dev
 # RUN --mount=type=cache,target=/root/.npm npm install
 
-RUN npm ci --prefer-offline --no-audit
+RUN npm install
 
 COPY . .
 
