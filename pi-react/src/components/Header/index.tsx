@@ -16,6 +16,7 @@ function Header() {
     "/login/aluno",
     "/login/instrutor",
     "/admin/home",
+    "/login/funcionario",
 ];
   const shouldHideButton = hidePaths.includes(currentPath);
 
@@ -35,23 +36,17 @@ function Header() {
             <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
 
               <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto  ">
-                <Link to="/">
-                <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
                     Planos
-                </a>
                 </Link>
 
-                <Link to="/">
-                <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
                     Calendário
-                </a>
                 </Link>
 
-                <Link to="/">
-                <a className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
-                    Saiba mais
-                </a>
-                </Link>        
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                    Saiba Mais
+                </Link>      
               </nav>
 
                 <a href="/" className=" flex order-first lg:order-none lg:w-1/5  lg:items-center lg:justify-center mb-4 md:mb-0">

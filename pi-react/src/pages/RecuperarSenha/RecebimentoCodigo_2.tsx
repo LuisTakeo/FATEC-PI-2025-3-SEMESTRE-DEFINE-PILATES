@@ -28,7 +28,7 @@ export default function RecebimentoCodigo(){
     const handleReenviarCodigo = useCallback(() => {
         console.log(`Reenviando código para ${telefoneRecebido}.`); 
         
-        // Lógica de API
+        // Lógica de API (Simulação)
 
         setContador(30);
         setReenviarHabilitado(false);
@@ -84,37 +84,40 @@ export default function RecebimentoCodigo(){
 
 
     return(
-        <div className="min-h-screen w-full font-sans overflow-x-hidden"> 
+        <div className="flex flex-col items-center justify-start w-full font-sans overflow-x-hidden"> 
             <main 
-                className="w-full flex justify-center py-20 md:py-32"
+                className="w-[80vw] flex flex-col justify-center px-[2%] py-6" 
                 style={{ backgroundColor: 'var(--background)' }}
             >
-                <div className="w-full max-w-md mx-auto px-4"> 
+                {/* O container principal do formulário */}
+                <div className="w-full mx-auto"> 
                     
-                    <form onSubmit={handleConfirmarCodigo} className="w-full" noValidate>
+                    <form onSubmit={handleConfirmarCodigo} className="w-full flex flex-col gap-8">
                         <section className="flex flex-col items-start w-full gap-8"> 
-                            <div className="flex flex-col gap-3">
-                                <h2 className={Estilizacoes.titulo_principal}>Código de segurança</h2>
-                                <p className={Estilizacoes.titulo_segundario}>
-                                    Escreva abaixo o código que você recebeu por SMS
-                                </p>
-                            </div>
+                            
+                            {/* Bloco Título e Descrição */}
+                            <header className="flex flex-col gap-2 w-full mb-2">
+                                <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>
+                                    Código de Segurança
+                                </h1>
+                                <h2 className={`${Estilizacoes.segundo_titulo_principal} text-[1.0rem] text-[var(--foreground)]`}>
+                                    Enviamos um código para o número **{telefoneRecebido}**. Digite-o abaixo.
+                                </h2>
+                            </header>
 
-                            <div className="w-full flex flex-col gap-0"> 
+                            <div className="w-full flex flex-col gap-1"> 
                                 
-                                <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
+                                <p className=" text-[1rem] font-medium text-[var(--cor-do-texto-secundario)]"> 
                                     Digite o código de segurança
                                 </p>
 
-                                {/* 2. Input sem a prop 'label' */}
                                 <Input
                                     id="codigo"
                                     value={codigo}
-                                    onChange={handleCodigoChange}
+                                    onChange={(e) => handleCodigoChange(e.target.value)} 
                                     type="text"
                                     pattern="[0-9]{6}"
                                     placeholder="000000"
-                                    size="w-full"
                                     maxLength={6}
                                 />
 
@@ -125,23 +128,27 @@ export default function RecebimentoCodigo(){
                                 )}
                             </div>
 
-                            <Botao 
-                                texto={isLoading ? "Confirmando..." : "Confirmar Código"} 
-                                type="submit" 
-                            /> 
+                            {/* Botão de Ação Principal */}
+                            <div className="w-full">
+                                <Botao 
+                                    texto={isLoading ? "Confirmando..." : "Confirmar Código"} 
+                                    type="submit" 
+                                /> 
+                            </div>
 
+                            {/* Bloco de Reenvio de Código */}
                             <div className="w-full flex flex-col"> 
                                 
                                 {reenviarHabilitado ? (
                                     <button 
                                         type="button" 
                                         onClick={handleReenviarCodigo}
-                                        className="text-[var(--destaque)] text-sm underline self-start bg-transparent border-none p-0 cursor-pointer"
+                                        className="text-[var(--destaque)] text-[1rem] underline self-start bg-transparent border-none p-0 cursor-pointer"
                                     >
                                         Solicitar reenvio do código
                                     </button>
                                 ) : (
-                                    <p className={Estilizacoes.titulo_segundario}>
+                                    <p className="text-base font-normal text-[var(--cor-do-texto-secundario)]"> 
                                         <span className="text-[var(--destaque)] font-semibold">
                                             Não recebeu seu código?
                                         </span>
@@ -152,6 +159,14 @@ export default function RecebimentoCodigo(){
                                         <span className="text-[var(--destaque)] font-semibold"> segundos</span>
                                     </p>
                                 )}
+
+                                {/* Adicionado link de retorno para o Login */}
+                                {/* <a
+                                    href="/" 
+                                    className="text-[var(--destaque)] text-[1rem] underline font-medium self-start mt-4"
+                                >
+                                    Voltar para o Login
+                                </a> */}
                             </div>
                         </section>
                     </form>
