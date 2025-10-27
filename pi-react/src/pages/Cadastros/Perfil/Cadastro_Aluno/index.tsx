@@ -100,10 +100,16 @@ function Cadastro_Aluno(){
 
         console.log("chego")
 
-        const contato: Contato = {
-            tipo: ativo === "email_opcao" ? "email" : "outro telefone",
-            valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
-            observacao: observacoes,
+        // Criar array de contatos apenas se houver alguma opção selecionada (não "Nenhum")
+        const contatos: Contato[] = [];
+        
+        if (ativo !== "") {
+            const contato: Contato = {
+                tipo: ativo === "email_opcao" ? "email" : "outro telefone",
+                valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
+                observacao: observacoes,
+            };
+            contatos.push(contato);
         }
 
         const enderecosFormatados: EnderecoType[] = enderecos.map(end => ({
@@ -126,9 +132,7 @@ function Cadastro_Aluno(){
                 profession: categoria,
                 birth_date: converterInputParaDDMMYYYY(data),
                 fotos: arquivoComprimido,
-                contatos: [
-                    contato
-                ],
+                contatos: contatos, // Array vazio se ativo === ""
                 enderecos: enderecosFormatados
         }
 
