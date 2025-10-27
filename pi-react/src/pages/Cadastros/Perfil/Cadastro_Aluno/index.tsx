@@ -105,7 +105,7 @@ function Cadastro_Aluno(){
         
         if (ativo !== "") {
             const contato: Contato = {
-                tipo: ativo === "email_opcao" ? "email" : "outro telefone",
+                tipo: ativo === "email_opcao" ? "email" : "telefone",
                 valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
                 observacao: observacoes,
             };
