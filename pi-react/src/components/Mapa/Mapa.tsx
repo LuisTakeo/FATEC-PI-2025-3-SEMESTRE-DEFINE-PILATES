@@ -82,7 +82,7 @@ export default function Mapa(){
                 options={[
                     {value:"-23.50505456997555,-46.45550671873131", label:"São Miguel Paulista"},
                     {value:"-23.53042485224035,-46.443679847565896", label:"Itaquera"},
-                    {value:"-23.505189956028758,-46.45554670523834", label:"Vla Jacuí"} 
+                    {value:"-23.505189956028758,-46.45554670523834", label:"Vila Jacuí"} 
                 ]}
                 onChange={(e) => {
                     const valorSelecionado = e.target.value;

@@ -3,6 +3,11 @@
 ############################################################
 FROM php:8.2-cli
 
+# Configurar timezone para America/Sao_Paulo
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+
 # Dependências de sistema e extensões PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev libzip-dev \

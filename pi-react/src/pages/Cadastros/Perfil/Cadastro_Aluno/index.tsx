@@ -4,10 +4,29 @@ import Input_Arquivo from "../../../../components/Input/Input_Arquivo";
 import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"
 import inputCPF from "../../../../services/inputCPF"
-import { useState } from "react";
-import { type Aluno, type Endereco, type Contato, cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
+import React, { useState } from "react";
+import { cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
+import type {Aluno} from "../../../../types/Aluno"
+import type {Endereco as EnderecoType} from "../../../../types/Aluno"
+import type {Contato} from "../../../../types/Aluno"
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
-import OutroEndereco from "../../../../components/Section/OutroEndereco";
+import Endereco from "../../../../components/Section/Endereco";
+
+interface EnderecoState {
+    id: number;
+    cep: string;
+    rua: string;
+    numero: string;
+    bairro: string;
+    complemento: string;
+    isPrincipal: boolean;
+}
+
+function converterInputParaDDMMYYYY(dataInput: string): string {
+    // dataInput no formato "2025-10-27" (do input type="date")
+    const [ano, mes, dia] = dataInput.split('-');
+    return `${dia}-${mes}-${ano}`;
+}
 
 function Cadastro_Aluno(){
     console.log("carregando")
@@ -18,18 +37,18 @@ function Cadastro_Aluno(){
     const [ddd, setDDD] = useState("");
     const [telefone, setTelefone] = useState("");
 
-    const [cep, setCEP] = useState("");
-    const [rua, setRua] = useState("");
-    const [numero, setNumero] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [complemento, setComplemento] = useState("")
-
-    const [cepComplementar, setCEPComplementar] = useState("");
-    const [ruaComplementar, setRuaComplementar] = useState("");
-    const [numeroComplementar, setNumeroComplementar] = useState("");
-    const [bairroComplementar, setBairroComplementar] = useState("");
-    const [complementoComplementar, setComplementoComplementar] = useState("")
-    const [isPrincipal, setIsPrincipal] = useState(false)
+    // Endereços como array
+    const [enderecos, setEnderecos] = useState<EnderecoState[]>([
+        {
+            id: 1,
+            cep: "",
+            rua: "",
+            numero: "",
+            bairro: "",
+            complemento: "",
+            isPrincipal: true
+        }
+    ]);
 
     const [permissao_medica, setPermissao_medica] = useState(false);
     const [medicamento, setMedicamento] = useState("")
@@ -44,7 +63,33 @@ function Cadastro_Aluno(){
 
     const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: File}>({})
 
-  
+    // Adicionar novo endereço
+    const adicionarEndereco = () => {
+        const novoId = Math.max(...enderecos.map(e => e.id), 0) + 1;
+        setEnderecos([...enderecos, {
+            id: novoId,
+            cep: "",
+            rua: "",
+            numero: "",
+            bairro: "",
+            complemento: "",
+            isPrincipal: false
+        }]);
+    };
+
+    // Remover endereço
+    const removerEndereco = (id: number) => {
+        if (enderecos.length > 1) {
+            setEnderecos(enderecos.filter(e => e.id !== id));
+        }
+    };
+
+    // Atualizar endereço específico
+    const atualizarEndereco = (id: number, campo: keyof EnderecoState, valor: any) => {
+        setEnderecos(enderecos.map(e => 
+            e.id === id ? { ...e, [campo]: valor } : e
+        ));
+    };
 
     function permitirInputs(state: boolean){
         setPermissao_medica(state);
@@ -55,34 +100,29 @@ function Cadastro_Aluno(){
 
         console.log("chego")
 
-        const contato: Contato = {
-            tipo: ativo === "email_opcao" ? "email" : "outro telefone",
-            valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
-            observacao: observacoes,
+        // Criar array de contatos apenas se houver alguma opção selecionada (não "Nenhum")
+        const contatos: Contato[] = [];
+        
+        if (ativo !== "") {
+            const contato: Contato = {
+                tipo: ativo === "email_opcao" ? "email" : "outro telefone",
+                valor: ativo === "email_opcao" ? email : outro_DDD + outro_telefone,
+                observacao: observacoes,
+            };
+            contatos.push(contato);
         }
 
-        const endereco: Endereco[]= [{
-            tipo: "numero",
-            rua: rua, 
-            numero: numero,
-            complemente: complemento,
-            bairro: bairro,
+        const enderecosFormatados: EnderecoType[] = enderecos.map(end => ({
+            tipo: "residencial",
+            rua: end.rua, 
+            numero: end.numero,
+            complemente: end.complemento,
+            bairro: end.bairro,
             cidade: "São Paulo",
             estado: "SP",
-            cep: cep,
-            principal: isPrincipal,
-        },
-        {
-            tipo: "numero",
-            rua: ruaComplementar, 
-            numero: numeroComplementar,
-            complemente: complementoComplementar,
-            bairro: bairroComplementar,
-            cidade: "São Paulo",
-            estado: "SP",
-            cep: cepComplementar,
-            principal: isPrincipal, 
-        }]
+            cep: end.cep,
+            principal: end.isPrincipal,
+        }));
         
         const aluno: Aluno = {
                 name: nome,
@@ -90,15 +130,13 @@ function Cadastro_Aluno(){
                 password: "123Ab!",
                 cpf: cpf,
                 profession: categoria,
-                birth_date: data,
+                birth_date: converterInputParaDDMMYYYY(data),
                 fotos: arquivoComprimido,
-                contatos: [
-                    contato
-                ],
-                enderecos: endereco
+                contatos: contatos, // Array vazio se ativo === ""
+                enderecos: enderecosFormatados
         }
 
-        const response = await cadastrar_aluno(aluno);
+        await cadastrar_aluno(aluno);
 
         return aluno
 
@@ -225,97 +263,47 @@ function Cadastro_Aluno(){
                             />
                         </div>
 
-                        <section id="endereço" className="flex justify-start items-start flex-col gap-5 mt-5">
-                            <div>
-                                <h1 className={Estilizacoes.segundo_titulo_principal}>Endereço</h1>
-                            </div>
+                        {/* ✅ SEÇÃO DE ENDEREÇOS REFATORADA */}
+                        <div id="endereco-complementar" className="w-full my-11 flex flex-col gap-6">
+                            
 
-                            {/* aplicar api */}
-                           <div className="w-full">
-                                <Input
-                                    id="cep"
-                                    label="CEP"
-                                    value={cep}
-                                    onChange={(e) => setCEP(e.target.value)}
-                                    type = "text"
-                                    pattern="[-0-9]+"
-                                    placeholder = "CEP"
-                                    
-                                    maxLength={8}
-                                />
-                            </div>
-
-                            <div className="flex justify-start items-start w-full gap-4">
-                                <div className="w-[75%]">
-                                    <Input
-                                        id="rua"
-                                        label="Rua"
-                                        value={rua}
-                                        onChange={(e) => setRua(e.target.value)}
-                                        type = "text"
-                                        pattern=".*"
-                                        placeholder = "Digite a Rua"
-                                        
+                            <div className="flex flex-col gap-6">
+                                {enderecos.map((endereco, index) => (
+                                    <Endereco
+                                        key={endereco.id}
+                                        titulo={index === 0 ? "Endereço Principal" : `Endereço ${index + 1}`}
+                                        cep={endereco.cep}
+                                        setCep={(valor) => atualizarEndereco(endereco.id, 'cep', typeof valor === 'function' ? valor(endereco.cep) : valor)}
+                                        rua={endereco.rua}
+                                        setRua={(valor) => atualizarEndereco(endereco.id, 'rua', typeof valor === 'function' ? valor(endereco.rua) : valor)}
+                                        numero={endereco.numero}
+                                        setNumero={(valor) => atualizarEndereco(endereco.id, 'numero', typeof valor === 'function' ? valor(endereco.numero) : valor)}
+                                        bairro={endereco.bairro}
+                                        setBairro={(valor) => atualizarEndereco(endereco.id, 'bairro', typeof valor === 'function' ? valor(endereco.bairro) : valor)}
+                                        complemento={endereco.complemento}
+                                        setComplemento={(valor) => atualizarEndereco(endereco.id, 'complemento', typeof valor === 'function' ? valor(endereco.complemento) : valor)}
+                                        isPrincipal={endereco.isPrincipal}
+                                        setIsPrincipal={(valor) => atualizarEndereco(endereco.id, 'isPrincipal', typeof valor === 'function' ? valor(endereco.isPrincipal) : valor)}
+                                        mostrarPrincipal={index > 0}
+                                        onRemover={enderecos.length > 1 ? () => removerEndereco(endereco.id) : undefined}
                                     />
-                                </div>
-
-                                <div className="w-[25%]">
-                                    <Input
-                                        id="numero"
-                                        label="Número"
-                                        value={numero}
-                                        onChange={(e) => setNumero(e.target.value)}
-                                        type = "text"
-                                        pattern=".*"
-                                        placeholder = "Número"
-                                        
-                                    />
+                                ))}
+                            </div>
+                            <div className="text-[1.5rem] flex flex-row gap-10 flex-wrap">
+                                <div className="flex gap-8 items-center justify-center">
+                                    <div>
+                                        <h1 className={Estilizacoes.titulo_segundario}>Adicionar outro endereço</h1>
+                                    </div>
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="flex items-center justify-center w-[50px] h-full rounded-full text-[2rem] text-white cursor-pointer bg-[var(--azul-segundario)]"
+                                            onClick={adicionarEndereco}
+                                        >+</button>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="w-full">
-                                <Input
-                                    id="bairro"
-                                    label="Bairro"
-                                    value={bairro}
-                                    onChange={(e) => setBairro(e.target.value)}
-                                    type = "text"
-                                    pattern=".*"
-                                    placeholder = "Digite o Bairro"
-                                    
-                                />
-                            </div>
-
-                            <div className="w-full">
-                                <Input
-                                    id="complemento"
-                                    label="Complemento"
-                                    value={complemento}
-                                    onChange={(e) => setComplemento(e.target.value)}
-                                    type = "text"
-                                    pattern=".*"
-                                    placeholder = "Ex: Apartamento 156"
-                                    
-                                />
-                            </div>
-
-
-                        </section>
-
-                        <OutroEndereco
-                            cepComplementar={cepComplementar}
-                            setCEPComplementar={setCEPComplementar}
-                            ruaComplementar={ruaComplementar}
-                            setRuaComplementar={setRuaComplementar}
-                            numeroComplementar={numeroComplementar}
-                            setNumeroComplementar={setNumeroComplementar}
-                            bairroComplementar={bairroComplementar}
-                            setBairroComplementar={setBairroComplementar}
-                            complementoComplementar={complementoComplementar}
-                            setComplementoComplementar={setComplementoComplementar}
-                            isPrincipal={isPrincipal}
-                            setIsPrincipal={setIsPrincipal}
-                        />
+                        </div>
 
 
                         <section id="info-medicas" className="flex justify-start items-start flex-col gap-5 mt-8">

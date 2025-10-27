@@ -31,14 +31,14 @@ export default function BlocoCalendario({ filtros, aulas, cargo }: BlocoCalendar
           // .filter((aula) => new Date(aula.data) >= new Date(datainicio) && new Date(aula.data) <= new Date(datafim))          
           .map((aula) => (
             <div 
-            key={aula.id}
-            className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
-            flex flex-col items-center justify-between px-[30px] py-[30px] gap-5
-            md:flex-row md:min-h-[130px] 
-            ">
-              
+              key={aula.id}
+              className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
+              flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 
+              border-l-[10px] border-l-[var(--destaque)]
+              md:flex-row md:min-h-[130px] 
+              ">
               <div className="w-full flex flex-col gap-2
-              md:gap-3">
+                md:gap-3">
                 <p>{aula.unidade}</p>
                 <p>Instrutor: {aula.instrutor}</p>
                 <p>Quantidade de Alunos: {aula.alunos.length}</p>
