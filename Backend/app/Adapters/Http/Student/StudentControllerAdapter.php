@@ -63,25 +63,29 @@ class StudentControllerAdapter extends BaseController
     }
 
     #[OA\Post(
-    path: "/api/students/login",
-    operationId: "loginStudent",
-    tags: ["Students"],
-    summary: "Login de estudante"
+        path: "/api/students/login",
+        operationId: "loginStudent",
+        tags: ["Students"],
+        summary: "Login de estudante"
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            required: ["nameuser", "password"],
-            properties: [
-                new OA\Property(property: "nameuser", type: "string", example: "11951999999"),
-                new OA\Property(property: "password", type: "string", example: "abc123A")
-            ]
-        )
+        content: new OA\JsonContent(ref: "#/components/schemas/LoginRequest")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Login realizado com sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/LoginSuccessResponse")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Credenciais inválidas",
+        content: new OA\JsonContent(ref: "#/components/schemas/LoginErrorResponse")
     )]
     public function login(Request $request): JsonResponse
     {
         $result = $this->studentService->loginStudent(
-            $request->input('nameuser'),
+            $request->input('login'),
             $request->input('password')
         );
         
