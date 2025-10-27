@@ -30,10 +30,19 @@ class StudentRegisterRequest extends FormRequest
                 'regex:/^data:image\/(jpeg|jpg|png|gif);base64,/',
 
                 function ($attribute, $value, $fail) {
+                    // Garantir que é string (segurança extra)
+                    if (!is_string($value)) {
+                        $fail('Tipo de arquivo inválido.');
+                        return;
+                    }
+                    
+                    // Validar tamanho (máx 3MB)
                     $imageSize = strlen($value);
                     if ($imageSize > 3 * 1024 * 1024) {
                         $fail('A imagem é muito grande. Máximo 3MB.');
                     }
+                    
+                    // Validar se Base64 é válido
                     $base64Data = substr($value, strpos($value, ',') + 1);
                     if (!base64_decode($base64Data, true)) {
                         $fail('Formato de imagem inválido.');

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Adapters\Database\AdminReceptionist\AdminReceptionistMySQLAdapter;
 use App\Adapters\Database\StudentMongoDBAdapter;
 use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
 use App\Adapters\Database\StudentMySQLAdapter;
+use App\Application\Ports\AdminReceptionist\AdminReceptionistServiceContract;
 use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
@@ -17,8 +19,10 @@ use App\Application\Services\PilatesApplicationService;
 use App\Adapters\Database\MySQLAdapter;
 use App\Adapters\Database\MongoDBAdapter;
 use App\Adapters\Database\NullNoSQLAdapter;
+use App\Application\Ports\AdminReceptionist\AdminReceptionistRepositoryPort;
 use App\Application\Ports\Instructor\InstructorRepositoryPort;
 use App\Application\Ports\Instructor\InstructorServiceContract;
+use App\Application\Services\AdminReceptionist\AdminReceptionistService;
 use App\Application\Services\Instructor\InstructorService;
 
 /**
@@ -66,6 +70,16 @@ class HexagonalArchitectureProvider extends ServiceProvider
         $this->app->bind(
             InstructorRepositoryPort::class,
             InstructorMySQLAdapter::class
+        );
+
+        //Admin and Receptionist ⬇
+        $this->app->bind(
+            AdminReceptionistServiceContract::class,
+            AdminReceptionistService::class
+        );
+        $this->app->bind(
+            AdminReceptionistRepositoryPort::class,
+            AdminReceptionistMySQLAdapter::class
         );
     }
 

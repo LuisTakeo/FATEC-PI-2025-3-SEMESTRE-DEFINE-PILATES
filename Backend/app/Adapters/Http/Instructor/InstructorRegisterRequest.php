@@ -106,12 +106,9 @@ class InstructorRegisterRequest extends FormRequest{
         ]);
         throw new ValidationException(
             $validator->errors()->toArray(),
-            'Instructor validation failed'
+            'Falha ao validar os campos.'
         );
     }
-
-    //missing methods
-
     public function toDTO(): InstructorDTO
     {
         return InstructorDTO::fromArray($this->validated());

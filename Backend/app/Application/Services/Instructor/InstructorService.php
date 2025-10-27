@@ -96,35 +96,24 @@ class InstructorService implements InstructorServiceContract
     public function registerInstructor(InstructorDTO $instructorDTO): array
     {
         try {
-            // Sanitize and prepare data before saving
             $instructorDTOFiltered = $this->sanitizeInstructorData($instructorDTO);
 
-            // Persist data using the repository port
             $savedInstructor = $this->sqlAdapter->create($instructorDTOFiltered);
 
             if (!$savedInstructor) {
-                return [
-                    'message' => 'Failed to register instructor',
-                    'error' => 'Could not save data to the database.',
-                    'status' => 'error'
-                ];
+                throw new Exception();
             }
 
-            // Return a success response with the created data
             return [
                 'message' => 'Instructor registered successfully',
-                'data' => $savedInstructor->toArray(), // Assuming the repository returns a DTO or model
                 'status' => 'success'
             ];
 
         } catch (Exception $e) {
-            // Log the detailed error for debugging purposes
-            Log::error('Error registering instructor: ' . $e->getMessage());
-
-            // Return a generic error response to the client
+            Log::error('Error registering instructor: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return [
                 'message' => 'An unexpected error occurred while registering the instructor.',
-                'error' => 'Internal server error',
+                'error' => $e->getMessage(),
                 'status' => 'error'
             ];
         }

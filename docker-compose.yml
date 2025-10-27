@@ -9,6 +9,8 @@ services:
     working_dir: /var/www
     volumes:
       - ./Backend:/var/www
+      - /etc/localtime:/etc/localtime:ro  # ✅ Sincronizar com host
+      - /etc/timezone:/etc/timezone:ro    # ✅ Sincronizar com host
     ports:
       - "8000:8000"
     environment:

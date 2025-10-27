@@ -1,62 +1,71 @@
-import "../../index.css";
-import "./stylesHeader.css";
-"use client";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import "../../index.css";
+"use client";
+import Botao from "../Botao/Botao";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-
+ 
   const currentPath = location.pathname.toLowerCase().replace(/\/$/, "");
+ 
+  const hidePaths = [
+    "/cadastro/aluno",
+    "/cadastro/instrutor",
+    "/cadastro/administrador/recepcionista",
+    "/login/aluno",
+    "/login/instrutor",
+    "/admin/home",
+];
+  const shouldHideButton = hidePaths.includes(currentPath);
 
-  const shouldHideButton =
-    currentPath === "/user/login" || currentPath === "/admin/home";
-
-  return (
-    <header className="bg-transparent body-font text-[var(--foreground)]">
-      <div className="container mx-auto flex flex-col md:flex-row items-center md:justify-between p-5">
-
-        <div className="order-1 md:order-2 w-full md:w-auto flex justify-center mb-4 md:mb-0">
-          <span className="flex items-baseline gap-1 whitespace-nowrap text-[2.2rem] max-sm:text-[1.8rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] transition-all duration-300">
-            Defıne Pilates
-           <span className="font-extrabold text-[3rem] max-sm:text-[2.4rem] leading-none">.</span>
-          </span>
+   
+    const buttonOrPlaceholder = shouldHideButton ? (
+        <div 
+             className="hidden"
+          >
+             &nbsp; 
         </div>
+    ) : (
+      <Botao texto="Acessar conta" onClick={() => navigate("/login/aluno")}/>
+    );
 
-        <nav className="order-2 md:order-1 w-full md:w-2/5 flex flex-col md:flex-row items-center md:items-center text-base mb-4 md:mb-0 gap-2 md:gap-8">
-          <Link
-            to="/"
-            className="text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem] max-sm:text-[1rem] cursor-pointer transition-colors relative z-50"
-          >
-            Página Inicial
-          </Link>
-          <Link
-            to="/"
-            className="text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem] max-sm:text-[1rem] cursor-pointer transition-colors relative z-50"
-          >
-            Calendário
-          </Link>
-          <Link
-            to="/"
-            className="text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.3rem] max-sm:text-[1rem] cursor-pointer transition-colors relative z-50"
-          >
-            Contato
-          </Link>
-        </nav>
+ return(
+        <header className={`text-black-600 body-font bg-[var(--background] ${window.location.href === 'http://localhost:5173/' ? "" : "py-[3%]"}`}>
+            <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
 
-        {!shouldHideButton && (
-          <div className="order-3 w-full md:order-3 md:w-2/5 flex justify-center md:justify-end">
-            <button
-              className="!bg-[var(--azul-segundario)] !text-white text-[1.2rem] max-sm:text-[1rem] tracking-[.2px] py-1.5 px-4 md:py-2 md:px-5 rounded-md font-semibold transition-all duration-200 hover:!bg-[var(--destaque)] max-sm:py-1 max-sm:px-3 relative z-50"
-              onClick={() => navigate("/user/login")}
-            >
-              Acessar conta
-            </button>
-          </div>
-        )}
-      </div>
-    </header>
-  );
+              <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto  ">
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                    Planos
+                </Link>
+
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                    Calendário
+                </Link>
+
+                <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
+                    Saiba Mais
+                </Link>      
+              </nav>
+
+                <a href="/" className=" flex order-first lg:order-none lg:w-1/5  lg:items-center lg:justify-center mb-4 md:mb-0">
+                    <span className="text-[2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
+                        Defıne Pilates
+                        <span className="font-extrabold text-[3rem]">.</span>
+                    </span>
+                </a>
+                <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+                
+                  <div className="w-[200px] my-8">
+                      {buttonOrPlaceholder}
+                  </div>
+                
+
+
+                </div>
+            </div>
+        </header>
+        );
 }
 
 export default Header;
