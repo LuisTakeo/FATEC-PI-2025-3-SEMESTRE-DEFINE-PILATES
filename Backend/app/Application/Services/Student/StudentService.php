@@ -95,7 +95,9 @@ class StudentService implements StudentServiceContract
                 "message"=> "error",
                 "error" => "Usuário não cadastrado no sistema"
             ];
-        $isPasswordValid = Hash::check($password, $responseUser["passworduser"]);
+        
+        $userData = $responseUser["data"];
+        $isPasswordValid = Hash::check($password, $userData["passworduser"]);
         if (! $isPasswordValid)
         {
             return ["status"=> false,

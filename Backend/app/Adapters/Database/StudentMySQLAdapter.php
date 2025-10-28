@@ -24,7 +24,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
     {
         try
         {
-            $student = Student::where("nameuser", $nameuser)->first();
+            $student = UserTgi::where("nameuser", $nameuser)->first();
             if (!$student)
                 throw new Exception("Dados inválidos");
             return [
@@ -36,7 +36,6 @@ class StudentMySQLAdapter implements StudentRepositoryPort
             Log::error("". $e->getMessage());
             return ['status'=> false,'message'=> $e->getMessage()];
         }
-        
     }
 
 
