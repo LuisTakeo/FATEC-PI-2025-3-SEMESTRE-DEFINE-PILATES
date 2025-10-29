@@ -29,7 +29,7 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                 throw new Exception("Dados inválidos");
             return [
                 'status' => true,
-                'data' => $student->toArray()];
+                'data' => $student];
         }
         catch (Exception $e)
         {

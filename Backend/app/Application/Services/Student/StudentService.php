@@ -11,6 +11,7 @@ use App\Application\Ports\StudentServiceContract;
 use Exception;
 use Hash;
 use Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class StudentService implements StudentServiceContract
 {
@@ -93,11 +94,11 @@ class StudentService implements StudentServiceContract
         if ($responseUser["status"] == false)
             return ["status"=> false,
                 "message"=> "error",
-                "error" => "Usuário não cadastrado no sistema"
+                "error" => "Usuário ou senha inválidos"
             ];
         
         $userData = $responseUser["data"];
-        $isPasswordValid = Hash::check($password, $userData["passworduser"]);
+        $isPasswordValid = Hash::check($password, $userData->getAuthPassword());
         if (! $isPasswordValid)
         {
             return ["status"=> false,
@@ -105,9 +106,50 @@ class StudentService implements StudentServiceContract
             "error"=> "Usuário ou senha inválidos"
             ];
         }
-        return ["status"=> true,
-        "message"=> "Usuário logado!"
-        ];
+        // 3. Verificar status
+            if ($userData->statususer !== 'Active') {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Usuário inativo'
+                ];
+            }
+
+            // 4. Carregar dados do estudante
+            $student = $userData->student;
+
+            if (!$student) {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Dados do estudante não encontrados',
+                    'test' => $userData->toArray()
+                ];
+            }
+
+            $token = JWTAuth::fromUser($userData);
+
+            $payload = JWTAuth::setToken($token)->getPayload();
+            // 6. Retornar dados (SEM senha)
+            return [
+                'status' => true,
+                'message' => 'Login realizado com sucesso',
+                'data' => [
+                    'user' => [
+                        'id' => $userData->id_users,
+                        'nameuser' => $userData->nameuser,
+                        'type' => $userData->typeuser,
+                        'status' => $userData->statususer,
+                    ],
+                    'student' => [
+                        'id' => $student->Id_students,
+                        'name' => $student->namestudent,
+                        'cpf' => $student->cpf,
+                    ],
+                    'token' => $token, // ✅ Token JWT-like
+                    'token_type' => 'Bearer'
+                ]
+            ];
     }
 
     public function registerStudent(StudentDTO $studentDTO): array
