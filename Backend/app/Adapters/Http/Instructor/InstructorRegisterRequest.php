@@ -22,7 +22,7 @@ class InstructorRegisterRequest extends FormRequest{
                 'string',
                 'regex:/^(\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$/'
             ],
-            'password' => ['required', 'string',''],
+            'password' => ['required', 'string',''], 
             
             'cref' => [
                 'nullable',
