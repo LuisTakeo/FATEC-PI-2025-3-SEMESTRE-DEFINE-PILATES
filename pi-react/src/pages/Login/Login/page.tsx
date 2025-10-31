@@ -4,6 +4,7 @@ import Estilizacoes from "../../../model/Estilizacoes";
 import Input from "../../../components/Erro/Input";
 import InputTelefone from "../../../components/Erro/InputTelefone";
 import Botao from "../../../components/Botao/Botao";
+import { login_aluno } from "../../../services/aluno/loginservice";
 
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 10;
@@ -70,20 +71,20 @@ export default function LoginPage() {
       setErroSenha(`A senha deve ter entre ${MIN_LENGTH} e ${MAX_LENGTH} caracteres.`);
       hasError = true;
     } else {
-      const erroConteudo = validarConteudoSenha(senha);
-      if (erroConteudo) {
-        setErroSenha("A senha deve conter letras maiúsculas, minúsculas, números e um caractere especial.");
-        hasError = true;
-      }
+      // const erroConteudo = validarConteudoSenha(senha);
+      // if (erroConteudo) {
+      //   setErroSenha("A senha deve conter letras maiúsculas, minúsculas, números e um caractere especial.");
+      //   hasError = true;
+      // }
     }
 
     if (!hasError) {
       setIsLoading(true);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
+        // await new Promise((resolve) => setTimeout(resolve, 1500));
+        const IsLogado = await login_aluno(telefone, senha);
         const authSuccess = true;
-
+        console.log(IsLogado);
         if (authSuccess) {
           if (typeof window !== "undefined") {
             localStorage.setItem("isLoggedIn", "true");
