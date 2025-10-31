@@ -16,6 +16,7 @@ function Header() {
     "/login/aluno",
     "/login/instrutor",
     "/admin/home",
+    "/login/funcionario",
 ];
   const shouldHideButton = hidePaths.includes(currentPath);
 

@@ -2,7 +2,6 @@ import { useState } from "react"
 import Botao from "../../components/Botao/Botao"
 import Input from "../../components/Erro/Input" 
 import Estilizacoes from "../../model/Estilizacoes"
-import React from 'react'; 
 
 const MIN_LENGTH = 6; 
 const MAX_LENGTH = 10; 
@@ -21,7 +20,7 @@ export default function AlterarSenha() {
         if (erroConfirmacao && val === senhaConfirmacao) {
             setErroConfirmacao(""); 
         }
-};
+    };
 
     // @ts-ignore
     const handleSenhaConfirmacaoChange = (val) => {
@@ -118,67 +117,80 @@ export default function AlterarSenha() {
     };
 
     return (
-    <div className="min-h-screen w-full font-sans overflow-x-hidden"> 
-    <main 
-        className="w-full flex justify-center py-20 md:py-32"
-            style={{ backgroundColor: 'var(--background)' }}
-            >
-                <div className="w-full max-w-md mx-auto px-4"> 
- 
-                    <form onSubmit={handleSave} className="w-full" noValidate>
-                        <div className="flex flex-col items-start w-full gap-8">
+        <div className="flex flex-col items-center justify-start w-full">
+            <main className="flex flex-col w-[80vw] px-[2%] py-6"> 
+        
+                <header className="flex flex-col items-start mb-12 w-full"> 
+                    
+                    <div className="flex flex-col justify-center gap-1 text-left w-full">
+                        <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>
+                            Definir Nova Senha
+                        </h1>
+                        <h2 className={`${Estilizacoes.segundo_titulo_principal} text-[1.1rem] text-[var(--foreground)]`}>
+                            Para ser válida, ela deve ter entre {MIN_LENGTH} e {MAX_LENGTH} caracteres, e conter letras maiúsculas, minúsculas, números e um caractere especial.
+                        </h2>
+                    </div>
+                </header>
 
-                            <header className="flex flex-col gap-3 w-full">
-                                <h2 className={Estilizacoes.titulo_principal}>
-                                    Nova senha
-                                    </h2>
-                                <p className={Estilizacoes.titulo_segundario}>
-                                    Defina sua nova senha (máx. 10 caracteres). Para ser válida, ela deve combinar letras maiúsculas, minúsculas, números e um símbolo especial.
-                                </p>
-                            </header>
-
-                            <div className="w-full flex flex-col gap-4"> 
-
-                                <div className="flex flex-col gap-0">
-                                    <Input
-                                        id="senha"
-                                        label="Nova Senha" 
-                                        value={senha}
-                                        onChange={handleSenhaChange}
-                                        type="password"
-                                        placeholder="Digite a senha"
-                                        size="w-full"
-                                        maxLength={MAX_LENGTH}
-                                        mostrarSenhaToggle={true} 
-                                        erro={erroSenha} 
-                                     />
-                                </div>
-
-                                <div className="flex flex-col gap-0"> 
-                                    <Input
-                                    id="senhaconfirmacao"
-                                        label="Confirme a Senha" 
-                                        value={senhaConfirmacao}
-                                        onChange={handleSenhaConfirmacaoChange}
-                                        type="password"
-                                        placeholder="Digite a senha novamente"
-                                        size="w-full"
-                                        maxLength={MAX_LENGTH}
-                                        mostrarSenhaToggle={true} 
-                                        erro={erroConfirmacao} // 👈 Adicionado!
-                                 />
-                                </div>
+                <form onSubmit={handleSave} className="flex flex-col gap-8 w-full">
+                    <section className="flex flex-col gap-6 w-full">
+                        <h3 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)] text-[1.3rem]`}>
+                            Dados da Nova Senha
+                        </h3>
+                        
+                        {/* Inputs e Botão de Salvar VÃO OCUPAR A LARGURA TOTAL DO MAIN (w-[80vw]) */}
+                        <div className="w-full flex flex-col gap-8">
+                            
+                            {/* Input Nova Senha (w-full garante o estiramento) */}
+                            <div className="text-[1rem] font-medium">
+                                <Input
+                                    id="senha"
+                                    label="Nova Senha" 
+                                    value={senha}
+                                    onChange={handleSenhaChange}
+                                    type="password"
+                                    placeholder="Digite a nova senha"
+                                    size="w-full"
+                                    maxLength={MAX_LENGTH}
+                                    mostrarSenhaToggle={true} 
+                                    erro={erroSenha} 
+                                />
                             </div>
 
-                            <Botao 
-                                texto={isLoading ? "Salvando..." : "Salvar nova senha"} 
-                                type="submit"
+                            {/* Input Confirmação (w-full garante o estiramento) */}
+                            <div className="text-[1rem] font-medium">
+                                <Input
+                                    id="senhaconfirmacao"
+                                    label="Confirme a Nova Senha" 
+                                    value={senhaConfirmacao}
+                                    onChange={handleSenhaConfirmacaoChange}
+                                    type="password"
+                                    placeholder="Digite a senha novamente"
+                                    size="w-full"
+                                    maxLength={MAX_LENGTH}
+                                    mostrarSenhaToggle={true} 
+                                    erro={erroConfirmacao} 
                                 />
-
+                            </div>
                         </div>
-                    </form>
-                </div>
+                    </section>
+                    
+                    {/* Botões (w-full garante o estiramento) */}
+                    <section className="mt-3 flex flex-col gap-6">
+                        <Botao 
+                            texto={isLoading ? "Salvando..." : "Salvar nova senha"} 
+                            type="submit"
+                        />
+                         
+                         {/* <a
+                            href="/" 
+                            className="text-[var(--destaque)] text-[1rem] underline font-medium self-start"
+                        >
+                            Voltar para o Login
+                        </a> */}
+                    </section>
+                </form>
             </main>
         </div>
-    )
+    );
 }
