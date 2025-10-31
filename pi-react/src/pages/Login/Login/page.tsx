@@ -5,6 +5,7 @@ import Input from "../../../components/Erro/Input";
 import InputTelefone from "../../../components/Erro/InputTelefone";
 import Botao from "../../../components/Botao/Botao";
 import { login_aluno } from "../../../services/aluno/loginservice";
+import { useNavigate } from "react-router-dom";
 
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 10;
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [erroTelefone, setErroTelefone] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const clearAllErrors = () => {
     setErroTelefone("");
@@ -82,10 +84,11 @@ export default function LoginPage() {
       setIsLoading(true);
       try {
         // await new Promise((resolve) => setTimeout(resolve, 1500));
-        const IsLogado = await login_aluno(telefone, senha);
-        const authSuccess = true;
-        console.log(IsLogado);
+        const authSuccess = await login_aluno(telefone, senha);
+        // const authSuccess = true;
+        // console.log(IsLogado);
         if (authSuccess) {
+          navigate("/home/aluno");
           if (typeof window !== "undefined") {
             localStorage.setItem("isLoggedIn", "true");
           }

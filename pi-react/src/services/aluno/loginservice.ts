@@ -22,6 +22,8 @@ export async function login_aluno(login: string , password: string) {
         const data = await response.json()
         console.log(data.data.user)
         console.log(data.data.token)
+        localStorage.setItem("Define-Pilates-AuthToken", data.data.token);
+        localStorage.setItem("Define-Pilates-UserInfo", (JSON.stringify(data.data.user)));
         if(response.status !== 200){
             return false
         }
