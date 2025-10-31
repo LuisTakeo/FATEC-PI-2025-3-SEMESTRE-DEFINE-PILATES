@@ -58,12 +58,12 @@ export default function Cadastro_Aula(){
                                 type="date"
                                 />
                             </div>
-                            <div>
+                            {/* <div>
                                 <Input
                                 label="Hora de Fim"
                                 type="date"
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -121,14 +121,6 @@ export default function Cadastro_Aula(){
                     </div>
                         */}
                     
-
-                    <div>
-                        <Input
-                        label="Observações"
-                        as="textarea"
-                        />
-                    </div>
-
                 </section>
 
                 <Botao texto="Cadastrar Aula"/>
