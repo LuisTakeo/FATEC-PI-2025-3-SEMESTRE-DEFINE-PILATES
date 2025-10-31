@@ -24,19 +24,18 @@ class StudentMySQLAdapter implements StudentRepositoryPort
     {
         try
         {
-            $student = Student::where("nameuser", $nameuser)->first();
+            $student = UserTgi::where("nameuser", $nameuser)->first();
             if (!$student)
                 throw new Exception("Dados inválidos");
             return [
                 'status' => true,
-                'data' => $student->toArray()];
+                'data' => $student];
         }
         catch (Exception $e)
         {
             Log::error("". $e->getMessage());
             return ['status'=> false,'message'=> $e->getMessage()];
         }
-        
     }
 
 
@@ -49,7 +48,8 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                 $hashedPassword = Hash::make($studentDTO->password);
 
                 $userTgi = UserTgi::create([
-                    'nameuser' => $studentDTO->phone,        
+                    'nameuser' => $studentDTO->phone,
+                    'fullname' => $studentDTO->name,        
                     'passworduser' => $hashedPassword,
                     'typeuser' => 'student',
                     'statususer' => 'active',
@@ -64,12 +64,12 @@ class StudentMySQLAdapter implements StudentRepositoryPort
                     'namestudent' => $studentDTO->name,
                     'cpf' => $studentDTO->cpf,
                     'Id_classprofessions' => $professionClassId,
-                    'Id_users' => $userTgi->Id_users,
+                    'Id_users' => $userTgi->id_users,
                 ]);
                 
                 Log::info('Student created', [
                     'id' => $student->Id_students,
-                    'user_id' => $userTgi->Id_users
+                    'user_id' => $userTgi->id_users
                 ]);
                 
                 return [

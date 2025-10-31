@@ -24,12 +24,11 @@ echo "[dev] Verificando necessidade de regenerar Swagger..."
 SWAGGER_FILE="storage/api-docs/api-docs.json"
 CONTROLLERS_DIR="app/Adapters/Http"
 
-if [ ! -f "$SWAGGER_FILE" ] || [ "$CONTROLLERS_DIR" -nt "$SWAGGER_FILE" ]; then
-  echo "[dev] Gerando documentação Swagger (arquivo desatualizado)..."
-  php artisan l5-swagger:generate || echo "[dev] AVISO: Falha ao gerar Swagger"
-else
-  echo "[dev] Swagger atualizado (pulando geração)"
-fi
+# if [ ! -f "$SWAGGER_FILE" ] || [ "$CONTROLLERS_DIR" -nt "$SWAGGER_FILE" ]; then
+echo "[dev] Gerando documentação Swagger (arquivo desatualizado)..."
+php artisan l5-swagger:generate || echo "[dev] AVISO: Falha ao gerar Swagger"
+
+
 echo "[dev] Rotas registradas:"
 php artisan route:list || true
 

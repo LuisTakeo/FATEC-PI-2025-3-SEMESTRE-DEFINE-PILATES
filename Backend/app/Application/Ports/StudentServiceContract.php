@@ -8,4 +8,6 @@ interface StudentServiceContract
 {
     // Define service contract methods here
     public function registerStudent(StudentDTO $studentDTO): array;
+
+    public function loginStudent(string $nameuser, string $password);
 }

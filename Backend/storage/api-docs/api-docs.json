@@ -75,6 +75,47 @@
                     }
                 }
             }
+        },
+        "/api/students/login": {
+            "post": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Login de estudante",
+                "operationId": "loginStudent",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -169,6 +210,95 @@
                         "type": "boolean",
                         "example": true,
                         "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "LoginErrorResponse": {
+                "title": "Login Error Response",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Credenciais inválidas"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginRequest": {
+                "title": "Login Request",
+                "required": [
+                    "nameuser",
+                    "password"
+                ],
+                "properties": {
+                    "login": {
+                        "description": "Nome de usuário (CPF ou telefone)",
+                        "type": "string",
+                        "example": "11951999999"
+                    },
+                    "password": {
+                        "description": "Senha do usuário",
+                        "type": "string",
+                        "format": "password",
+                        "example": "abc123A"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginSuccessResponse": {
+                "title": "Login Success Response",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Login realizado com sucesso"
+                    },
+                    "data": {
+                        "properties": {
+                            "token": {
+                                "description": "Token de autenticação JWT",
+                                "type": "string",
+                                "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                            },
+                            "student": {
+                                "properties": {
+                                    "Id_students": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "11951999999"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "profession": {
+                                        "type": "string",
+                                        "example": "Engenheiro"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "15-01-1990"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"
