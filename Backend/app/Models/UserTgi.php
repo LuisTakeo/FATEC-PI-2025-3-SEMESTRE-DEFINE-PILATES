@@ -20,6 +20,7 @@ class UserTgi extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'nameuser',
+        'fullname',
         'passworduser',
         'typeuser',
         'statususer',
@@ -35,6 +36,11 @@ class UserTgi extends Authenticatable implements JWTSubject
         'message_sent' => 'boolean',
         'birthdate' => 'date',
     ];
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['fullname'] ?? 'Sem nome';
+    }
 
     public function getAuthPasswordName()
     {
@@ -108,6 +114,7 @@ class UserTgi extends Authenticatable implements JWTSubject
         $claims = [
             'id' => $this->id_users,
             'loginuser' => $this->nameuser,
+            'fullname' => $this->fullname,
             'typeuser' => $this->typeuser,
             'statususer' => $this->statususer,
         ];
@@ -118,10 +125,8 @@ class UserTgi extends Authenticatable implements JWTSubject
         // ✅ Adicionar dados específicos do tipo
         if ($this->typeuser === 'student' && $this->student) {
             $claims['student_id'] = $this->student->Id_students;
-            $claims['student_name'] = $this->student->namestudent;
         } elseif ($this->typeuser === 'instructor' && $this->instructor) {
             $claims['instructor_id'] = $this->instructor->id_instructor;
-            $claims['instructor_name'] = $this->instructor->nameinstructor;
         } elseif ($this->typeuser === 'collaborator' && $this->collaborator) {
             $claims['collaborator_id'] = $this->collaborator->id_collaborator;
             $claims['is_admin'] = true;

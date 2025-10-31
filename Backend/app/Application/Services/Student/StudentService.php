@@ -138,12 +138,12 @@ class StudentService implements StudentServiceContract
                     'user' => [
                         'id' => $userData->id_users,
                         'nameuser' => $userData->nameuser,
+                        'fullname' => $userData->fullname,
                         'type' => $userData->typeuser,
                         'status' => $userData->statususer,
                     ],
                     'student' => [
                         'id' => $student->Id_students,
-                        'name' => $student->namestudent,
                         'cpf' => $student->cpf,
                     ],
                     'token' => $token, // ✅ Token JWT-like
