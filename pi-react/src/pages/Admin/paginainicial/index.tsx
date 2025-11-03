@@ -31,7 +31,7 @@ export default function CadastroInicialPage() {
 
             <button
               className="!bg-[var(--destaque)] text-white font-inter py-4 rounded-md text-lg font-semibold !border-2 !border-[var(--destaque)] hover:!bg-[var(--azul-segundario)] hover:!border-[var(--azul-segundario)] transition-colors duration-200"
-              onClick={() => navigate("/cadastro/recepcionista")}
+              onClick={() => navigate("/cadastro/adm-recep")}
             >
               Recepcionista | Administrador
             </button>
