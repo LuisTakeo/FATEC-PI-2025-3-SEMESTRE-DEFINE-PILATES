@@ -735,53 +735,6 @@
                 },
                 "type": "object"
             },
-            "StudentListResponse": {
-                "title": "Student List Response",
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "example": "success"
-                    },
-                    "total": {
-                        "type": "integer",
-                        "example": 10
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "id": {
-                                    "type": "integer",
-                                    "example": 1
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": "João Silva"
-                                },
-                                "phone": {
-                                    "type": "string",
-                                    "example": "11999999999"
-                                },
-                                "cpf": {
-                                    "type": "string",
-                                    "example": "12345678901"
-                                },
-                                "birth_date": {
-                                    "type": "string",
-                                    "format": "date",
-                                    "example": "1990-01-15"
-                                },
-                                "profession": {
-                                    "type": "string",
-                                    "example": "Engenheiro"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "type": "object"
-            },
             "StudentRegisterRequest": {
                 "title": "Student Register Request",
                 "description": "Request body for student registration",
