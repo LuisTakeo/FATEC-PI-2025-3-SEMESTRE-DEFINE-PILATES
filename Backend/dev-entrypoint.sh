@@ -4,10 +4,10 @@ set -e
 cd /var/www
 
 echo "[dev] Checando vendor..."
-if [ ! -f vendor/autoload.php ]; then
-  echo "[dev] vendor vazio: executando composer install"
-  composer install
-fi
+# if [ ! -f vendor/autoload.php ]; then
+echo "[dev] vendor vazio: executando composer install"
+composer install
+# fi
 
 # Gera key se necessário
 if grep -q "APP_KEY=" .env 2>/dev/null; then
