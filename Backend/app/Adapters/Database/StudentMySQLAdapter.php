@@ -20,6 +20,18 @@ class StudentMySQLAdapter implements StudentRepositoryPort
         // Inject dependencies here
     }
 
+    public function getStudentsFromDB() {
+        try {
+            $student = UserTgi::where("typeuser", "Student")->get();
+            return $student;
+        }
+        catch(Exception $e) {
+            Log::error("Failed to retrieve students", ['error' => $e->getMessage()]);
+            return [];
+
+        }
+    }
+
     public function getStudentByLoginName(String $nameuser) : array
     {
         try
@@ -103,5 +115,28 @@ class StudentMySQLAdapter implements StudentRepositoryPort
         );
         
         return $professionClass->Id_classprofessions;
+    }
+
+    /**
+     * Busca todos os usuários do tipo student com dados relacionados
+     */
+    public function getAllStudentUsers(): array
+    {
+        try {
+            $students = UserTgi::where('typeuser', 'student')
+                ->with(['student.professionClassification'])
+                ->get();
+            
+            return [
+                'status' => true,
+                'data' => $students
+            ];
+        } catch (Exception $e) {
+            Log::error('Failed to retrieve student users', ['error' => $e->getMessage()]);
+            return [
+                'status' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 }

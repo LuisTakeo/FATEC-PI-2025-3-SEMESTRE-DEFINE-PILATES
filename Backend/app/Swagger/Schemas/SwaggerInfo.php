@@ -14,4 +14,16 @@ use OpenApi\Attributes as OA;
     url: "http://localhost:8000",
     description: "Development Server"
 )]
+#[OA\Tag(
+    name: "Students",
+    description: "Student management operations"
+)]
+#[OA\Tag(
+    name: "Instructors",
+    description: "Instructor management operations"
+)]
+#[OA\Tag(
+    name: "AdminReceptionist",
+    description: "Admin and Receptionist management operations"
+)]
 class SwaggerInfo {}

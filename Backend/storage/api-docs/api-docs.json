@@ -12,6 +12,156 @@
         }
     ],
     "paths": {
+        "/api/admin_receptionist": {
+            "get": {
+                "tags": [
+                    "AdminReceptionist"
+                ],
+                "summary": "Test endpoint",
+                "operationId": "getAdminReceptionist",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "test"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin_receptionist/save": {
+            "post": {
+                "tags": [
+                    "AdminReceptionist"
+                ],
+                "summary": "Cadastro completo de novo administrador ou recepcionista",
+                "operationId": "registerAdminReceptionist",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminReceptionistRegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminReceptionistSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
+        "/api/instructors": {
+            "get": {
+                "tags": [
+                    "Instructors"
+                ],
+                "summary": "Test endpoint",
+                "operationId": "getInstructors",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "test"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/instructors/save": {
+            "post": {
+                "tags": [
+                    "Instructors"
+                ],
+                "summary": "Cadastrar novo instrutor",
+                "operationId": "registerInstructor",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstructorRegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Instrutor cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dados inválidos"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "phone": [
+                                                    "O telefone já está cadastrado"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/students": {
             "get": {
                 "tags": [
@@ -76,6 +226,92 @@
                 }
             }
         },
+        "/api/students/list": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Listar todos os estudantes com informações básicas",
+                "operationId": "listStudents",
+                "responses": {
+                    "200": {
+                        "description": "Lista de estudantes retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "fullname": {
+                                                        "type": "string",
+                                                        "example": "João Silva"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "11999999999"
+                                                    },
+                                                    "typeuser": {
+                                                        "type": "string",
+                                                        "example": "student"
+                                                    },
+                                                    "birth_date": {
+                                                        "type": "string",
+                                                        "example": "1990-01-15",
+                                                        "nullable": true
+                                                    },
+                                                    "cpf": {
+                                                        "type": "string",
+                                                        "example": "12345678901",
+                                                        "nullable": true
+                                                    },
+                                                    "profession": {
+                                                        "type": "string",
+                                                        "example": "Engenheiro",
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar estudantes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to list students"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/students/login": {
             "post": {
                 "tags": [
@@ -120,6 +356,114 @@
     },
     "components": {
         "schemas": {
+            "AdminReceptionistRegisterRequest": {
+                "title": "Admin/Receptionist Register Request",
+                "description": "Request body for admin or receptionist registration",
+                "required": [
+                    "name",
+                    "phone",
+                    "password",
+                    "birth_date",
+                    "hiring",
+                    "classification",
+                    "typecollaborator",
+                    "fulladdress"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nome completo do colaborador",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Maria Santos"
+                    },
+                    "phone": {
+                        "description": "Telefone principal (formato: 11999999999 ou (11)99999-9999)",
+                        "type": "string",
+                        "example": "(11)98765-4321"
+                    },
+                    "password": {
+                        "description": "Senha de acesso (mínimo 8 caracteres, deve conter maiúscula, minúscula, número e caractere especial)",
+                        "type": "string",
+                        "maxLength": 16,
+                        "minLength": 8,
+                        "example": "Senha@123"
+                    },
+                    "birth_date": {
+                        "description": "Data de nascimento (formato DD-MM-YYYY)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "15-03-1985"
+                    },
+                    "hiring": {
+                        "description": "Data de contratação (formato DD-MM-YYYY)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "01-02-2024"
+                    },
+                    "classification": {
+                        "description": "Classificação profissional (1 letra)",
+                        "type": "string",
+                        "maxLength": 1,
+                        "example": "A"
+                    },
+                    "typecollaborator": {
+                        "description": "Tipo de colaborador",
+                        "type": "string",
+                        "enum": [
+                            "Administrator",
+                            "Receptionist"
+                        ],
+                        "example": "Administrator"
+                    },
+                    "fulladdress": {
+                        "description": "Endereço completo (mínimo 15 caracteres, máximo 255)",
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 15,
+                        "example": "Rua XV de Novembro, 745, Centro, Curitiba - PR"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminReceptionistSuccessResponse": {
+                "title": "Admin/Receptionist Success Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Admin/Receptionist registered successfully"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Maria Santos"
+                            },
+                            "phone": {
+                                "type": "string",
+                                "example": "(11)98765-4321"
+                            },
+                            "typecollaborator": {
+                                "type": "string",
+                                "example": "Administrator"
+                            },
+                            "classification": {
+                                "type": "string",
+                                "example": "A"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "Contato": {
                 "title": "Contact Information",
                 "required": [
@@ -214,6 +558,94 @@
                 },
                 "type": "object"
             },
+            "InstructorRegisterRequest": {
+                "title": "Instructor Register Request",
+                "description": "Request body for instructor registration",
+                "required": [
+                    "name",
+                    "phone",
+                    "password",
+                    "birth_date"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nome completo do instrutor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "John Doe"
+                    },
+                    "phone": {
+                        "description": "Telefone principal (usado como login)",
+                        "type": "string",
+                        "example": "11999999999"
+                    },
+                    "password": {
+                        "description": "Senha de acesso (mínimo 6 caracteres)",
+                        "type": "string",
+                        "minLength": 6,
+                        "example": "abc123A"
+                    },
+                    "birth_date": {
+                        "description": "Data de nascimento (formato: YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1990-01-15"
+                    },
+                    "hiring": {
+                        "description": "Data de contratação (formato: YYYY-MM-DD)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2020-01-15"
+                    },
+                    "classification": {
+                        "description": "Classificação profissional do instrutor",
+                        "type": "string",
+                        "example": "Senior"
+                    },
+                    "cref": {
+                        "description": "Número do registro CREF (Conselho Regional de Educação Física)",
+                        "type": "string",
+                        "example": "12345-G/SP"
+                    },
+                    "crefito": {
+                        "description": "Número do registro CREFITO (Conselho Regional de Fisioterapia e Terapia Ocupacional)",
+                        "type": "string",
+                        "example": "3/12345-F"
+                    }
+                },
+                "type": "object"
+            },
+            "InstructorSuccessResponse": {
+                "title": "Instructor Success Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Instrutor cadastrado com sucesso"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "John Doe"
+                            },
+                            "phone": {
+                                "type": "string",
+                                "example": "11999999999"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "LoginErrorResponse": {
                 "title": "Login Error Response",
                 "properties": {
@@ -299,6 +731,53 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "StudentListResponse": {
+                "title": "Student List Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "João Silva"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "example": "11999999999"
+                                },
+                                "cpf": {
+                                    "type": "string",
+                                    "example": "12345678901"
+                                },
+                                "birth_date": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "example": "1990-01-15"
+                                },
+                                "profession": {
+                                    "type": "string",
+                                    "example": "Engenheiro"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -434,8 +913,16 @@
     },
     "tags": [
         {
+            "name": "AdminReceptionist",
+            "description": "Admin and Receptionist management operations"
+        },
+        {
             "name": "Students",
             "description": "Student management operations"
+        },
+        {
+            "name": "Instructors",
+            "description": "Instructor management operations"
         }
     ]
 }

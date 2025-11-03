@@ -21,8 +21,11 @@ return [
 
                 // ✅ CORRIGIR: Escanear apenas controllers, não toda app/
                 'annotations' => [
-                    base_path('app/Adapters/Http/Student'), // ✅ Apenas seus controllers
+                    base_path('app/Adapters/Http'), // ✅ Apenas seus controllers
+                    // base_path(('app/Adapters/Http/AdminReceptionist')),
+                    // base_path(('app/Adapters/Http/Instructor')),
                     base_path('app/Swagger/Schemas'),
+                    
                 ],
             ],
         ],

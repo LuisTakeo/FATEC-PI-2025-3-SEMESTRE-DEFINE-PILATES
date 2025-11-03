@@ -7,6 +7,7 @@ use App\Adapters\Http\Student\StudentControllerAdapter;
 Route::prefix('students')->name('students.')->group(function () {
 
     Route::get('/', [StudentControllerAdapter::class, 'index'])->name('index');
+    Route::get('/list', [StudentControllerAdapter::class, 'listStudents'])->name('list');
     Route::post('save', [StudentControllerAdapter::class, 'postRequest'])->name('save');
     Route::post('/login', [StudentControllerAdapter::class, 'login'])->name('login');
     // Route::post('save-validation', [StudentControllerAdapter::class, 'postWithValidation'])->name('store');
