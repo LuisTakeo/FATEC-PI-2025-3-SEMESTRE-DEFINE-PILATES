@@ -2,6 +2,6 @@ version: 2
 authtoken: ${NGROK_AUTHTOKEN}
 tunnels:
   backend:
-    addr: backend:3142
+    addr: laravel-backend:8000
     proto: http
-    domain: integral-phoenix-loosely.ngrok-free.app
+    domain: sibilation-edythe-unprivately.ngrok-free.dev

@@ -148,6 +148,28 @@ services:
     #     - backend
     #   restart: unless-stopped
 
+  ngrok-backend:
+    build:
+      context: ./Ngrok
+      dockerfile: Dockerfile
+      args:
+        - NGROK_CONFIG=ngrok-backend.yml
+    container_name: define-pilates-ngrok-backend
+    profiles:
+      - ngrok
+    ports:
+      - "4041:4040"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_BACKEND}
+      - NGROK_URL=${NGROK_BACKEND_URL}
+    volumes:
+      - ./Ngrok/ngrok-frontend.yml:/etc/ngrok.yml:ro
+    depends_on:
+      - pi-react
+    restart: unless-stopped
+    networks:
+      - app-network
+
   ngrok-frontend:
     build:
       context: ./Ngrok
@@ -161,6 +183,7 @@ services:
       - "4042:4040"
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_FRONTEND}
+      - NGROK_URL=${NGROK_FRONTEND_URL}
     volumes:
       - ./Ngrok/ngrok-frontend.yml:/etc/ngrok.yml:ro
     depends_on:
