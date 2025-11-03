@@ -33,28 +33,6 @@ services:
     networks:
       - app-network
 
-  # Next.js Frontend
-  # nextjs-frontend:
-  #   cpus: 0.5
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: define-pilates-frontend
-  #   restart: unless-stopped
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     NODE_ENV: ${NODE_ENV}
-  #     NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-  #   volumes:
-  #     - ./frontend:/app
-  #     - /app/node_modules
-  #     - /app/.next
-  #   depends_on:
-  #     - laravel-backend
-  #   networks:
-  #     - app-network
-
   # MySQL Database
   mysql:
     cpus: 0.5
@@ -153,6 +131,41 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+    networks:
+      - app-network
+    
+    # ngrok-backend:
+    #   build:
+    #     context: ./ngrok
+    #     dockerfile: Dockerfile
+    #     args:
+    #       - NGROK_CONFIG=ngrok-backend.yml
+    #   ports:
+    #     - "4041:4040"  # Expose on different host port
+    #   environment:
+    #     - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_BACKEND}
+    #   depends_on:
+    #     - backend
+    #   restart: unless-stopped
+
+  ngrok-frontend:
+    build:
+      context: ./Ngrok
+      dockerfile: Dockerfile
+      args:
+        - NGROK_CONFIG=ngrok-frontend.yml
+    container_name: define-pilates-ngrok-frontend
+    profiles:
+      - ngrok
+    ports:
+      - "4042:4040"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_FRONTEND}
+    volumes:
+      - ./Ngrok/ngrok-frontend.yml:/etc/ngrok.yml:ro
+    depends_on:
+      - pi-react
+    restart: unless-stopped
     networks:
       - app-network
 
