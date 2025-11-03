@@ -11,6 +11,7 @@ import type {Endereco as EnderecoType} from "../../../../types/Aluno"
 import type {Contato} from "../../../../types/Aluno"
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
 import Endereco from "../../../../components/Section/Endereco";
+import { useNavigate } from "react-router-dom";
 
 interface EnderecoState {
     id: number;
@@ -30,6 +31,7 @@ function converterInputParaDDMMYYYY(dataInput: string): string {
 
 function Cadastro_Aluno(){
     console.log("carregando")
+    const navigate = useNavigate();
 
     const [nome, setNome] = useState("")
     const [cpf, setCPF] = useState("");
@@ -136,7 +138,14 @@ function Cadastro_Aluno(){
                 enderecos: enderecosFormatados
         }
 
-        await cadastrar_aluno(aluno);
+        const isCadastrado = await cadastrar_aluno(aluno);
+        if (isCadastrado)
+        {
+            alert("Aluno cadastrado com sucesso!");
+            navigate("/login/aluno");
+        }
+        else
+            alert("Erro ao cadastrar aluno. Por favor, tente novamente.");
 
         return aluno
 

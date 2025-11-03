@@ -1,8 +1,10 @@
+import { API_BASE_URL } from "../../config/api";
 import type { Funcionario } from "../../types/Funcionario"
 
 export async function cadastrar_adm_recep(funcionario: Funcionario) {
     try {
-        const response = await fetch("http://localhost:8000/api/admin_receptionist/save", {
+        console.log(API_BASE_URL);
+        const response = await fetch(`${API_BASE_URL}/admin_receptionist/save`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -1,9 +1,11 @@
+import { API_BASE_URL } from "../../config/api";
 import type {Aluno} from "./../../types/Aluno"
 
 export async function cadastrar_aluno(aluno: Aluno) {
     try{
         console.log(aluno);
-        const response = await fetch("http://localhost:8000/api/students/save", 
+        console.log(API_BASE_URL);
+        const response = await fetch(`${API_BASE_URL}/students/save`, 
             {
                 method: "POST",
                 headers:{
@@ -16,6 +18,9 @@ export async function cadastrar_aluno(aluno: Aluno) {
         console.log(response)
         const data = await response.json()
         console.log(data)
+        if(response.status !== 200){
+            return false
+        }
 
         return true
 
