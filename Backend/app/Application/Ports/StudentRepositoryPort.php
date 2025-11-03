@@ -10,4 +10,8 @@ interface StudentRepositoryPort
     public function create(StudentDTO $student);
 
     public function getStudentByLoginName(String $nameuser);
+
+    public function getStudentsFromDB();
+
+    public function getAllStudentUsers(): array;
 }

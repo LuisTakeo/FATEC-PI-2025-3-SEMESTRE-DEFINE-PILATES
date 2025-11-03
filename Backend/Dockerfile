@@ -53,7 +53,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 # Copiar manifestos do Composer
-COPY composer.json composer.lock ./
+# COPY composer.json composer.lock ./
+
 
 # Criar usuário não-root
 RUN groupadd -g 1000 www 2>/dev/null || true

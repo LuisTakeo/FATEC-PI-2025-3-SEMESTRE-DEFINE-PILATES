@@ -29,12 +29,12 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
                 'fulladdress' => $adminReceptionistDTO->fulladdress,
                 'hiring' => $adminReceptionistDTO->hiring->format('Y-m-d'),
                 'classification' => $adminReceptionistDTO->classification,
-                'Id_users' => $userTgi->Id_users,
+                'Id_users' => $userTgi->id_users,
             ]);
 
             Log::info('Instructor and associated Collaborator created successfully', [
                 'collaborator_id' => $collaborator->id,
-                'user_tgi_id' => $userTgi->Id_users
+                'user_tgi_id' => $userTgi->id_users
             ]);
                 
                 return $collaborator;

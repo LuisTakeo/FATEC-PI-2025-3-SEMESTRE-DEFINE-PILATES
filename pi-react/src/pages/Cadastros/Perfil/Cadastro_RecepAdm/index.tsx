@@ -1,23 +1,13 @@
 import { useState } from "react";
-import type { ChangeEvent } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import Input from "../../../../components/Input/Input";
+import type { Funcionario } from "../../../../types/Funcionario";
+import { cadastrar_adm_recep } from "../../../../services/funcionarios/cadastrar_adm_recep";
 
-interface FormData {
-    name: string;
-    phone: string;
-    birth_date: string;
-    hiring: string;
-    classification: string;
-    cep: string;
-    fulladdress: string;
-    number: string;
-    typecollaborator: string;
-}
-
-export default function Cadastro_Adm_Recep(){
-    const [formData, setFormData] = useState<FormData>({
+export default function Cadastro_Adm_Recep() {
+    const [funcionario, setFuncionario] = useState<Funcionario>({
         name: '',
+        password: '',
         phone: '',
         birth_date: '',
         hiring: '',
@@ -32,7 +22,7 @@ export default function Cadastro_Adm_Recep(){
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [isAddressFound, setIsAddressFound] = useState(false);
-    
+
     const fetchAddressByCep = async (cep: string) => {
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -41,22 +31,22 @@ export default function Cadastro_Adm_Recep(){
             if (data.erro) {
                 setError("CEP não encontrado. Por favor, verifique.");
                 setIsAddressFound(false);
-                setFormData(prev => ({ ...prev, fulladdress: '' }));
+                setFuncionario(prev => ({ ...prev, fulladdress: '' }));
             } else {
                 const address = `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
-                setFormData(prev => ({ ...prev, fulladdress: address }));
+                setFuncionario(prev => ({ ...prev, fulladdress: address }));
                 setIsAddressFound(true);
                 setError(null);
             }
-        } catch (err) {
+        } catch {
             setError("Falha ao buscar o CEP. Tente novamente.");
             setIsAddressFound(false);
         }
     };
-    
+
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        setFuncionario(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -67,7 +57,7 @@ export default function Cadastro_Adm_Recep(){
                 fetchAddressByCep(cepDigits);
             } else if (isAddressFound) {
                 setIsAddressFound(false);
-                setFormData(prev => ({ ...prev, fulladdress: '' }));
+                setFuncionario(prev => ({ ...prev, fulladdress: '' }));
             }
         }
     };
@@ -85,32 +75,39 @@ export default function Cadastro_Adm_Recep(){
         setSuccess(null);
 
         const payload = {
-            ...formData, // Inclui name, password, phone, etc.
-            birth_date: formatDate(formData.birth_date),
-            hiring: formatDate(formData.hiring),
-            // Combina endereço, número e CEP em um único campo
-            fulladdress: `${formData.fulladdress}, ${formData.number}, ${formData.cep}`
+            ...funcionario,
+            birth_date: formatDate(funcionario.birth_date),
+            hiring: formatDate(funcionario.hiring),
+            fulladdress: `${funcionario.fulladdress}, ${funcionario.number}, ${funcionario.cep}`
         };
 
-        // try {
-        //     await registerInstructor(payload);
-        //     setSuccess('Instrutor cadastrado com sucesso!');
-        //     setFormData({
-        //         name: '', phone: '', birth_date: '', hiring: '', cep: '', number: '', typecollaborator: '',
-        //         classification: '', fulladdress: ''
-        //     });
-        // } catch (err: any) {
-        //     if (err.status === 422 && err.errors) {
-        //             const errorMessages = Object.values(err.errors).flat().join(' ');
-        //             throw new Error(errorMessages);
-        //         }
-        //     setError(err.message);
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            const result = await cadastrar_adm_recep(payload);
+            if (result) {
+                setSuccess("Funcionário cadastrado com sucesso!");
+                setFuncionario({
+                    name: '',
+                    password: '',
+                    phone: '',
+                    birth_date: '',
+                    hiring: '',
+                    classification: '',
+                    cep: '',
+                    fulladdress: '',
+                    number: '',
+                    typecollaborator: ''
+                });
+            } else {
+                setError("Erro ao cadastrar funcionário.");
+            }
+        } catch {
+            setError("Erro inesperado ao cadastrar.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return(
+    return (
         <div className="cadastro-instrutor-container">
             <main className="cadastro-instrutor-main">
                 <header className="cadastro-instrutor-header">
@@ -118,7 +115,6 @@ export default function Cadastro_Adm_Recep(){
                     <h2 className="subtitle">Informe os dados abaixo para criar o acesso</h2>
                 </header>
 
-                {/* Exibição de mensagens de sucesso ou erro */}
                 {success && <div className="alert alert-success" role="alert">{success}</div>}
                 {error && <div className="alert alert-error" role="alert">{error}</div>}
 
@@ -126,38 +122,37 @@ export default function Cadastro_Adm_Recep(){
                     <section id="info-pessoais-section" className="form-section">
                         <h3 className="form-section-title">Informações Pessoais e Acesso</h3>
 
-                        <Input id="name" name="name" label="Nome" placeholder="Digite o nome completo" required value={formData.name} onChange={handleChange} />
+                        <Input id="name" name="name" label="Nome" placeholder="Digite o nome completo" required value={funcionario.name} onChange={handleChange} />
 
-                        <Input id="phone" name="phone" label="Telefone" type="tel" placeholder="(11) 99999-9999" required value={formData.phone} onChange={handleChange} />
+                        <Input id="phone" name="phone" label="Telefone" type="tel" placeholder="(11) 99999-9999" required value={funcionario.phone} onChange={handleChange} />
 
                         <div className="form-row">
                             <div className="form-group-half">
-                                <Input id="birth_date" name="birth_date" label="Data de Nascimento" type="date" required value={formData.birth_date} onChange={handleChange} />
+                                <Input id="birth_date" name="birth_date" label="Data de Nascimento" type="date" required value={funcionario.birth_date} onChange={handleChange} />
                             </div>
 
                             <div className="form-group-half">
-                                <Input id="hiring" name="hiring" label="Data de Contratação" type="date" required value={formData.hiring} onChange={handleChange} />
+                                <Input id="hiring" name="hiring" label="Data de Contratação" type="date" required value={funcionario.hiring} onChange={handleChange} />
                             </div>
                         </div>
                     </section>
 
                     <section id="info-profissionais-section" className="form-section mt-10">
                         <h3 className="form-section-title">Informações Profissionais</h3>
-                        
-                        <Input 
+
+                        <Input
                             as="select"
-                            id="tipo-func"
-                            name="tipo-func"
+                            id="typecollaborator"
+                            name="typecollaborator"
                             label="Tipo de Funcionário"
                             required
-                            value={formData.typecollaborator}
+                            value={funcionario.typecollaborator}
                             onChange={handleChange}
                             options={[
                                 { value: 'adm', label: 'Administrador' },
                                 { value: 'recep', label: 'Recepcionista' },
                             ]}
                         />
-
                     </section>
 
                     <section id="endereco-section" className="form-section mt-10">
@@ -165,10 +160,10 @@ export default function Cadastro_Adm_Recep(){
 
                         <div className="form-row">
                             <div className="form-group" style={{ flex: 3 }}>
-                                <Input id="cep" name="cep" label="CEP" placeholder="Digite o CEP" required value={formData.cep} onChange={handleChange} maxLength={8} />
+                                <Input id="cep" name="cep" label="CEP" placeholder="Digite o CEP" required value={funcionario.cep} onChange={handleChange} maxLength={8} />
                             </div>
                             <div className="form-group" style={{ flex: 1 }}>
-                                <Input id="number" name="number" label="Número" placeholder="Ex: 123" required value={formData.number} onChange={handleChange} />
+                                <Input id="number" name="number" label="Número" placeholder="Ex: 123" required value={funcionario.number} onChange={handleChange} />
                             </div>
                         </div>
 
@@ -178,16 +173,15 @@ export default function Cadastro_Adm_Recep(){
                             name="fulladdress"
                             label="Endereço Completo"
                             placeholder="Preenchido automaticamente após digitar o CEP"
-                            value={formData.fulladdress}
+                            value={funcionario.fulladdress}
                             onChange={handleChange}
                             disabled
                         />
-
                     </section>
 
                     <section className="mt-10">
                         <button type="submit" disabled={loading} className="submit-button">
-                            {loading ? 'Cadastrando...' : 'Cadastrar Instrutor'}
+                            {loading ? 'Cadastrando...' : 'Cadastrar Funcionário'}
                         </button>
                     </section>
                 </form>
@@ -195,4 +189,3 @@ export default function Cadastro_Adm_Recep(){
         </div>
     );
 }
-

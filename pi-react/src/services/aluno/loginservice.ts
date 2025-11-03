@@ -1,11 +1,14 @@
 // import type {Aluno} from "./../../types/Aluno"
 
+import { API_BASE_URL } from "../../config/api";
+
 export async function login_aluno(login: string , password: string) {
     try{
         const telefoneLogin = formatar_telefone(login);
         console.log(telefoneLogin);
         console.log(password);
-        const response = await fetch("http://localhost:8000/api/students/login", 
+        console.log(API_BASE_URL);
+        const response = await fetch(`${API_BASE_URL}/students/login`, 
             {
                 method: "POST",
                 headers:{
