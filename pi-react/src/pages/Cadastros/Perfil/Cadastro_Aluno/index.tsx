@@ -38,6 +38,9 @@ function Cadastro_Aluno(){
     const [data, setData] = useState("");
     const [ddd, setDDD] = useState("");
     const [telefone, setTelefone] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmarPassword, setConfirmarPassword] = useState("");
+    const [passwordError, setPasswordError] = useState(false);
 
     // Endereços como array
     const [enderecos, setEnderecos] = useState<EnderecoState[]>([
@@ -129,7 +132,7 @@ function Cadastro_Aluno(){
         const aluno: Aluno = {
                 name: nome,
                 phone: ddd + telefone,
-                password: "123Ab!",
+                password: password,
                 cpf: cpf,
                 profession: categoria,
                 birth_date: converterInputParaDDMMYYYY(data),
@@ -214,6 +217,39 @@ function Cadastro_Aluno(){
                                     />
                                 </div>
 
+                            </div>
+
+                            <div className="w-full">
+                                <Input
+                                    id="senha"
+                                    label="Senha"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Digite a senha"
+
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Input
+                                    id="confirmar-senha"
+                                    label="Confirmar Senha"
+                                    value={confirmarPassword}
+                                    onChange={(e) => {
+                                        setConfirmarPassword(e.target.value);
+                                        if (e.target.value !== password) {
+                                            setPasswordError(true);
+                                        } else {
+                                            setPasswordError(false);
+                                        }
+                                    }}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Confirme a senha"
+                                    error={passwordError && confirmarPassword !== ""}
+                                    errorMessage="As senhas não coincidem"
+                                />
                             </div>
 
                             <ContatoComplem

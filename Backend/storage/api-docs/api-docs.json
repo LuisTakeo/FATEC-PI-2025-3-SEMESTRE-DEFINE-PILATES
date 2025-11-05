@@ -7,6 +7,10 @@
     },
     "servers": [
         {
+            "url": "https://sibilation-edythe-unprivately.ngrok-free.dev",
+            "description": "Ngrok Server (HTTPS) - Use when accessing via Ngrok"
+        },
+        {
             "url": "http://localhost:8000",
             "description": "Local Server (HTTP) - Use when accessing locally"
         }
