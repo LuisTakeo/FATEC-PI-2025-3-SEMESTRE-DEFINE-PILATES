@@ -11,6 +11,7 @@ use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
 use Exception;
 use Hash;
+use Log;
 use Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -233,9 +234,14 @@ class StudentService implements StudentServiceContract
                 ];
             }
 
+            //imprimir aa lista toda
+            Log::info('Retrieved student users', collect($result['data'])->toArray());
+
             $students = collect($result['data'])->map(function ($user) {
                 return StudentListDTO::fromModel($user)->toArray();
             })->all();
+            // for each para o array de students
+            
 
             return [
                 'status' => 'success',
@@ -243,7 +249,7 @@ class StudentService implements StudentServiceContract
             ];
 
         } catch (Exception $e) {
-            \Log::error('Failed to list students', ['error' => $e->getMessage()]);
+            Log::error('Failed to list students', ['error' => $e->getMessage()]);
             return [
                 'status' => 'error',
                 'message' => 'Failed to list students',

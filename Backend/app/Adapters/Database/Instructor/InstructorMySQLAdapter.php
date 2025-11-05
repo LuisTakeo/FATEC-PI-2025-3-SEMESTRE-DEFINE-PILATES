@@ -32,23 +32,22 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 'fulladdress' => $instructorDTO->fulladdress,
                 'hiring' => $instructorDTO->hiring->format('Y-m-d'),
                 'classification' => $instructorDTO->classification,
-                'Id_users' => $userTgi->Id_users,
+                'Id_users' => $userTgi->id_users,
             ]);
 
             $instructor = Instructor::create([
-                'nameinstructor' => $instructorDTO->name,
                 'hiring' => $instructorDTO->hiring->format('Y-m-d'),
                 'classification' => $instructorDTO->classification,
                 'cref' => $instructorDTO->cref,
                 'crefito' => $instructorDTO->crefito,
-                'Id_users' => $userTgi->Id_users,
+                'Id_users' => $userTgi->id_users,
                 'Id_collaborators' => $collaborator->Id_collaborators,
             ]);
 
             Log::info('Instructor and associated Collaborator created successfully', [
                 'instructor_id' => $instructor->Id_instructors,
                 'collaborator_id' => $collaborator->Id_collaborators,
-                'user_tgi_id' => $userTgi->Id_users
+                'user_tgi_id' => $userTgi->id_users
             ]);
                 
                 return $instructor;

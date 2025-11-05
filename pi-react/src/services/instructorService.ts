@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../config/api";
+
 interface InstructorPayload {
     name: string;
     password: string;
@@ -10,10 +12,10 @@ interface InstructorPayload {
     fulladdress: string;
 }
 
-const API_URL = `${import.meta.env.VITE_API_URL}/instructors/save`;
+// const API_URL = `${import.meta.env.VITE_API_URL}/instructors/save`;
 
 export const registerInstructor = async (payload: InstructorPayload) => {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_BASE_URL}/instructors/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -23,6 +23,9 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
                 'birthdate' => $adminReceptionistDTO->birthDate->format('Y-m-d')
             ]);
 
+            // log para ver se estou conseguindo acessar id_users
+            Log::info('UserTgi created', ['id' => $userTgi->id_users]);
+
             $collaborator = Collaborator::create([
                 'namecollaborator' => $adminReceptionistDTO->name,
                 'typecollaborator' => $adminReceptionistDTO->typecollaborator,
@@ -30,6 +33,7 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
                 'hiring' => $adminReceptionistDTO->hiring->format('Y-m-d'),
                 'classification' => $adminReceptionistDTO->classification,
                 'Id_users' => $userTgi->id_users,
+                'birthday' => $adminReceptionistDTO->birthDate->format('Y-m-d')
             ]);
 
             Log::info('Instructor and associated Collaborator created successfully', [
