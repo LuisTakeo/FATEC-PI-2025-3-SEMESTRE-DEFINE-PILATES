@@ -9,7 +9,7 @@ interface Estilizacoes {
 
 const Estilizacoes = {
     //texto
-    titulo_principal: "text-[2rem] font-bold text-[var(--destaque)]",
+    titulo_principal: "text-[2rem] font-bold text-[var(--destaque)] w-full",
     segundo_titulo_principal: "text-[1.5rem] font-bold text-[var(--destaque)]",
     titulo_segundario: "text-[1.3rem] font-semibold text-[var(--foreground)]",
 
