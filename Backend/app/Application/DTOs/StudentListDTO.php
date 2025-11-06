@@ -9,7 +9,7 @@ class StudentListDTO
     public function __construct(
         public readonly int $id,
         public readonly string $fullname,
-        public readonly string $phone,
+        public readonly ?string $phone = null,
         public readonly string $typeuser,
         public readonly ?string $birthDate = null,
         public readonly ?string $cpf = null,
@@ -43,4 +43,15 @@ class StudentListDTO
             'profession' => $this->profession
         ];
     }
+
+    // public static function fromModelIdAndName(UserTgi $user): self
+    // {
+    //     return new self(
+    //         id: $user->id_users,
+    //         fullname: $user->fullname ?? '',
+    //         phone: $user->nameuser,
+    //         typeuser: $user->typeuser
+    //     );
+    // }
+    
 }

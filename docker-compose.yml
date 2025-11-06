@@ -30,6 +30,12 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/up || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - app-network
 
@@ -163,9 +169,10 @@ services:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_BACKEND}
       - NGROK_URL=${NGROK_BACKEND_URL}
     volumes:
-      - ./Ngrok/ngrok-frontend.yml:/etc/ngrok.yml:ro
+      - ./Ngrok/ngrok-backend.yml:/etc/ngrok.yml:ro
     depends_on:
-      - pi-react
+      laravel-backend:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - app-network

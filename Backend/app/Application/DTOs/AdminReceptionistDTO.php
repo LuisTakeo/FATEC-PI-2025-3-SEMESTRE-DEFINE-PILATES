@@ -10,7 +10,7 @@ final class AdminReceptionistDTO implements Arrayable {
         public readonly string $name,
         public readonly string $phone,
         public readonly string $password,
-        public readonly string $classification,
+        public readonly ?string $classification,
         public readonly string $fulladdress,
         public readonly string $typecollaborator,
         public readonly DateTime $hiring,
@@ -27,7 +27,7 @@ final class AdminReceptionistDTO implements Arrayable {
             password: $data['password'],
             hiring: DateTime::createFromFormat('d-m-Y', $data['hiring']),
             birthDate: DateTime::createFromFormat('d-m-Y', $data['birth_date']),
-            classification: $data['classification'],
+            classification: $data['classification'] ?? null,
             typecollaborator: $data['typecollaborator'],
             fulladdress: $data['fulladdress'],
         );

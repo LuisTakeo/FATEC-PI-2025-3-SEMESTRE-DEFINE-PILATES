@@ -22,9 +22,9 @@ return [
     'allowed_origins' => [
         env('FRONTEND_URL'),
         'http://localhost:5173',
+        'http://localhost:3000',
         'https://chronogrammatic-unamended-janay.ngrok-free.dev',
-        'sibilation-edythe-unprivately.ngrok-free.dev'
-        
+        'https://sibilation-edythe-unprivately.ngrok-free.dev'
     ],
 
     'allowed_origins_patterns' => [],

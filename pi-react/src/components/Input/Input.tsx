@@ -20,17 +20,22 @@ interface InputProps {
     rows?: number;
     disabled?: boolean;
     maxLength?: number;
+    error?: boolean;
+    errorMessage?: string;
 }
 
 function Input({
     id, name, label, value, onChange, onBlur, type = 'text', as = 'input',
-    placeholder, pattern, required = false, options = [], rows = 4, disabled = false, maxLength
+    placeholder, pattern, required = false, options = [], rows = 4, disabled = false, maxLength,
+    error = false, errorMessage
 }: InputProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(prevState => !prevState);
     };
+
+    const inputClassName = `form-input ${error ? 'border-red-500 border-2 focus:border-red-600 focus:ring-red-500' : ''}`;
 
     const renderInput = () => {
         
@@ -49,7 +54,7 @@ function Input({
                 onBlur={onBlur}
                 rows={rows}
                 disabled={disabled}
-                className="form-textarea"
+                className={inputClassName}
             />
         );
     }
@@ -57,7 +62,7 @@ function Input({
 
         if (as === 'select') {
             return (
-                <select {...baseProps} className="form-input">
+                <select {...baseProps} className={inputClassName}>
                     <option value="" disabled>Selecione uma opção</option>
                     {options.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -70,7 +75,7 @@ function Input({
             const inputType = isPasswordVisible ? 'text' : 'password';
             return (
                 <div className="input-wrapper">
-                    <input {...commonProps} type={inputType} className="form-input" />
+                    <input {...commonProps} type={inputType} className={inputClassName} />
                     <button type="button" onClick={togglePasswordVisibility} className="password-toggle-btn">
                         {isPasswordVisible ? (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -82,13 +87,16 @@ function Input({
             );
         }
 
-        return <input {...commonProps} type={type} className="form-input" />;
+        return <input {...commonProps} type={type} className={inputClassName} />;
     };
 
     return (
         <div className="form-group">
             <label htmlFor={id} className="form-label">{label}</label>
             {renderInput()}
+            {error && errorMessage && (
+                <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+            )}
         </div>
     );
 }

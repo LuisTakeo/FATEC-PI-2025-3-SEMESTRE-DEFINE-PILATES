@@ -119,12 +119,14 @@ class StudentMySQLAdapter implements StudentRepositoryPort
 
     /**
      * Busca todos os usuários do tipo student com dados relacionados
+     * Traz apenas os campos necessários para otimizar a query
      */
     public function getAllStudentUsers(): array
     {
         try {
             $students = UserTgi::where('typeuser', 'student')
-                ->with(['student.professionClassification'])
+                ->select(['id_users', 'fullname', 'nameuser', 'typeuser', 'birthdate'])
+                ->with('student:Id_students,Id_users,cpf,Id_classprofessions')
                 ->get();
             
             return [

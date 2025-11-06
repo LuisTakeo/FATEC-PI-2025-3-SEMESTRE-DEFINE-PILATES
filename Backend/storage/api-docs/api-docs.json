@@ -7,8 +7,12 @@
     },
     "servers": [
         {
+            "url": "https://sibilation-edythe-unprivately.ngrok-free.dev",
+            "description": "Ngrok Server (HTTPS) - Use when accessing via Ngrok"
+        },
+        {
             "url": "http://localhost:8000",
-            "description": "Development Server"
+            "description": "Local Server (HTTP) - Use when accessing locally"
         }
     ],
     "paths": {
@@ -565,52 +569,70 @@
                     "name",
                     "phone",
                     "password",
-                    "birth_date"
+                    "birth_date",
+                    "hiring",
+                    "classification",
+                    "fulladdress"
                 ],
                 "properties": {
                     "name": {
                         "description": "Nome completo do instrutor",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "John Doe"
+                        "example": "João Silva"
                     },
                     "phone": {
-                        "description": "Telefone principal (usado como login)",
+                        "description": "Telefone celular (formato: 11999999999 ou (11)99999-9999)",
                         "type": "string",
+                        "pattern": "^(\\(?\\d{2}\\)?\\s?)?\\d{4,5}-?\\d{4}$",
                         "example": "11999999999"
                     },
                     "password": {
-                        "description": "Senha de acesso (mínimo 6 caracteres)",
+                        "description": "Senha de acesso",
                         "type": "string",
-                        "minLength": 6,
-                        "example": "abc123A"
+                        "example": "senhaSegura123"
                     },
                     "birth_date": {
-                        "description": "Data de nascimento (formato: YYYY-MM-DD)",
+                        "description": "Data de nascimento (formato: DD-MM-YYYY)",
                         "type": "string",
                         "format": "date",
-                        "example": "1990-01-15"
+                        "example": "15-01-1990"
                     },
                     "hiring": {
-                        "description": "Data de contratação (formato: YYYY-MM-DD)",
+                        "description": "Data de contratação (formato: DD-MM-YYYY)",
                         "type": "string",
                         "format": "date",
-                        "example": "2020-01-15"
+                        "example": "15-01-2020"
                     },
                     "classification": {
-                        "description": "Classificação profissional do instrutor",
+                        "description": "Classificação profissional do instrutor (máx 1 caractere, apenas letras)",
                         "type": "string",
-                        "example": "Senior"
+                        "maxLength": 1,
+                        "pattern": "^[A-Za-zÀ-ÿ]+$",
+                        "example": "A"
                     },
                     "cref": {
-                        "description": "Número do registro CREF (Conselho Regional de Educação Física)",
+                        "description": "Número do registro CREF (formato: 123456-G/SP)",
                         "type": "string",
-                        "example": "12345-G/SP"
+                        "maxLength": 20,
+                        "pattern": "^[0-9]{1,6}-[A-Z]\\/[A-Z]{2}$",
+                        "example": "123456-G/SP",
+                        "nullable": true
                     },
                     "crefito": {
-                        "description": "Número do registro CREFITO (Conselho Regional de Fisioterapia e Terapia Ocupacional)",
+                        "description": "Número do registro CREFITO (formato: 3/123456-F)",
                         "type": "string",
-                        "example": "3/12345-F"
+                        "maxLength": 20,
+                        "pattern": "^\\d+\\/\\d{1,6}-[A-Z]$",
+                        "example": "3/123456-F",
+                        "nullable": true
+                    },
+                    "fulladdress": {
+                        "description": "Endereço completo (mínimo 15 caracteres)",
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 15,
+                        "example": "Rua das Flores, 123 - Centro - São Paulo/SP"
                     }
                 },
                 "type": "object"

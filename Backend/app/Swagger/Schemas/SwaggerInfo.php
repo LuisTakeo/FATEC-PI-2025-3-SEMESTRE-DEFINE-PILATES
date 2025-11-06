@@ -11,8 +11,12 @@ use OpenApi\Attributes as OA;
     description: "API documentation for Define Pilates management system"
 )]
 #[OA\Server(
+    url: "https://sibilation-edythe-unprivately.ngrok-free.dev",
+    description: "Ngrok Server (HTTPS) - Use when accessing via Ngrok"
+)]
+#[OA\Server(
     url: "http://localhost:8000",
-    description: "Development Server"
+    description: "Local Server (HTTP) - Use when accessing locally"
 )]
 #[OA\Tag(
     name: "Students",

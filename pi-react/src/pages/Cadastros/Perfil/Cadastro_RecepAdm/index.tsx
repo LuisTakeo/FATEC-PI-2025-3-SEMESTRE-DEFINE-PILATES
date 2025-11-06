@@ -18,6 +18,8 @@ export default function Cadastro_Adm_Recep() {
         typecollaborator: ''
     });
 
+    const [confirmarPassword, setConfirmarPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
@@ -125,7 +127,38 @@ export default function Cadastro_Adm_Recep() {
                         <Input id="name" name="name" label="Nome" placeholder="Digite o nome completo" required value={funcionario.name} onChange={handleChange} />
 
                         <Input id="phone" name="phone" label="Telefone" type="tel" placeholder="(11) 99999-9999" required value={funcionario.phone} onChange={handleChange} />
+                        <div className="w-full">
+                                <Input
+                                    id="senha"
+                                    label="Senha"
+                                    value={funcionario.password}
+                                    onChange={(e) => setFuncionario({ ...funcionario, password: e.target.value })}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Digite a senha"
 
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Input
+                                    id="confirmar-senha"
+                                    label="Confirmar Senha"
+                                    value={confirmarPassword}
+                                    onChange={(e) => {
+                                        setConfirmarPassword(e.target.value);
+                                        if (e.target.value !== funcionario.password) {
+                                            setPasswordError(true);
+                                        } else {
+                                            setPasswordError(false);
+                                        }
+                                    }}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Confirme a senha"
+                                    error={passwordError && confirmarPassword !== ""}
+                                    errorMessage="As senhas não coincidem"
+                                />
+                            </div>
                         <div className="form-row">
                             <div className="form-group-half">
                                 <Input id="birth_date" name="birth_date" label="Data de Nascimento" type="date" required value={funcionario.birth_date} onChange={handleChange} />
@@ -149,8 +182,8 @@ export default function Cadastro_Adm_Recep() {
                             value={funcionario.typecollaborator}
                             onChange={handleChange}
                             options={[
-                                { value: 'adm', label: 'Administrador' },
-                                { value: 'recep', label: 'Recepcionista' },
+                                { value: 'Administrator', label: 'Administrador' },
+                                { value: 'Receptionist', label: 'Recepcionista' },
                             ]}
                         />
                     </section>

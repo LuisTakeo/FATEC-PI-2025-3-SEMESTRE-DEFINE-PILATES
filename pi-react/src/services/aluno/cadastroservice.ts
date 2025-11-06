@@ -18,7 +18,7 @@ export async function cadastrar_aluno(aluno: Aluno) {
         console.log(response)
         const data = await response.json()
         console.log(data)
-        if(response.status !== 200){
+        if(response.status !== 201){
             return false
         }
 
