@@ -80,6 +80,47 @@
                 }
             }
         },
+        "/api/admin_receptionist/login": {
+            "post": {
+                "tags": [
+                    "AdminReceptionist"
+                ],
+                "summary": "Login de administrador ou recepcionista",
+                "operationId": "loginAdminReceptionist",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/instructors": {
             "get": {
                 "tags": [

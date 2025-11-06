@@ -71,8 +71,7 @@ class UserTgi extends Authenticatable implements JWTSubject
     // ✅ UserTgi pode ter UM Collaborator (se typeuser = 'collaborator')
     public function collaborator(): HasOne
     {
-        return $this->hasOne(Collaborator::class, 'Id_users', 'Id_users')
-                    ->where('users.typeuser', 'collaborator');
+        return $this->hasOne(Collaborator::class, 'Id_users', 'id_users');
     }
 
     // ✅ Método dinâmico para buscar o relacionamento correto

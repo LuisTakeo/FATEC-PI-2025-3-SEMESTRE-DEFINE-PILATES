@@ -73,7 +73,9 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
     {
         try
         {
-            $instructor = UserTgi::where("nameuser", $nameuser)->first();
+            $instructor = UserTgi::where("nameuser", $nameuser)
+            ->whereIn("typeuser", ["Instructor"])
+            ->first();
             if (!$instructor)
                 throw new Exception("Dados inválidos");
             return [
