@@ -17,69 +17,6 @@ class InstructorService implements InstructorServiceContract
     private InstructorRepositoryPort $sqlAdapter;
     private NoSQLPort $noSQLAdapter;
 
-  /**
- * @OA\Post(
- * path="/api/instructors/save",
- * tags={"Instructors"},
- * summary="Register a new instructor/collaborator",
- * description="Create a new instructor account with their professional and personal data",
- * @OA\RequestBody(
- * required=true,
- * description="Instructor registration data",
- * @OA\JsonContent(
- * required={"name", "phone", "password", "birth_date", "hiring", "classification", "fulladdress"},
- * @OA\Property(property="name", type="string", maxLength=255, example="Carlos Andrade"),
- * @OA\Property(property="phone", type="string", pattern="^(\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$", example="(11) 98765-4321"),
- * @OA\Property(property="password", type="string", minLength=8, example="strongPassword123"),
- * @OA\Property(property="birth_date", type="string", format="date", description="Format: d-m-Y", example="15-08-1990"),
- * @OA\Property(property="hiring", type="string", format="date", description="Format: d-m-Y. Hiring date.", example="01-02-2023"),
- * @OA\Property(property="fulladdress", type="string", maxLength=255, description="Endereço completo (Rua, Número, Bairro, Cidade - UF)", example="Avenida Paulista, 1000, Bela Vista, São Paulo - SP"),
- * @OA\Property(property="classification", type="string", maxLength=1, description="Instructor classification (e.g., A, B, C)", example="A"),
- * @OA\Property(property="cref", type="string", maxLength=20, nullable=true, description="CREF number (optional)", example="123456-G/SP"),
- * @OA\Property(property="crefito", type="string", maxLength=20, nullable=true, description="CREFITO number (optional)", example="98765-FTO")
- * )
- * ),
- * @OA\Response(
- * response=201,
- * description="Instructor registered successfully",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="Instructor registered successfully"),
- * @OA\Property(property="status", type="string", example="success"),
- * @OA\Property(
- * property="data",
- * type="object",
- * @OA\Property(property="id", type="integer", example=1),
- * @OA\Property(property="name", type="string", example="Carlos Andrade"),
- * @OA\Property(property="phone", type="string", example="11987654321"),
- * @OA\Property(property="birth_date", type="string", example="15-08-1990"),
- * @OA\Property(property="hiring", type="string", example="01-02-2023"),
- * @OA\Property(property="fulladdress", type="string", example="Avenida Paulista, 1000, Bela Vista, São Paulo - SP"),
- * @OA\Property(property="classification", type="string", example="A"),
- * @OA\Property(property="cref", type="string", nullable=true, example="123456-G/SP"),
- * @OA\Property(property="crefito", type="string", nullable=true, example="98765-FTO")
- * )
- * )
- * ),
- * @OA\Response(
- * response=422,
- * description="Validation error or business rule violation",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="Instructor registration failed"),
- * @OA\Property(property="status", type="string", example="error"),
- * @OA\Property(property="error", type="string", example="The fulladdress field is required.")
- * )
- * ),
- * @OA\Response(
- * response=500,
- * description="Internal server error",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="An unexpected error occurred"),
- * @OA\Property(property="status", type="string", example="error"),
- * @OA\Property(property="error", type="string", example="Internal server error")
- * )
- * )
- * )
- */
 
    public function __construct(
         InstructorRepositoryPort $sqlAdapter,
@@ -161,49 +98,49 @@ class InstructorService implements InstructorServiceContract
             ];
         }
         // 3. Verificar status
-            if ($userData->statususer !== 'Active') {
-                return [
-                    'status' => false,
-                    'message' => 'error',
-                    'error' => 'Usuário inativo'
-                ];
-            }
-
-            // 4. Carregar dados do instrutor
-            $instructor = $userData->instructor;
-
-            if (!$instructor) {
-                return [
-                    'status' => false,
-                    'message' => 'error',
-                    'error' => 'Dados do instrutor não encontrados',
-                    'test' => $userData->toArray()
-                ];
-            }
-
-            $token = JWTAuth::fromUser($userData);
-
-            $payload = JWTAuth::setToken($token)->getPayload();
-            // 6. Retornar dados (SEM senha)
+        if ($userData->statususer !== 'Active') {
             return [
-                'status' => true,
-                'message' => 'Login realizado com sucesso',
-                'data' => [
-                    'user' => [
-                        'id' => $userData->id_users,
-                        'nameuser' => $userData->nameuser,
-                        'fullname' => $userData->fullname,
-                        'type' => $userData->typeuser,
-                        'status' => $userData->statususer,
-                    ],
-                    'instructor' => [
-                        'id' => $instructor->Id_instructors,
-                        'cref' => $instructor->cref,
-                        'crefito' => $instructor->crefito,
-                    ],
-                    'token' => $token, // ✅ Token JWT-like
-                    'token_type' => 'Bearer'
-                ]
+                'status' => false,
+                'message' => 'error',
+                'error' => 'Usuário inativo'
             ];
+        }
+
+        // 4. Carregar dados do instrutor
+        $instructor = $userData->instructor;
+
+        if (!$instructor) {
+            return [
+                'status' => false,
+                'message' => 'error',
+                'error' => 'Dados do instrutor não encontrados',
+                'test' => $userData->toArray()
+            ];
+        }
+
+        $token = JWTAuth::fromUser($userData);
+
+        $payload = JWTAuth::setToken($token)->getPayload();
+        // 6. Retornar dados (SEM senha)
+        return [
+            'status' => true,
+            'message' => 'Login realizado com sucesso',
+            'data' => [
+                'user' => [
+                    'id' => $userData->id_users,
+                    'nameuser' => $userData->nameuser,
+                    'fullname' => $userData->fullname,
+                    'type' => $userData->typeuser,
+                    'status' => $userData->statususer,
+                ],
+                'instructor' => [
+                    'id' => $instructor->Id_instructors,
+                    'cref' => $instructor->cref,
+                    'crefito' => $instructor->crefito,
+                ],
+                'token' => $token, // ✅ Token JWT-like
+                'token_type' => 'Bearer'
+            ]
+        ];
     }
 } 
