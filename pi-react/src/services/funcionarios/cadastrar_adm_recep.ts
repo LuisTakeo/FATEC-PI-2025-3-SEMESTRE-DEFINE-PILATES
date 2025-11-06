@@ -3,7 +3,7 @@ import type { Funcionario } from "../../types/Funcionario"
 
 export async function cadastrar_adm_recep(funcionario: Funcionario) {
     try {
-        console.log(API_BASE_URL);
+        console.log(funcionario);
         const response = await fetch(`${API_BASE_URL}/admin_receptionist/save`, {
             method: "POST",
             headers: {

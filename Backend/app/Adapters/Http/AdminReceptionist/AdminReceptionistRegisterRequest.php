@@ -39,7 +39,7 @@ class AdminReceptionistRegisterRequest extends FormRequest{
                 'after:01-01-1900'       
             ],
             'classification' => [
-                'required',
+                'nullable',
                 'string',
                 'max:1',
                 'regex:/^[A-Za-zÀ-ÿ]+$/'
@@ -67,7 +67,6 @@ class AdminReceptionistRegisterRequest extends FormRequest{
             'name.required' => 'O nome é obrigatório.',
             'name.string' => 'O nome deve possuir apenas letras',
             'name.max' => 'O nome não pode exceder 255 caracteres.',
-            'classification.required' => 'A classificação é obrigatória.',
             'classification.string' => 'A classificação deve possuir apenas letras',
             'classification.max' => 'A classificação não pode exceder 1 caractere.',
             'classification.regex' => 'A classificação deve conter apenas letras.',
