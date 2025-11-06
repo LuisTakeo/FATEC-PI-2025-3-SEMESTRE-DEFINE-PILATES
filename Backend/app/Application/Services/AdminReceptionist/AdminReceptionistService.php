@@ -6,74 +6,15 @@ use App\Application\DTOs\AdminReceptionistDTO;
 use App\Application\Ports\AdminReceptionist\AdminReceptionistRepositoryPort;
 use App\Application\Ports\AdminReceptionist\AdminReceptionistServiceContract;
 use Exception;
+use Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminReceptionistService implements AdminReceptionistServiceContract
 {
     private AdminReceptionistRepositoryPort $repository;
 
-  /**
- * @OA\Post(
- * path="/api/admin_receptionist/save",
- * tags={"AdminReceptionist"},
- * summary="Register a new Administrator or Receptionist",
- * description="Create a new collaborator account for an Administrator or Receptionist.",
- * @OA\RequestBody(
- * required=true,
- * description="Admin/Receptionist registration data",
- * @OA\JsonContent(
- * required={"name", "phone", "password", "birth_date", "hiring", "classification", "fulladdress", "typecollaborator"},
- * @OA\Property(property="name", type="string", maxLength=255, example="Ana Beatriz"),
- * @OA\Property(property="phone", type="string", pattern="^(\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$", example="(11) 98765-4321"),
- * @OA\Property(property="password", type="string", minLength=6, example="strongPassword123"),
- * @OA\Property(property="birth_date", type="string", format="date", description="Format: d-m-Y", example="15-08-1990"),
- * @OA\Property(property="hiring", type="string", format="date", description="Format: d-m-Y. Hiring date.", example="01-02-2023"),
- * @OA\Property(property="fulladdress", type="string", maxLength=255, description="Endereço completo (Rua, Número, Bairro, Cidade - UF)", example="Avenida Paulista, 1000, Bela Vista, São Paulo - SP"),
- * @OA\Property(property="classification", type="string", maxLength=1, description="Collaborator classification (e.g., A, B, C)", example="A"),
- * @OA\Property(property="typecollaborator", type="string", enum={"Administrador", "Recepcionista"}, example="Recepcionista")
- * )
- * ),
- * @OA\Response(
- * response=201,
- * description="Collaborator registered successfully",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="Collaborator registered successfully"),
- * @OA\Property(property="status", type="string", example="success"),
- * @OA\Property(
- * property="data",
- * type="object",
- * @OA\Property(property="id", type="integer", example=1),
- * @OA\Property(property="name", type="string", example="Ana Beatriz"),
- * @OA\Property(property="phone", type="string", example="11987654321"),
- * @OA\Property(property="birth_date", type="string", example="15-08-1990"),
- * @OA\Property(property="hiring", type="string", example="01-02-2023"),
- * @OA\Property(property="fulladdress", type="string", example="Avenida Paulista, 1000, Bela Vista, São Paulo - SP"),
- * @OA\Property(property="classification", type="string", example="A"),
- * @OA\Property(property="typecollaborator", type="string", example="Recepcionista")
- * )
- * )
- * ),
- * @OA\Response(
- * response=422,
- * description="Validation error",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="Falha ao validar os campos."),
- * @OA\Property(property="status", type="string", example="error"),
- * @OA\Property(property="error", type="object", example={"typecollaborator": {"O tipo de colaborador deve ser Administrador ou Recepcionista."}})
- * )
- * ),
- * @OA\Response(
- * response=500,
- * description="Internal server error",
- * @OA\JsonContent(
- * @OA\Property(property="message", type="string", example="An unexpected error occurred while registering the collaborator."),
- * @OA\Property(property="status", type="string", example="error"),
- * @OA\Property(property="error", type="string", example="SQLSTATE[HY000]: General error...")
- * )
- * )
- * )
- */
     public function __construct(AdminReceptionistRepositoryPort $repository) {
         $this->repository = $repository;
     }
@@ -121,5 +62,68 @@ class AdminReceptionistService implements AdminReceptionistServiceContract
             fulladdress: $dto->fulladdress,
             classification: strtoupper(trim(strip_tags($dto->classification)))
         );
+    }
+
+    public function loginAdminReceptionist(string $nameuser, string $password): array{
+        $responseUser = $this->repository->getEmployeeByLoginName($nameuser);
+        if ($responseUser["status"] == false)
+            return ["status"=> false,
+                "message"=> "error",
+                "error" => "Usuário ou senha inválidos"
+            ];
+
+        $userData = $responseUser["data"];
+        $isPasswordValid = Hash::check($password, $userData->getAuthPassword());
+        if (! $isPasswordValid)
+        {
+            return ["status"=> false,
+            "message"=> "error",
+            "error"=> "Usuário ou senha inválidos"
+            ];
+        }
+        // 3. Verificar status
+            if ($userData->statususer !== 'Active') {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Usuário inativo'
+                ];
+            }
+
+            // 4. Carregar dados do colaborador
+            $collaborator = $userData->collaborator;
+
+            if (!$collaborator) {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Dados do colaborador não encontrados',
+                    'test' => $userData->toArray()
+                ];
+            }
+
+            $token = JWTAuth::fromUser($userData);
+
+            $payload = JWTAuth::setToken($token)->getPayload();
+            // 6. Retornar dados (SEM senha)
+            return [
+                'status' => true,
+                'message' => 'Login realizado com sucesso',
+                'data' => [
+                    'user' => [
+                        'id' => $userData->id_users,
+                        'nameuser' => $userData->nameuser,
+                        'fullname' => $userData->fullname,
+                        'type' => $userData->typeuser,
+                        'status' => $userData->statususer,
+                    ],
+                    'collaborator' => [
+                        'id' => $collaborator->Id_collaborators,
+                        'role' => $collaborator->typecollaborator,
+                    ],
+                    'token' => $token, // ✅ Token JWT-like
+                    'token_type' => 'Bearer'
+                ]
+            ];
     }
 }

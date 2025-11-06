@@ -7,8 +7,10 @@ use App\Application\Ports\NoSQLPort;
 use App\Application\Ports\Instructor\InstructorRepositoryPort;
 use App\Application\Ports\Instructor\InstructorServiceContract;
 use Exception;
+use Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class InstructorService implements InstructorServiceContract
 {
@@ -139,5 +141,69 @@ class InstructorService implements InstructorServiceContract
             fulladdress: $dto->fulladdress,
             classification: strtoupper(trim(strip_tags($dto->classification)))
         );
+    }
+
+    public function loginInstructor(string $nameuser, string $password): array{
+        $responseUser = $this->sqlAdapter->getInstructorByLoginName($nameuser);
+        if ($responseUser["status"] == false)
+            return ["status"=> false,
+                "message"=> "error",
+                "error" => "Usuário ou senha inválidos"
+            ];
+
+        $userData = $responseUser["data"];
+        $isPasswordValid = Hash::check($password, $userData->getAuthPassword());
+        if (! $isPasswordValid)
+        {
+            return ["status"=> false,
+            "message"=> "error",
+            "error"=> "Usuário ou senha inválidos"
+            ];
+        }
+        // 3. Verificar status
+            if ($userData->statususer !== 'Active') {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Usuário inativo'
+                ];
+            }
+
+            // 4. Carregar dados do instrutor
+            $instructor = $userData->instructor;
+
+            if (!$instructor) {
+                return [
+                    'status' => false,
+                    'message' => 'error',
+                    'error' => 'Dados do instrutor não encontrados',
+                    'test' => $userData->toArray()
+                ];
+            }
+
+            $token = JWTAuth::fromUser($userData);
+
+            $payload = JWTAuth::setToken($token)->getPayload();
+            // 6. Retornar dados (SEM senha)
+            return [
+                'status' => true,
+                'message' => 'Login realizado com sucesso',
+                'data' => [
+                    'user' => [
+                        'id' => $userData->id_users,
+                        'nameuser' => $userData->nameuser,
+                        'fullname' => $userData->fullname,
+                        'type' => $userData->typeuser,
+                        'status' => $userData->statususer,
+                    ],
+                    'instructor' => [
+                        'id' => $instructor->Id_instructors,
+                        'cref' => $instructor->cref,
+                        'crefito' => $instructor->crefito,
+                    ],
+                    'token' => $token, // ✅ Token JWT-like
+                    'token_type' => 'Bearer'
+                ]
+            ];
     }
 } 

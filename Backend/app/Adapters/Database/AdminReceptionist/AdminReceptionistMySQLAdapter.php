@@ -57,4 +57,24 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
             throw $e;
         }
     }
+
+    public function getEmployeeByLoginName(string $nameuser): array
+    {
+        try
+        {
+            $employee = UserTgi::where("nameuser", $nameuser)
+            ->whereIn("typeuser", ["Administrator", "Receptionist"])
+            ->first();
+            if (!$employee)
+                throw new Exception("Dados inválidos");
+            return [
+                'status' => true,
+                'data' => $employee];
+        }
+        catch (Exception $e)
+        {
+            Log::error("". $e->getMessage());
+            return ['status'=> false,'message'=> $e->getMessage()];
+        }
+    }
 }
