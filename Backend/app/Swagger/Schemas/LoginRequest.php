@@ -15,7 +15,7 @@ class LoginRequest
     #[OA\Property(
         property: "login",
         type: "string",
-        description: "Nome de usuário (CPF ou telefone)",
+        description: "Nome de usuário (Telefone)",
         example: "11951999999"
     )]
     public string $nameuser;

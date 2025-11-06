@@ -64,8 +64,8 @@ class UserTgi extends Authenticatable implements JWTSubject
     // ✅ UserTgi pode ter UM Instructor (se typeuser = 'instructor')
     public function instructor(): HasOne
     {
-        return $this->hasOne(Instructor::class, 'Id_users', 'Id_users')
-                    ->where('users.typeuser', 'instructor');
+        return $this->hasOne(
+            Instructor::class, 'Id_users', 'id_users');
     }
 
     // ✅ UserTgi pode ter UM Collaborator (se typeuser = 'collaborator')

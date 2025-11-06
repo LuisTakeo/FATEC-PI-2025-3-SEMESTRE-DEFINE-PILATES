@@ -166,6 +166,47 @@
                 }
             }
         },
+        "/api/instructors/login": {
+            "post": {
+                "tags": [
+                    "Instructors"
+                ],
+                "summary": "Login de instrutor",
+                "operationId": "loginInstructor",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/students": {
             "get": {
                 "tags": [
@@ -620,11 +661,11 @@
                         "nullable": true
                     },
                     "crefito": {
-                        "description": "Número do registro CREFITO (formato: 3/123456-F)",
+                        "description": "Número do registro CREFITO (formato: 133456-F - 6 dígitos, hífen, 1 letra)",
                         "type": "string",
                         "maxLength": 20,
-                        "pattern": "^\\d+\\/\\d{1,6}-[A-Z]$",
-                        "example": "3/123456-F",
+                        "pattern": "^\\d{6}-[A-Z]$",
+                        "example": "133456-F",
                         "nullable": true
                     },
                     "fulladdress": {
@@ -690,7 +731,7 @@
                 ],
                 "properties": {
                     "login": {
-                        "description": "Nome de usuário (CPF ou telefone)",
+                        "description": "Nome de usuário (Telefone)",
                         "type": "string",
                         "example": "11951999999"
                     },

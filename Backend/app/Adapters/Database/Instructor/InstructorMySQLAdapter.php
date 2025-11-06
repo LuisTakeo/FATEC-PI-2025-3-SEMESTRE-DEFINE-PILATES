@@ -68,4 +68,23 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
             throw $e;
         }
     }
+
+    public function getInstructorByLoginName(String $nameuser) : array
+    {
+        try
+        {
+            $instructor = UserTgi::where("nameuser", $nameuser)->first();
+            if (!$instructor)
+                throw new Exception("Dados inválidos");
+            return [
+                'status' => true,
+                'data' => $instructor];
+        }
+        catch (Exception $e)
+        {
+            Log::error("". $e->getMessage());
+            return ['status'=> false,'message'=> $e->getMessage()];
+        }
+    }
+    
 }
