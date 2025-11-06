@@ -37,8 +37,7 @@ class InstructorRegisterRequest extends FormRequest{
                 'string',
                 'max:20',
                 'unique:instructors,crefito',
-                'regex:/^\d+\/\d{1,6}-[A-Z]$/
-'
+                'regex:/^\d{6}-[A-Z]$/'
             ],
 
             'birth_date' => ['required','date',

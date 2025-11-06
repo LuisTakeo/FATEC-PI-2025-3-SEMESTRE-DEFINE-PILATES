@@ -38,6 +38,9 @@ function Cadastro_Instrutor(){
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [isAddressFound, setIsAddressFound] = useState(false);
+    // const [password, setPassword] = useState("");
+    const [confirmarPassword, setConfirmarPassword] = useState("");
+    const [passwordError, setPasswordError] = useState(false);
     
     const fetchAddressByCep = async (cep: string) => {
         try {
@@ -135,7 +138,38 @@ function Cadastro_Instrutor(){
                         <Input id="name" name="name" label="Nome" placeholder="Digite o nome completo" required value={formData.name} onChange={handleChange} />
 
                         <Input id="phone" name="phone" label="Telefone" type="tel" placeholder="(11) 99999-9999" required value={formData.phone} onChange={handleChange} />
+                        <div className="w-full">
+                                <Input
+                                    id="senha"
+                                    label="Senha"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Digite a senha"
 
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Input
+                                    id="confirmar-senha"
+                                    label="Confirmar Senha"
+                                    value={confirmarPassword}
+                                    onChange={(e) => {
+                                        setConfirmarPassword(e.target.value);
+                                        if (e.target.value !== formData.password) {
+                                            setPasswordError(true);
+                                        } else {
+                                            setPasswordError(false);
+                                        }
+                                    }}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Confirme a senha"
+                                    error={passwordError && confirmarPassword !== ""}
+                                    errorMessage="As senhas não coincidem"
+                                />
+                            </div>
                         <div className="form-row">
                             <div className="form-group-half">
                                 <Input id="birth_date" name="birth_date" label="Data de Nascimento" type="date" required value={formData.birth_date} onChange={handleChange} />

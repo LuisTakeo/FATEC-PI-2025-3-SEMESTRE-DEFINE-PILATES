@@ -20,6 +20,7 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
                 
                 $userTgi = UserTgi::create([
                 'nameuser' => $instructorDTO->phone,
+                'fullname' => $instructorDTO->name,
                 'passworduser' => $instructorDTO->password,
                 'typeuser' => 'instructor',
                 'statususer' => 'active',

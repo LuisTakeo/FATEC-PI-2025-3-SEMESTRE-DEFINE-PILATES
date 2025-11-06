@@ -81,12 +81,12 @@ class InstructorRegisterRequest
 
     #[OA\Property(
         property: "crefito",
-        description: "Número do registro CREFITO (formato: 3/123456-F)",
+        description: "Número do registro CREFITO (formato: 133456-F - 6 dígitos, hífen, 1 letra)",
         type: "string",
         maxLength: 20,
-        pattern: "^\d+\/\d{1,6}-[A-Z]$",
+        pattern: "^\d{6}-[A-Z]$",
         nullable: true,
-        example: "3/123456-F"
+        example: "133456-F"
     )]
     public ?string $crefito;
 

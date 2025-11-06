@@ -25,7 +25,7 @@ export const registerInstructor = async (payload: InstructorPayload) => {
     });
 
     const result = await response.json();
-
+    console.log(result);
     if (!response.ok) {
         throw { status: response.status, ...result };
     }
