@@ -4,24 +4,31 @@ import Estilizacoes from "../../../model/Estilizacoes";
 import Input from "../../../components/Erro/Input";
 import InputTelefone from "../../../components/Erro/InputTelefone";
 import Botao from "../../../components/Botao/Botao";
+import { login_funcionario } from "../../../services/funcionarios/loginservice";
+import { useNavigate } from "react-router-dom";
 
 const MIN_LENGTH = 6;
-const MAX_LENGTH = 10;
+const MAX_LENGTH = 20;
 
 const KEY_IS_LOGGED = "isEmployeeLoggedIn";
 const KEY_USER_ROLE = "userRole";
 
 export default function LoginFuncionario() {
+  const navigate = useNavigate();
+
   const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
+  const [tipoUsuario, setTipoUsuario] = useState("");
   const [erroTelefone, setErroTelefone] = useState("");
   const [erroSenha, setErroSenha] = useState("");
+  const [erroTipoUsuario, setErroTipoUsuario] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
 
   const clearAllErrors = () => {
     setErroTelefone("");
     setErroSenha("");
+    setErroTipoUsuario("");
   };
 
   const handleTelefoneChange = (val: string) => {
@@ -31,6 +38,11 @@ export default function LoginFuncionario() {
 
   const handleSenhaChange = (val: string) => {
     setSenha(val);
+    clearAllErrors();
+  };
+
+  const handleTipoUsuarioChange = (val: string) => {
+    setTipoUsuario(val);
     clearAllErrors();
   };
 
@@ -45,7 +57,11 @@ export default function LoginFuncionario() {
     const temNumero = /[0-9]/.test(s);
     const temEspecial = /[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~`]/.test(s);
 
-    if (!temMinuscula || !temMaiuscula || !temNumero || !temEspecial) {
+    if (!temMinuscula 
+      || !temMaiuscula 
+      || !temNumero 
+      // || !temEspecial
+    ) {
       return "Senha inválida.";
     }
     return null;
@@ -58,6 +74,12 @@ export default function LoginFuncionario() {
 
     clearAllErrors();
     let hasError = false;
+
+    // Validação do Tipo de Usuário
+    if (!tipoUsuario.trim()) {
+      setErroTipoUsuario("Selecione o tipo de funcionário.");
+      hasError = true;
+    }
 
     // Validação do Telefone
     if (!telefone.trim()) {
@@ -88,32 +110,34 @@ export default function LoginFuncionario() {
     if (!hasError) {
       setIsLoading(true);
       try {
-        // Simulação de delay da API (usando await new Promise)
-        await new Promise((resolve) => setTimeout(resolve, 1500)); 
+              // await new Promise((resolve) => setTimeout(resolve, 1500));
+              const authSuccess = await login_funcionario(telefone, senha, tipoUsuario);
+              // const authSuccess = true;
+              // console.log(IsLogado);
+              if (authSuccess) {
+                console.log("Tipo acesso:", tipoUsuario);
+                if (tipoUsuario == "administrator") {
+                  navigate("/admin/home");
+                } else{
+                  navigate("/home/funcionario");
+                }
 
-        const authResult = true; 
 
-        if (authResult) {
-          const cargoRecebido = "adm"; 
-          
-          if (typeof window !== "undefined") {
-            // Armazenamento local adaptado para Funcionário
-            localStorage.setItem(KEY_IS_LOGGED, "true");
-            localStorage.setItem(KEY_USER_ROLE, cargoRecebido);
-            setAuthSuccess(true); 
-          }
-          console.log("✅ Login de funcionário bem-sucedido. LocalStorage atualizado.");
-        } else {
-          setErroSenha("Credenciais de funcionário inválidas.");
-          setAuthSuccess(false);
-        }
-      } catch (error) {
-        console.error("Erro na API de Login de Funcionário:", error);
-        setErroSenha("Erro de conexão. Tente novamente mais tarde.");
-        setAuthSuccess(false);
-      } finally {
-        setIsLoading(false);
-      }
+                // navigate("/home/aluno");
+                
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("isLoggedIn", "true");
+                }
+                console.log("Login SUCESSO. Usuário logado.");
+              } else {
+                setErroSenha("Credenciais inválidas. Verifique telefone e senha.");
+              }
+            } catch (error) {
+              console.error("Erro na API de Login:", error);
+              setErroSenha("Erro de conexão. Tente novamente mais tarde.");
+            } finally {
+              setIsLoading(false);
+            }
     }
   };
 
@@ -152,6 +176,23 @@ export default function LoginFuncionario() {
             </h3>
 
             <div className="w-full flex flex-col gap-8">
+              <div className="text-[1rem] font-medium">
+                <Input
+                  id="tipo-usuario-login"
+                  label="Tipo de Funcionário"
+                  value={tipoUsuario}
+                  onChange={handleTipoUsuarioChange}
+                  type="select"
+                  placeholder="Selecione o tipo de funcionário"
+                  erro={erroTipoUsuario}
+                  options={[
+                    { value: "administrator", label: "Administrador" },
+                    { value: "receptionist", label: "Recepcionista" },
+                    { value: "instructor", label: "Instrutor" }
+                  ]}
+                />
+              </div>
+
               <div className="text-[1rem] font-medium">
                 <InputTelefone
                   id="telefone-login"
