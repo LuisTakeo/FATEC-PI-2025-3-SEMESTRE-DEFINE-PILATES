@@ -1,0 +1,7 @@
+version: 2
+authtoken: ${NGROK_AUTHTOKEN}
+tunnels:
+  backend:
+    addr: laravel-backend:8000
+    proto: http
+    domain: sibilation-edythe-unprivately.ngrok-free.dev

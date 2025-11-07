@@ -13,7 +13,7 @@ return [
                 'api' => 'api/documentation',
             ],
             'paths' => [
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', false),
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
                 'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
                 'docs_json' => 'api-docs.json',
                 'docs_yaml' => 'api-docs.yaml',
@@ -21,8 +21,11 @@ return [
 
                 // ✅ CORRIGIR: Escanear apenas controllers, não toda app/
                 'annotations' => [
-                    base_path('app/Adapters/Http/Student'), // ✅ Apenas seus controllers
+                    base_path('app/Adapters/Http'), // ✅ Apenas seus controllers
+                    // base_path(('app/Adapters/Http/AdminReceptionist')),
+                    // base_path(('app/Adapters/Http/Instructor')),
                     base_path('app/Swagger/Schemas'),
+                    
                 ],
             ],
         ],
@@ -76,7 +79,7 @@ return [
         ],
         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', true), // ✅ true para desenvolvimento
         'generate_yaml_copy' => env('L5_SWAGGER_GENERATE_YAML_COPY', false),
-        'proxy' => false,
+        'proxy' => env('L5_SWAGGER_PROXY', false),
         'additional_config_url' => null,
         'operations_sort' => env('L5_SWAGGER_OPERATIONS_SORT', null),
         'validator_url' => null,

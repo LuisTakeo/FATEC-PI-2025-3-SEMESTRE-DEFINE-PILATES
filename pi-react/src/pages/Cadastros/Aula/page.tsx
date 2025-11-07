@@ -1,15 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import Botao from "./../../../components/Botao/Botao"
 import Input from "./../../../components/Input/Input"
+import Estilizacoes from "../../../model/Estilizacoes";
+import { useState } from "react";
+import PesquisarInstrutor from "../../../components/CadastroAula/PesquisarInstrutor";
 
 export default function Cadastro_Aula(){
 
   const navigate = useNavigate();
 
+  const [unidade, setUnidade] = useState("")
+  const [horaInicio, setHoraInicio] = useState("")
+  const [data, setData] = useState("")
+ 
     return(
         <main className="w-full h-full flex flex-col px-[15%]">
             <header className="w-full h-full flex flex-row">
-                <div className="w-full text-[2rem] font-semibold text-[var(--destaque)]">
+                <div className={`${Estilizacoes.titulo_principal} w-full`}>
                     <h1>Cadastrar aula</h1>
                 </div>
                 <div className="w-full">
@@ -17,11 +24,11 @@ export default function Cadastro_Aula(){
                 </div>
             </header>
             <form action="">
-                <section>
+                <section className="w-full h-full flex flex-col justify-center items-start gap-8 py-8">
 
                      <div>
                         <div>
-                            <h1>Unidade</h1>
+                            <h1 className={Estilizacoes.titulo_segundario}>Unidade</h1>
                         </div>
                         <Input
                         id=""
@@ -32,102 +39,34 @@ export default function Cadastro_Aula(){
                             {value:"unidade 2", label:"Itaquera"},
                             {value:"unidade 3", label:"Vila Jacuí"} 
                         ]}
-                        // onChange={(e) => {
-                        //     const valorSelecionado = e.target.value;
-                        //     const [latitude , longitude] = valorSelecionado.split(",").map(Number)
-                        //     setLatitude(latitude)
-                        //     setLongitude(longitude)
-                        // }}
+                        onChange={(e) => setUnidade(e.target.value)}
                         />
                     </div>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-4">
                         <div>
-                            <h1>Data e Hora</h1>
+                            <h1 className={Estilizacoes.titulo_segundario}>Data e Hora de Incio</h1>
                         </div>
-                        <div className="flex flex-row">
+                        <div className="flex flex-col gap-10
+                        md:flex-row">
                             <div>
                                 <Input
                                 label="Data da Aula"
                                 type="date"
+                                onChange={(e) => setData(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <Input
-                                label="Hora de Inicio"
-                                type="date"
-                                />
-                            </div>
-                            <div>
-                                <Input
-                                label="Hora de Fim"
-                                type="date"
+                                label="Hora de Início"
+                                type="time"
+                                onChange={(e) => setHoraInicio(e.target.value)}
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col">
-                        <div>
-                            <h1>Instrutor</h1>
-                        </div>
-                        <div className="flex flex-row">
-                            <div>
-                                <Input
-                                type="text"
-                                />
-                            </div>
-                            <div>
-                                <Botao texto="Pesquisar"/>
-                            </div>
-                        </div>
-                    </div>
-                    
-                     {/* <div>
-                        <p>Quais planos contém esta aula?</p>
-                        <label htmlFor="">
-                            <input type="checkbox" name="recorrente" value="sim"/>
-                            Plano anual
-                        </label>
-                        <label htmlFor="">
-                            <input type="checkbox" name="recorrente" value="nao"/>
-                            Plano trimestral
-                        </label>
-                        <label htmlFor="">
-                            <input type="checkbox" name="recorrente" value="nao"/>
-                            Plano semestral
-                        </label>
-                        <label htmlFor="">
-                            <input type="checkbox" name="recorrente" value="nao"/>
-                            Plano mensal
-                        </label>
-                        <label htmlFor="">
-                            <input type="checkbox" name="recorrente" value="nao"/>
-                            Plano semanal
-                        </label>
-                    </div>
-
-                    <div>
-                        <p>Tornar recorrente?</p>
-                        <label htmlFor="">
-                            <input type="radio" name="recorrente" value="sim"/>
-                            Sim
-                        </label>
-                        <label htmlFor="">
-                            <input type="radio" name="recorrente" value="nao"/>
-                            Não
-                        </label>
-                        {/* ao clicar em se tornar recorrente, perguntar se deve se repetir em quais dias e por quanto tempo 
-                    </div>
-                        */}
-                    
-
-                    <div>
-                        <Input
-                        label="Observações"
-                        as="textarea"
-                        />
-                    </div>
+                    <PesquisarInstrutor/>
 
                 </section>
 

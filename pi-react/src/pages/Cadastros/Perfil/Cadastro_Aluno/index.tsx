@@ -11,6 +11,7 @@ import type {Endereco as EnderecoType} from "../../../../types/Aluno"
 import type {Contato} from "../../../../types/Aluno"
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
 import Endereco from "../../../../components/Section/Endereco";
+import { useNavigate } from "react-router-dom";
 
 interface EnderecoState {
     id: number;
@@ -30,12 +31,16 @@ function converterInputParaDDMMYYYY(dataInput: string): string {
 
 function Cadastro_Aluno(){
     console.log("carregando")
+    const navigate = useNavigate();
 
     const [nome, setNome] = useState("")
     const [cpf, setCPF] = useState("");
     const [data, setData] = useState("");
     const [ddd, setDDD] = useState("");
     const [telefone, setTelefone] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmarPassword, setConfirmarPassword] = useState("");
+    const [passwordError, setPasswordError] = useState(false);
 
     // Endereços como array
     const [enderecos, setEnderecos] = useState<EnderecoState[]>([
@@ -127,7 +132,7 @@ function Cadastro_Aluno(){
         const aluno: Aluno = {
                 name: nome,
                 phone: ddd + telefone,
-                password: "123Ab!",
+                password: password,
                 cpf: cpf,
                 profession: categoria,
                 birth_date: converterInputParaDDMMYYYY(data),
@@ -136,7 +141,14 @@ function Cadastro_Aluno(){
                 enderecos: enderecosFormatados
         }
 
-        await cadastrar_aluno(aluno);
+        const isCadastrado = await cadastrar_aluno(aluno);
+        if (isCadastrado)
+        {
+            alert("Aluno cadastrado com sucesso!");
+            navigate("/login/aluno");
+        }
+        else
+            alert("Erro ao cadastrar aluno. Por favor, tente novamente.");
 
         return aluno
 
@@ -205,6 +217,39 @@ function Cadastro_Aluno(){
                                     />
                                 </div>
 
+                            </div>
+
+                            <div className="w-full">
+                                <Input
+                                    id="senha"
+                                    label="Senha"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Digite a senha"
+
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Input
+                                    id="confirmar-senha"
+                                    label="Confirmar Senha"
+                                    value={confirmarPassword}
+                                    onChange={(e) => {
+                                        setConfirmarPassword(e.target.value);
+                                        if (e.target.value !== password) {
+                                            setPasswordError(true);
+                                        } else {
+                                            setPasswordError(false);
+                                        }
+                                    }}
+                                    type = "password"
+                                    pattern="[a-zA-Z0-9/]+"
+                                    placeholder = "Confirme a senha"
+                                    error={passwordError && confirmarPassword !== ""}
+                                    errorMessage="As senhas não coincidem"
+                                />
                             </div>
 
                             <ContatoComplem

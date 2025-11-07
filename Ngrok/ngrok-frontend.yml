@@ -1,0 +1,7 @@
+version: 2
+authtoken: ${NGROK_AUTHTOKEN}
+tunnels:
+  frontend:
+    addr: pi-react:5173
+    proto: http
+    domain: chronogrammatic-unamended-janay.ngrok-free.dev

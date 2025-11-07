@@ -4,12 +4,14 @@ namespace App\Application\Services\Student;
 
 
 use App\Application\DTOs\StudentDTO;
+use App\Application\DTOs\StudentListDTO;
 use App\Application\Ports\NoSQLPort;
 use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
 use Exception;
 use Hash;
+use Log;
 use Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -210,6 +212,48 @@ class StudentService implements StudentServiceContract
                 'message' => 'Erro interno do servidor',
                 'error' => $e->getMessage(),
                 'status' => 'error'
+            ];
+        }
+    }
+
+
+    public function getStudents(): array {
+        $users = $this->sqlAdapter->getStudentsFromDB();
+        return $users->toArray();
+    }
+
+    public function listStudents(): array
+    {
+        try {
+            $result = $this->sqlAdapter->getAllStudentUsers();
+            
+            if (!$result['status']) {
+                return [
+                    'status' => 'error',
+                    'message' => $result['message'] ?? 'Failed to retrieve students'
+                ];
+            }
+
+            //imprimir aa lista toda
+            Log::info('Retrieved student users', collect($result['data'])->toArray());
+
+            $students = collect($result['data'])->map(function ($user) {
+                return StudentListDTO::fromModel($user)->toArray();
+            })->all();
+            // for each para o array de students
+            
+
+            return [
+                'status' => 'success',
+                'data' => $students
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Failed to list students', ['error' => $e->getMessage()]);
+            return [
+                'status' => 'error',
+                'message' => 'Failed to list students',
+                'error' => $e->getMessage()
             ];
         }
     }

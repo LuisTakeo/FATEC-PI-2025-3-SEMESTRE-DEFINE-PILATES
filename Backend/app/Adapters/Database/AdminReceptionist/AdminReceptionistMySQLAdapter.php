@@ -23,18 +23,22 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
                 'birthdate' => $adminReceptionistDTO->birthDate->format('Y-m-d')
             ]);
 
+            // log para ver se estou conseguindo acessar id_users
+            Log::info('UserTgi created', ['id' => $userTgi->id_users]);
+
             $collaborator = Collaborator::create([
                 'namecollaborator' => $adminReceptionistDTO->name,
                 'typecollaborator' => $adminReceptionistDTO->typecollaborator,
                 'fulladdress' => $adminReceptionistDTO->fulladdress,
                 'hiring' => $adminReceptionistDTO->hiring->format('Y-m-d'),
                 'classification' => $adminReceptionistDTO->classification,
-                'Id_users' => $userTgi->Id_users,
+                'Id_users' => $userTgi->id_users,
+                'birthday' => $adminReceptionistDTO->birthDate->format('Y-m-d')
             ]);
 
             Log::info('Instructor and associated Collaborator created successfully', [
                 'collaborator_id' => $collaborator->id,
-                'user_tgi_id' => $userTgi->Id_users
+                'user_tgi_id' => $userTgi->id_users
             ]);
                 
                 return $collaborator;
@@ -51,6 +55,26 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
             ]);
             
             throw $e;
+        }
+    }
+
+    public function getEmployeeByLoginName(string $nameuser): array
+    {
+        try
+        {
+            $employee = UserTgi::where("nameuser", $nameuser)
+            ->whereIn("typeuser", ["Administrator", "Receptionist"])
+            ->first();
+            if (!$employee)
+                throw new Exception("Dados inválidos");
+            return [
+                'status' => true,
+                'data' => $employee];
+        }
+        catch (Exception $e)
+        {
+            Log::error("". $e->getMessage());
+            return ['status'=> false,'message'=> $e->getMessage()];
         }
     }
 }

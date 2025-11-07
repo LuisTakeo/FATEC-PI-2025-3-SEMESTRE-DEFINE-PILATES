@@ -2,9 +2,11 @@ import Estilizacoes from "../../../model/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import { AiOutlineHeart } from "react-icons/ai";
 import Mapa from "./../../../components/Mapa/Mapa"
+import { API_BASE_URL, API_URL } from "../../../config/api";
 
 
 function PaginaInicio(){
+    console.log(API_BASE_URL)
 
     return(
     <main className={`${Estilizacoes.container_main} w-full`}>

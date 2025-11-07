@@ -34,7 +34,7 @@ class StudentControllerAdapter extends BaseController
     )]
     public function index(Request $request)
     {
-        return response()->json(["message" => "It works INDEX EEEEEEEEE"]);
+        return $this->studentService->getStudents();
     }
 
     #[OA\Post(
@@ -58,6 +58,54 @@ class StudentControllerAdapter extends BaseController
     {
         $result = $this->studentService->registerStudent($request->toDTO());
         $status = $result['status'] === 'success' ? 201 : 422;
+        
+        return response()->json($result, $status);
+    }
+
+    #[OA\Get(
+        path: "/api/students/list",
+        operationId: "listStudents",
+        tags: ["Students"],
+        summary: "Listar todos os estudantes com informações básicas"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Lista de estudantes retornada com sucesso",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(
+                    property: "data",
+                    type: "array",
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 1),
+                            new OA\Property(property: "fullname", type: "string", example: "João Silva"),
+                            new OA\Property(property: "phone", type: "string", example: "11999999999"),
+                            new OA\Property(property: "typeuser", type: "string", example: "student"),
+                            new OA\Property(property: "birth_date", type: "string", nullable: true, example: "1990-01-15"),
+                            new OA\Property(property: "cpf", type: "string", nullable: true, example: "12345678901"),
+                            new OA\Property(property: "profession", type: "string", nullable: true, example: "Engenheiro")
+                        ]
+                    )
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar estudantes",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Failed to list students")
+            ]
+        )
+    )]
+    public function listStudents(): JsonResponse
+    {
+        $result = $this->studentService->listStudents();
+        $status = $result['status'] === 'success' ? 200 : 500;
         
         return response()->json($result, $status);
     }
