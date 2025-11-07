@@ -7,7 +7,7 @@ export interface InputProps {
     onChange: (val: string) => void;
     
     onBlur?: () => void; 
-    inputRef?: React.Ref<HTMLInputElement | null>; 
+    inputRef?: React.Ref<HTMLInputElement | HTMLSelectElement | null>; 
     
     type: string; 
     placeholder?: string;
@@ -16,6 +16,7 @@ export interface InputProps {
     mostrarSenhaToggle?: boolean; 
     
     maxLength?: number; 
+    options?: { value: string; label: string }[]; // Para select
 }
 
 export default function Input({
@@ -31,10 +32,11 @@ export default function Input({
     mostrarSenhaToggle = false,
     inputRef,
     maxLength,
+    options = [],
 }: InputProps) {
     
     const [mostrarSenha, setMostrarSenha] = useState(false);
-    const defaultRef = useRef<HTMLInputElement>(null);
+    const defaultRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
     const ref = inputRef || defaultRef;
     const inputType = mostrarSenhaToggle ? (mostrarSenha ? "text" : "password") : type;
 
@@ -43,26 +45,50 @@ export default function Input({
             <label htmlFor={id} className="text-sm font-inter">{label}</label>
 
             <div className="relative w-full">
-                <input
-                    id={id}
-                    ref={ref}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    onBlur={onBlur} 
-                    type={inputType} 
-                    placeholder={placeholder}
-                    maxLength={maxLength} 
-                    className={`
-                        w-full px-4 ${mostrarSenhaToggle ? "pr-9" : "pr-4"} h-12
-                        rounded-md border ${erro ? "border-red-500" : "border-gray-300"}
-                        bg-[var(--input-background)] text-[var(--color-foreground)]
-                        focus:outline-none ${!erro ? "focus:ring-1 focus:ring-[var(--destaque)]" : ""}
-                        text-sm transition-all
-                        flex items-center
-                    `}
-                />
+                {type === "select" ? (
+                    <select
+                        id={id}
+                        ref={ref as React.Ref<HTMLSelectElement>}
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        onBlur={onBlur}
+                        className={`
+                            w-full px-4 h-12
+                            rounded-md border ${erro ? "border-red-500" : "border-gray-300"}
+                            bg-[var(--input-background)] text-[var(--color-foreground)]
+                            focus:outline-none ${!erro ? "focus:ring-1 focus:ring-[var(--destaque)]" : ""}
+                            text-sm transition-all
+                        `}
+                    >
+                        <option value="" disabled>{placeholder || "Selecione uma opção"}</option>
+                        {options.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                                {opt.label}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    <input
+                        id={id}
+                        ref={ref as React.Ref<HTMLInputElement>}
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        onBlur={onBlur} 
+                        type={inputType} 
+                        placeholder={placeholder}
+                        maxLength={maxLength} 
+                        className={`
+                            w-full px-4 ${mostrarSenhaToggle ? "pr-9" : "pr-4"} h-12
+                            rounded-md border ${erro ? "border-red-500" : "border-gray-300"}
+                            bg-[var(--input-background)] text-[var(--color-foreground)]
+                            focus:outline-none ${!erro ? "focus:ring-1 focus:ring-[var(--destaque)]" : ""}
+                            text-sm transition-all
+                            flex items-center
+                        `}
+                    />
+                )}
 
-                {mostrarSenhaToggle && (
+                {mostrarSenhaToggle && type !== "select" && (
                     <div
                         className="absolute right-2 top-0 bottom-0 flex items-center px-1 cursor-pointer text-gray-500 hover:text-[var(--destaque)]"
                         onClick={() => setMostrarSenha(!mostrarSenha)}
