@@ -17,6 +17,7 @@ import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone_1";
 import Cadastro_Adm_Recep from "./pages/Cadastros/Perfil/Cadastro_RecepAdm";
 import Calendario_Funcionari from "./pages/Calendarios/Calendario_Funcionario/page"
 import Cadastro_Aula from "./pages/Cadastros/Aula/page"
+import HomeAlunoPage from "./pages/Aluno/page";
 
 function MainRoutes() {
     return (
@@ -47,6 +48,9 @@ function MainRoutes() {
             <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/login/aluno" element={<Login/>}/>
             <Route path="/login/funcionario" element={<Login_Funcionario/>}/>
+
+            <Route path="/aluno/home" element={<HomeAlunoPage/>}/>
+            
         </Routes>
 
         // {/* SÓ ADMIN LOGADO */}
