@@ -88,7 +88,7 @@ export default function LoginPage() {
         // const authSuccess = true;
         // console.log(IsLogado);
         if (authSuccess) {
-          navigate("/home/aluno");
+          navigate("/aluno/home");
           if (typeof window !== "undefined") {
             localStorage.setItem("isLoggedIn", "true");
           }
