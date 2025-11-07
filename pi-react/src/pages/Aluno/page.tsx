@@ -1,8 +1,6 @@
 // pages/Aluno/page.tsx
-import React from 'react';
 
 // IMPORTAÇÕES DOS COMPONENTES NECESSÁRIOS:
-import FooterComponente from '../../components/Footer'; 
 import Mapa from '../../components/Mapa/Mapa'; 
 import Botao from '../../components/Botao/Botao'; 
 import Estilizacoes from '../../model/Estilizacoes'; 
