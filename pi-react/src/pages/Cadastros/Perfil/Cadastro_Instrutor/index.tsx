@@ -4,20 +4,7 @@ import type { FormEvent } from "react";
 import "./stylesCadastroInstrutor.css";
 import Input from "../../../../components/Input/Input";
 import { registerInstructor } from "../../../../services/instructorService";
-
-interface FormData {
-    name: string;
-    password: string;
-    phone: string;
-    birth_date: string;
-    hiring: string;
-    classification: string;
-    cref: string;
-    crefito: string;
-    cep: string;
-    fulladdress: string;
-    number: string;
-}
+import type { FormData } from "../../../../types/FormData";
 
 function Cadastro_Instrutor(){
     const [formData, setFormData] = useState<FormData>({

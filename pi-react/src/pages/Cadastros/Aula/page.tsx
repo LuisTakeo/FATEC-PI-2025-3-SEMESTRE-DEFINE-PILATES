@@ -3,14 +3,14 @@ import Botao from "./../../../components/Botao/Botao"
 import Input from "./../../../components/Input/Input"
 import Estilizacoes from "../../../model/Estilizacoes";
 import { useState } from "react";
-import PesquisarInstrutor from "../../../components/CadastroAula/PesquisarInstrutor";
+import PesquisarInstrutor from "./PesquisarInstrutor";
 
 export default function Cadastro_Aula(){
 
   const navigate = useNavigate();
 
   const [unidade, setUnidade] = useState("")
-  const [horaInicio, setHoraInicio] = useState("")
+  const [hora, setHora] = useState("")
   const [data, setData] = useState("")
  
     return(
@@ -60,13 +60,17 @@ export default function Cadastro_Aula(){
                                 <Input
                                 label="Hora de Início"
                                 type="time"
-                                onChange={(e) => setHoraInicio(e.target.value)}
+                                onChange={(e) => setHora(e.target.value)}
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <PesquisarInstrutor/>
+                    <PesquisarInstrutor
+                        unidadeAula={unidade}
+                        dataAula={data}
+                        horaAula={hora}
+                    />
 
                 </section>
 

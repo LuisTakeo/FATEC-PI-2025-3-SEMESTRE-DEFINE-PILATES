@@ -38,12 +38,12 @@ function MainRoutes() {
             <Route path="/cadastro/aluno" element={<Cadastro_Aluno />} />
             <Route path="/cadastro/instrutor" element={<Cadastro_Instrutor />} />
             <Route path="/cadastro/adm-recep" element={<Cadastro_Adm_Recep/>}/>
-            <Route path="cadastro/aula" element={<Cadastro_Aula/>}/>
+            <Route path="/cadastro/aula" element={<Cadastro_Aula/>}/>
 
             <Route path="/admin/Home" element={<CadastroInicialPage />} />
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
-            <Route path="/funcionario/calendario" element={<Calendario_Funcionari/>}/>
+            <Route path="/calendario/funcionario" element={<Calendario_Funcionari/>}/>
 
             <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/login/aluno" element={<Login/>}/>
