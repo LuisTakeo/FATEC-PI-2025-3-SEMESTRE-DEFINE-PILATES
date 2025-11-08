@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Botao from "../../components/Botao/Botao"
 import Input from "../../components/Erro/Input" 
-import Estilizacoes from "../../model/Estilizacoes"
+import Estilizacoes from "../../uteis/Estilizacoes"
 
 const MIN_LENGTH = 6; 
 const MAX_LENGTH = 10; 

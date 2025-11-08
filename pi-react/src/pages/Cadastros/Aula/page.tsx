@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Botao from "./../../../components/Botao/Botao"
 import Input from "./../../../components/Input/Input"
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import { useState } from "react";
 import PesquisarInstrutor from "./PesquisarInstrutor";
 
@@ -15,7 +15,7 @@ export default function Cadastro_Aula(){
  
     return(
         <main className="w-full h-full flex flex-col px-[15%]">
-            <header className="w-full h-full flex flex-row">
+            <header className="w-full h-full flex gap-5 flex-col md:flex-row">
                 <div className={`${Estilizacoes.titulo_principal} w-full`}>
                     <h1>Cadastrar aula</h1>
                 </div>
@@ -39,7 +39,7 @@ export default function Cadastro_Aula(){
                             {value:"unidade 2", label:"Itaquera"},
                             {value:"unidade 3", label:"Vila Jacuí"} 
                         ]}
-                        onChange={(e) => setUnidade(e.target.value)}
+                        onChange={(e) => {setUnidade(e.target.value); console.log(e.target.value)}}
                         />
                     </div>
 
@@ -53,14 +53,33 @@ export default function Cadastro_Aula(){
                                 <Input
                                 label="Data da Aula"
                                 type="date"
-                                onChange={(e) => setData(e.target.value)}
+                                onChange={(e) => {setData(e.target.value); console.log(e.target.value)}}
                                 />
                             </div>
                             <div>
+                                
                                 <Input
-                                label="Hora de Início"
-                                type="time"
-                                onChange={(e) => setHora(e.target.value)}
+                                    label="Hora de Início"
+                                    type="select"
+                                    as="select"
+                                    options={[
+                                        { value: "07:00", label: "07:00" },
+                                        { value: "08:00", label: "08:00" },
+                                        { value: "09:00", label: "09:00" },
+                                        { value: "10:00", label: "10:00" },
+                                        { value: "11:00", label: "11:00" },
+                                        { value: "12:00", label: "12:00" },
+                                        { value: "13:00", label: "13:00" },
+                                        { value: "14:00", label: "14:00" },
+                                        { value: "15:00", label: "15:00" },
+                                        { value: "16:00", label: "16:00" },
+                                        { value: "17:00", label: "17:00" },
+                                        { value: "18:00", label: "18:00" },
+                                        { value: "19:00", label: "19:00" },
+                                        { value: "20:00", label: "20:00" },
+                                        { value: "21:00", label: "21:00" },
+                                    ]}
+                                    onChange={(e) => {setHora(e.target.value); console.log(e.target.value)}}
                                 />
                             </div>
                         </div>

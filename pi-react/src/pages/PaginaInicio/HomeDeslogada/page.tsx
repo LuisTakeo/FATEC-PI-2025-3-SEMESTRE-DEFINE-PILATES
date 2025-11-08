@@ -1,4 +1,4 @@
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import { AiOutlineHeart } from "react-icons/ai";
 import Mapa from "./../../../components/Mapa/Mapa"

@@ -5,7 +5,7 @@ import React from 'react';
 import FooterComponente from '../../components/Footer'; 
 import Mapa from '../../components/Mapa/Mapa'; 
 import Botao from '../../components/Botao/Botao'; 
-import Estilizacoes from '../../model/Estilizacoes'; 
+import Estilizacoes from '../../uteis/Estilizacoes'; 
 
 export default function HomeAlunoPage() {
 

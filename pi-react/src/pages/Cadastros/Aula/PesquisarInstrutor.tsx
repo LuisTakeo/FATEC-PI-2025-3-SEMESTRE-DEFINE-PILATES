@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import type { FormData } from "../../../types/FormData";
+import { API_BASE_URL } from "../../../config/api"
 
 export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
     unidadeAula: string;
@@ -10,7 +11,7 @@ export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
 }){
 
     const [instrutorSelecionado, setInstrutorSelecionado] = useState<number | null>(null);
-    const [instrutores, setInstrutores] = useState([]);
+    const [instrutores, setInstrutores] = useState<{ id: number; nome: string }[]>([]);
     const [listAllow, setListAllow] = useState(false)
     const [instrutorError, setInstrutorError] = useState(false)
     const [mensagemErro, setMensagemErro] = useState("")
@@ -30,7 +31,7 @@ export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
     const buscarInstrutor = async () => {
         try {
             const response = await fetch(
-            `http://localhost:3000/instrutores/disponiveis?unidade=${unidadeAula}&data=${dataAula}&hora=${horaAula}`
+            `${API_BASE_URL}/instructors/disponiveis?unidade=${unidadeAula}&data=${dataAula}&hora=${horaAula}`
             )
 
             if (!response.ok) {
@@ -62,14 +63,6 @@ export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
         setInstrutorError(false)
     }
 
-    //MOKADO
-    const instrutorMock = [
-    { id: 1, nome: "Carla Souza" },
-    { id: 2, nome: "Paulo Lima" }
-    ];
-
-
-
     return(
         <div className="flex flex-col gap-10 w-full">
             <div className="flex flex-col gap-4 justify-start w-full 
@@ -85,7 +78,7 @@ export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
 
            {listAllow && (
                 <div className="w-full flex flex-col gap-10">
-                    {instrutorMock.length > 0 && instrutorMock.map(i => (
+                    {instrutores.length > 0 && instrutores.map(i => (
                         <div id="bloco-instrtor"
                             className={`bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
                             flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 
@@ -116,14 +109,9 @@ export default function PesquisarInstrutor({unidadeAula, dataAula, horaAula}:{
                 </div>
             )} 
 
-
-
-
-
-
             {instrutorError && (
                 <div>
-                    <h1 className="text-[1.3rem] text-red-700 md:text-[1.5rem]">{mensagemErro}</h1>
+                    <h1 className="text-[1.3rem] text-red-700 md:text-[1.3rem]">{mensagemErro}</h1>
                 </div>
             )}
         </div>

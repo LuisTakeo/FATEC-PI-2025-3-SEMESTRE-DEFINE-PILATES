@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import Input from "./../../components/Input/Input"
 import { useState } from 'react';
 import { useEffect } from 'react';
-import Estilizacoes from '../../model/Estilizacoes';
+import Estilizacoes from '../../uteis/Estilizacoes';
 
 export default function Mapa(){
 

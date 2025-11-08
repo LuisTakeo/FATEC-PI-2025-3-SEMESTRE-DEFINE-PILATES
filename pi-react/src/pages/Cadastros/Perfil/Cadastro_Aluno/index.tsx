@@ -1,5 +1,5 @@
 import Options_categprofis from "./Options_categprofis"
-import Estilizacoes from "../../../../model/Estilizacoes";
+import Estilizacoes from "../../../../uteis/Estilizacoes";
 import Input_Arquivo from "../../../../components/Input/Input_Arquivo";
 import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"

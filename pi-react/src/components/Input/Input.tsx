@@ -25,7 +25,7 @@ interface InputProps {
 }
 
 function Input({
-    id, name, label, value, onChange, onBlur, type = 'text', as = 'input',
+    id, name, label, value, onChange, onBlur, type = 'text', as = 'input', 
     placeholder, pattern, required = false, options = [], rows = 4, disabled = false, maxLength,
     error = false, errorMessage
 }: InputProps) {
@@ -40,24 +40,24 @@ function Input({
     const renderInput = () => {
         
         const commonProps = { id, name, placeholder, pattern, required, value, onChange, onBlur, disabled, maxLength, autoComplete: "off" };
-        const baseProps = { id, name, placeholder, required, value, onChange, onBlur, disabled };
+        const baseProps = { id, name, placeholder, required, value, onChange, onBlur, disabled};
 
 
-    if (as === 'textarea') {
-        return (
-            <textarea
-                id={id}
-                name={name}
-                placeholder={placeholder}
-                value={value}
-                onChange={onChange} 
-                onBlur={onBlur}
-                rows={rows}
-                disabled={disabled}
-                className={inputClassName}
-            />
-        );
-    }
+        if (as === 'textarea') {
+            return (
+                <textarea
+                    id={id}
+                    name={name}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange} 
+                    onBlur={onBlur}
+                    rows={rows}
+                    disabled={disabled}
+                    className={inputClassName}
+                />
+            );
+        }
 
 
         if (as === 'select') {
@@ -92,7 +92,7 @@ function Input({
 
     return (
         <div className="form-group">
-            <label htmlFor={id} className="form-label">{label}</label>
+            <label htmlFor={id} className="text-[1.7rem] md:text-[1.3rem]">{label}</label>
             {renderInput()}
             {error && errorMessage && (
                 <p className="text-red-500 text-sm mt-1">{errorMessage}</p>

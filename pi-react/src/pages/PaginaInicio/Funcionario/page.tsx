@@ -1,5 +1,5 @@
 import BlocoHome from "./../../../components/BlocoHome/BlocoHome"
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import { useState } from "react";
 
 interface Item {

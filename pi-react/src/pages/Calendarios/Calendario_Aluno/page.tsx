@@ -1,5 +1,5 @@
 import Botao from "../../../components/Botao/Botao"
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import Calendario from "../../../components/Calendario/Calendario"
 
 function Calendario_Aluno(){

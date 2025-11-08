@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Estilizacoes from "../../model/Estilizacoes";
+import Estilizacoes from "../../uteis/Estilizacoes";
 import Input from "./../Input/Input";
 
 

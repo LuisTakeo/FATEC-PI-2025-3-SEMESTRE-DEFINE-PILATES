@@ -1,6 +1,6 @@
 "use client";
 import { useState, type FormEvent } from "react";
-import Estilizacoes from "../../../model/Estilizacoes";
+import Estilizacoes from "../../../uteis/Estilizacoes";
 import Input from "../../../components/Erro/Input";
 import InputTelefone from "../../../components/Erro/InputTelefone";
 import Botao from "../../../components/Botao/Botao";

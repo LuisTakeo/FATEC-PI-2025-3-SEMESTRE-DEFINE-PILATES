@@ -1,6 +1,6 @@
 import { useState } from "react"
 import React from 'react';
-import Estilizacoes from "../../model/Estilizacoes"
+import Estilizacoes from "../../uteis/Estilizacoes"
 import InputTelefone from "../../components/Erro/InputTelefone"; 
 import Botao from "../../components/Botao/Botao" 
 

@@ -1,4 +1,4 @@
-import Estilizacoes from "../../model/Estilizacoes";
+import Estilizacoes from "../../uteis/Estilizacoes";
 import { useEffect, useState } from "react";
 
 export default function Calendario(){

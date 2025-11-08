@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {comprimirImagem} from "../../services/comprimirImagem"
-import Estilizacoes from "../../model/Estilizacoes";
+import Estilizacoes from "../../uteis/Estilizacoes";
 
 interface BotaoProps {
     id: string;
