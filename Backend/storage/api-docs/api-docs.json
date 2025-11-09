@@ -184,6 +184,53 @@
                 }
             }
         },
+        "/api/aulas/studios": {
+            "get": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Listar todos os estúdios com informações básicas",
+                "operationId": "listStudios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de estúdios retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Estúdio Central"
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "Rua das Flores, 123"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/instructors": {
             "get": {
                 "tags": [

@@ -106,4 +106,39 @@ class AulasControllerAdapter extends BaseController
         return response()->json($result, $status);
     }
 
+
+    #[OA\Get(
+        path: "/api/aulas/studios",
+        operationId: "listStudios",
+        tags: ["Aulas"],
+        summary: "Listar todos os estúdios com informações básicas"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Lista de estúdios retornada com sucesso",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(
+                    property: "data",
+                    type: "array",
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 1),
+                            new OA\Property(property: "name", type: "string", example: "Estúdio Central"),
+                            new OA\Property(property: "address", type: "string", example: "Rua das Flores, 123")
+                        ]
+                    )
+                )
+            ]
+        )
+    )]
+    public function listStudios(): JsonResponse
+    {
+        $result = $this->aulasService->listStudios();
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
+    }
+
 }

@@ -30,4 +30,21 @@ class AulasService implements AulasServiceContract
             ];
         }
     }
+
+    public function listStudios(): array
+    {
+        try {
+            $studios = $this->aulasRepository->getStudios();
+
+            return [
+                'status' => 'success',
+                'data' => $studios
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Failed to list studios'
+            ];
+        }
+    }
 }

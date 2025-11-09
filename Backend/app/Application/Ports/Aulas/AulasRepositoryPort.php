@@ -6,4 +6,5 @@ interface AulasRepositoryPort
 {
     // Define service contract methods here
     public function getAulasTypes(): array;
+    public function getStudios(): array;
 }

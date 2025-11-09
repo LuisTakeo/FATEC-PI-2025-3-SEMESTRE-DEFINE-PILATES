@@ -6,4 +6,5 @@ interface AulasServiceContract
 {
     // Define service contract methods here
     public function listAulasTypes(): array;
+    public function listStudios(): array;
 }
