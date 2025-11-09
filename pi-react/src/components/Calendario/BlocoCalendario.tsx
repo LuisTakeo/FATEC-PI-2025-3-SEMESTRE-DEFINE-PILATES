@@ -5,7 +5,7 @@ import FiltrosCalendario from "./FiltrosCalendario"
 
 interface BlocoCalendarioProps {
   aulas: Aula[]; 
-  cargo: "adm" | "recep" | "aluno" | "instru"| null;
+  cargo?: "adm" | "recep" | "aluno" | "instru" | null;
 }
 
 export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) {

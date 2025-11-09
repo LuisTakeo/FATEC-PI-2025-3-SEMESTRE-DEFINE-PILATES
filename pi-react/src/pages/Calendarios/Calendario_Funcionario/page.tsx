@@ -7,7 +7,7 @@ import API_BASE_URL from "../../../config/api"
 
 export default function Calendario_Funcionario() {
   
-  const [cargo, setCargo] = useState<"adm" | "recep" | "aluno" | "instru" | null>(null);
+  const [cargo, setCargo] = useState<"adm" | "recep" | "instru" | null>(null);
 
   useEffect(() => {
     setCargo("adm");
@@ -41,14 +41,19 @@ export default function Calendario_Funcionario() {
           <p className="text-[2rem] font-semibold">Consulte abaixo aulas passadas e futuras</p>
         </header>
 
-        <section className={`${cargo !== "adm" ? "hidden" : ""} w-full lg:max-w-[70%] h-full px-[15%] py-10 flex flex-col gap-5`}>
-            <div className="w-full text-[1.8rem] lg:text-[1.5rem]">
-              <h1>Cadastre futuras aulas</h1>
-            </div>
-            <div className="w-full">
-              <Botao texto="Cadastrar Aula" link="/cadastro/aula" type="button"/>
-            </div>
+        <section className="w-full flex flex-col py-10 gap-10">
+          <div className={`${cargo !== "adm" ? "hidden" : ""} 
+            w-full lg:max-w-[70%] h-full px-[15%] flex flex-col gap-5`}>
+              <div className="w-full text-[1.8rem] lg:text-[1.5rem]">
+                <h1>Cadastre futuras aulas</h1>
+              </div>
+              <div className="w-full">
+                <Botao texto="Cadastrar Aula" link="/cadastro/aula" type="button"/>
+              </div>
+          </div>
         </section>
+        
+
       </section>
       
       <BlocoCalendario aulas={aulas} cargo={cargo}/>
