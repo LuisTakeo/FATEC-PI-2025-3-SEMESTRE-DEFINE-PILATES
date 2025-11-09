@@ -121,6 +121,69 @@
                 }
             }
         },
+        "/api/aulas/types": {
+            "get": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Listar todos os tipos de aulas com informações básicas",
+                "operationId": "listAulasTypes",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tipos de aulas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "example": "Ioga"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar aulas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to list aulas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/instructors": {
             "get": {
                 "tags": [
@@ -972,6 +1035,10 @@
         {
             "name": "AdminReceptionist",
             "description": "Admin and Receptionist management operations"
+        },
+        {
+            "name": "Aulas",
+            "description": "Aulas management operations"
         },
         {
             "name": "Students",
