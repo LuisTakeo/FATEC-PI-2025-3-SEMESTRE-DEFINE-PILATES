@@ -8,18 +8,31 @@ interface BlocoCalendarioProps {
   cargo?: "adm" | "recep" | "aluno" | "instru" | null;
 }
 
+function getBrazilToday() {
+  try {
+    const parts = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date());
+    const year = Number(parts.find(p => p.type === 'year')?.value ?? new Date().getFullYear());
+    const month = Number(parts.find(p => p.type === 'month')?.value ?? (new Date().getMonth() + 1));
+    const day = Number(parts.find(p => p.type === 'day')?.value ?? new Date().getDate());
+    return new Date(year, month - 1, day);
+  } catch (e) {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+}
+
 export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) {
-  const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
+  const [dataInicio, setDataInicio] = useState<Date | null>(getBrazilToday());
 
   const parseAulaDate = (dateStr: string) => {
     if (!dateStr) return null;
     if (dateStr.includes('/')) {
-      const [d, m, y] = dateStr.split('/');
-      return new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`);
+      const [d, m, y] = dateStr.split('/').map(x => Number(x));
+      return new Date(y, (m || 1) - 1, d || 1);
     }
     if (dateStr.includes('-')) {
-      const [y, m, d] = dateStr.split('-');
-      return new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`);
+      const [y, m, d] = dateStr.split('-').map(x => Number(x));
+      return new Date(y || new Date().getFullYear(), (m || 1) - 1, d || 1);
     }
     return new Date(dateStr);
   };

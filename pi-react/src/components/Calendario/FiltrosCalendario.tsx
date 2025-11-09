@@ -14,7 +14,17 @@ export default function FiltrosCalendario({
   const mesesDoAno: string[] = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   
   const limparFiltros = () => {
-    setDataInicio(new Date());
+    // resetar para data atual no fuso de São Paulo
+    try {
+      const parts = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date());
+      const year = Number(parts.find(p => p.type === 'year')?.value ?? new Date().getFullYear());
+      const month = Number(parts.find(p => p.type === 'month')?.value ?? (new Date().getMonth() + 1));
+      const day = Number(parts.find(p => p.type === 'day')?.value ?? new Date().getDate());
+      setDataInicio(new Date(year, month - 1, day));
+    } catch (e) {
+      const d = new Date();
+      setDataInicio(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
+    }
   }
 
 
@@ -32,11 +42,19 @@ export default function FiltrosCalendario({
         <div className="flex flex-col w-full gap-5 lg:flex-row">
           <div className="flex flex-col w-full gap-5">
             <h1>Filtrar por Data</h1>
-            <Input 
+            <Input
               id="data"
-              type="date" 
-              value={dataInicio ? dataInicio.toISOString().split('T')[0] : ''}
-              onChange={e => setDataInicio(e.target.value ? new Date(e.target.value) : null)} 
+              type="date"
+              value={dataInicio ? `${dataInicio.getFullYear()}-${String(dataInicio.getMonth()+1).padStart(2,'0')}-${String(dataInicio.getDate()).padStart(2,'0')}` : ''}
+              onChange={e => {
+                const v = e.target.value; // 'YYYY-MM-DD'
+                if (!v) {
+                  setDataInicio(null);
+                  return;
+                }
+                const [y, m, d] = v.split('-').map(Number);
+                setDataInicio(new Date(y, (m || 1) - 1, d || 1));
+              }}
             />
           </div>
 
