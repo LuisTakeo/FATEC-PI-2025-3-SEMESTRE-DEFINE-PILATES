@@ -7,7 +7,11 @@ import API_BASE_URL from "../../../config/api"
 
 export default function Calendario_Funcionario() {
   
-  const cargo =  "adm";
+  const [cargo, setCargo] = useState<"adm" | "recep" | "aluno" | "instru" | null>(null);
+
+  useEffect(() => {
+    setCargo("adm");
+  }, []);
 
   const [aulas, setAulas] = useState<Aula[]>([]);
 
@@ -26,7 +30,7 @@ export default function Calendario_Funcionario() {
   // }, []);
 
   //MOCKADO
-  useEffect(() => { const aulasMock: Aula[] = [ { id: 1, unidade: "Unidade 1", instrutor: "Carlos Silva", alunos: ["Maria"], data: "21/10/2025", horario: { inicio: "08:00", fim: "09:00" } }, { id: 2, unidade: "Unidade 2", instrutor: "Maria Souza", alunos: ["Joao", "Maria","Pedro"], data: "22/10/2025", horario: { inicio: "10:00", fim: "11:00" } }, { id: 3, unidade: "Unidade 3", instrutor: "João Santos",alunos: ["Joao", "Maria"], data: "23/10/2025", horario: { inicio: "14:00", fim: "15:30" } }, { id: 4, unidade: "Unidade 1", instrutor: "Ana Oliveira",alunos: ["Joao", "Maria", "Julia"], data: "24/10/2025", horario: { inicio: "09:00", fim: "10:30" } }, { id: 5, unidade: "Unidade 3", instrutor: "Pedro Costa",alunos: ["Joao", "Maria", "Bruno"], data: "25/10/2025", horario: { inicio: "16:00", fim: "17:00" } }, { id: 6, unidade: "Unidade 2", instrutor: "Maria Souza",alunos: ["Joao", "Maria"], data: "26/10/2025", horario: { inicio: "11:00", fim: "12:30" } }, { id: 7, unidade: "Unidade 3", instrutor: "Carlos Silva",alunos: ["Joao", "Maria", "Samara"], data: "27/10/2025", horario: { inicio: "13:00", fim: "14:30" } }, { id: 8, unidade: "Unidade 3", instrutor: "Fernanda Lima",alunos: ["Joao", "Maria", "Maraisa"], data: "28/10/2025", horario: { inicio: "15:00", fim: "16:30" } } ]; setAulas(aulasMock); }, []);
+  useEffect(() => { const aulasMock: Aula[] = [ { id: 1, unidade: "unidade 1", instrutor: "Carlos Silva", alunos: ["Maria"], data: "21/10/2025", horario: { inicio: "08:00", fim: "09:00" } }, { id: 2, unidade: "unidade 2", instrutor: "Maria Souza", alunos: ["Joao", "Maria","Pedro"], data: "22/10/2025", horario: { inicio: "10:00", fim: "11:00" } }, { id: 3, unidade: "unidade 3", instrutor: "João Santos",alunos: ["Joao", "Maria"], data: "23/10/2025", horario: { inicio: "14:00", fim: "15:30" } }, { id: 4, unidade: "unidade 1", instrutor: "Ana Oliveira",alunos: ["Joao", "Maria", "Julia"], data: "24/10/2025", horario: { inicio: "09:00", fim: "10:30" } }, { id: 5, unidade: "unidade 3", instrutor: "Pedro Costa",alunos: ["Joao", "Maria", "Bruno"], data: "25/10/2025", horario: { inicio: "16:00", fim: "17:00" } }, { id: 6, unidade: "unidade 2", instrutor: "Maria Souza",alunos: ["Joao", "Maria"], data: "26/10/2025", horario: { inicio: "11:00", fim: "12:30" } }, { id: 7, unidade: "unidade 3", instrutor: "Carlos Silva",alunos: ["Joao", "Maria", "Samara"], data: "27/10/2025", horario: { inicio: "13:00", fim: "14:30" } }, { id: 8, unidade: "unidade 3", instrutor: "Fernanda Lima",alunos: ["Joao", "Maria", "Maraisa"], data: "28/10/2025", horario: { inicio: "15:00", fim: "16:30" } } ]; setAulas(aulasMock); }, []);
 
 
   return (

@@ -5,7 +5,7 @@ import FiltrosCalendario from "./FiltrosCalendario"
 
 interface BlocoCalendarioProps {
   aulas: Aula[]; 
-  cargo: string;
+  cargo: "adm" | "recep" | "aluno" | "instru"| null;
 }
 
 export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) {
@@ -51,21 +51,10 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
   });
 
   const Componente: React.FC = () => {
-    if (cargo === "instru") {
-      return (
-        aulasFiltradas.map((aula) => (
-          <div key={aula.id}>
-            <p>{aula.data} | {aula.horario.inicio}</p>
-            {/* nome dos alunos */}
-          </div>
-        ))
-      );
-    } else if (cargo === "adm" || cargo === "recep") {
-      return (
+   return (
         <>
           {aulasFiltradas
             .sort((a, b) => {
-              // Ordenar por data e horário
               const [dayA, monthA, yearA] = a.data.split("/");
               const [dayB, monthB, yearB] = b.data.split("/");
               const dateA = new Date(`${yearA}-${monthA}-${dayA}T${a.horario.inicio}`);
@@ -80,11 +69,21 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
                 border-l-[10px] border-l-[var(--destaque)]
                 md:flex-row md:min-h-[130px] 
                 ">
-                <div className="w-full flex flex-col gap-2
-                  md:gap-3">
-                  <p>{aula.unidade}</p>
-                  <p>Instrutor: {aula.instrutor}</p>
-                  <p>Quantidade de Alunos: {aula.alunos.length}</p>
+                <div className="w-full flex flex-col gap-2 md:gap-3">
+
+                  <p>{aula.unidade === "unidade 1" ? "Unidade: São Miguel Paulista" 
+                  : aula.unidade === "unidade 2" ? "Unidade: Itaquera" 
+                  : aula.unidade === "unidade 3" ? "Unidade: Vila Jacuí" : ""
+                  }</p>
+
+                  {cargo !== "instru" && (
+                    <p>Instrutor: {aula.instrutor}</p>
+                  )}
+
+                  {cargo !== "aluno" && (
+                    <p>Quantidade de Alunos: {aula.alunos.length}</p>
+                  )}
+
                   <p>{aula.data} | {aula.horario.inicio} - {aula.horario.fim}</p>
                 </div>
                 <div className="w-full md:w-[40%]">
@@ -95,16 +94,6 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
           }
         </> 
       );
-    } else if (cargo === "student") {
-      // ALUNO
-      return <></>;
-    } else {
-      return (
-        <div>
-          <h1>Problemas em detectar qual é o usuário, volte mais tarde.</h1>
-        </div>
-      );
-    }
   };
 
   return (
