@@ -8,6 +8,7 @@ import API_BASE_URL from "../../../config/api"
 export default function Calendario_Aluno() {
   
   const [aulas, setAulas] = useState<Aula[]>([]);
+  //temporario
   const [aulaPendente, setAulaPendente] = useState("8")
 
   // useEffect(() => {
