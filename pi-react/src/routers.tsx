@@ -15,7 +15,7 @@ import AlterarSenha from "./pages/RecuperarSenha/AlterarSenha_3";
 import RecebimentoCodigo from "./pages/RecuperarSenha/RecebimentoCodigo_2";
 import RecuperacaoTelefone from "./pages/RecuperarSenha/RecuperacaoTelefone_1";
 import Cadastro_Adm_Recep from "./pages/Cadastros/Perfil/Cadastro_RecepAdm";
-import Calendario_Funcionari from "./pages/Calendarios/Calendario_Funcionario/page"
+import Calendario_Funcionario from "./pages/Calendarios/Calendario_Funcionario/page"
 import Cadastro_Aula from "./pages/Cadastros/Aula/page"
 import HomeAlunoPage from "./pages/Aluno/page";
 
@@ -43,7 +43,7 @@ function MainRoutes() {
             <Route path="/admin/Home" element={<CadastroInicialPage />} />
 
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
-            <Route path="/calendario/funcionario" element={<Calendario_Funcionari/>}/>
+            <Route path="/calendario/funcionario" element={<Calendario_Funcionario/>}/>
 
             <Route path="/user/Login" element={<LoginPage />} />
             <Route path="/login/aluno" element={<Login/>}/>

@@ -14,14 +14,14 @@ interface Item {
 
 
 
-const KEY_IS_LOGGED = "isEmployeeLoggedIn";
-const KEY_USER_ROLE = "userRole";
+// const KEY_IS_LOGGED = "isEmployeeLoggedIn";
+// const KEY_USER_ROLE = "userRole";
 
 export default function HomeFuncionario(){
     const rotas = (): Item[] => {
 
-        const isLogado = localStorage.getItem(KEY_IS_LOGGED) === "true";
-        const userRole = localStorage.getItem(KEY_USER_ROLE);
+        // const isLogado = localStorage.getItem(KEY_IS_LOGGED) === "true";
+        // const userRole = localStorage.getItem(KEY_USER_ROLE);
 
         if (!isLogado || !userRole) return [];
 

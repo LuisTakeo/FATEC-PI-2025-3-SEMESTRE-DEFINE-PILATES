@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 20;
 
-const KEY_IS_LOGGED = "isEmployeeLoggedIn";
-const KEY_USER_ROLE = "userRole";
+// const KEY_IS_LOGGED = "isEmployeeLoggedIn";
+// const KEY_USER_ROLE = "userRole";
 
 export default function LoginFuncionario() {
   const navigate = useNavigate();

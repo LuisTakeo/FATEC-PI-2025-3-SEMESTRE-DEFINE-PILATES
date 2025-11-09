@@ -1,111 +1,63 @@
-import { useState } from "react";
 import Input from "./../Input/Input"
-import Botao from "./../Botao/Botao" // Importe o componente Botao
+import Botao from "./../Botao/Botao"
 
-export default function FiltrosCalendario(){
-  const mesesDoAno = [
-    "Janeiro",
-    "Fevereiro", 
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro"
-  ];
+interface FiltrosCalendarioProps {
+  dataInicio: Date | null;
+  setDataInicio: (date: Date | null) => void;
+  horaInicio: number | null;
+  setHoraInicio: (time: number | null) => void;
+}
 
-    const dataAtual = new Date()
+export default function FiltrosCalendario({
+  dataInicio, setDataInicio,
+  horaInicio, setHoraInicio
+}: FiltrosCalendarioProps){
 
-    const [dataInicio, setDataInicio] = useState(dataAtual)
-    const [dataFim, setDataFim] = useState(dataAtual)
-    const [allowDataFim, setAllowDataFim] = useState(false)
+  const mesesDoAno: string[] = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  
+  const limparFiltros = () => {
+    setDataInicio(new Date());
+    setHoraInicio(null);
 
-    const [horaInicio, setHoraInicio] = useState(dataAtual.getTime())
-    const [horaFim, setHoraFim] = useState(dataAtual.getTime())
+  }
+
 
   return (
-    <>
     <section>
       <div className="flex flex-row gap-2 ">
-        <h1 className="text-[2.2rem] text-[var(--destaque)] font-semibold
-        md:text-[2.5rem]">
-        {dataInicio.getDate()} de {mesesDoAno[dataInicio.getMonth()]} de {dataInicio.getFullYear()}
-        </h1>
-        {allowDataFim && (
-           <h1
-            className="text-[1.7rem] text-[var(--destaque)] font-semibold
-            md:text-[2rem]"
-           >- {dataFim.getDate() + 1} de {mesesDoAno[dataFim.getMonth()]} de {dataFim.getFullYear()}</h1> 
+        {dataInicio && (
+          <h1>Todas as aulas de {dataInicio.getDate()} de {mesesDoAno[(dataInicio.getMonth())]} de {dataInicio.getFullYear()}</h1>
         )}
       </div>
 
-      <div className="flex flex-col w-full h-auto text-[2rem] py-10 gap-10 items-center justify-between 
-            md:flex-row md:text-[1.5rem] 
-            ">
-            <div className="w-full">
-                <h1 className="text-[2rem] font-semibold">Filtros</h1>
-            </div>
+      <div className="flex flex-col  w-full h-auto text-[2rem] py-10 gap-10 items-center justify-between 
+      md:text-[1.5rem] lg:flex-row md:items-start">
+        <div className="flex flex-col w-full gap-5 lg:flex-row">
+          <div className="flex flex-col w-full gap-5">
+            <h1>Filtrar por Data</h1>
+            <Input 
+              id="data"
+              type="date" 
+              label="Data início" 
+              value={dataInicio ? dataInicio.toISOString().split('T')[0] : ''}
+              onChange={e => setDataInicio(e.target.value ? new Date(e.target.value) : null)} 
+            />
+          </div>
 
-            <div className="flex flex-col w-full gap-5 lg:flex-row">
-                <div className="flex flex-col w-full gap-5">
-                    <div>
-                        <h1>Filtrar por Data</h1>
-                    </div>
-                    <div className="flex flex-col gap-5 
-                    md:flex-row">
-                        <Input
-                            label="Data inicio" 
-                            type="date"
-                            onChange={(e) => {
-                                if (e.target.value === ""){
-                                    setDataInicio(new Date())
-                                }else{
-                                    setDataInicio(new Date(e.target.value))
-                                }
-                            }}
-                        />
-                        <Input
-                            label="Data fim" 
-                            type="date"
-                            onChange={(e) => {
-                                if (e.target.value === ""){
-                                    setAllowDataFim(false)
-                                }else{
-                                    setDataFim(new Date(e.target.value))
-                                    setAllowDataFim(true)
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
+          <div className="flex flex-col w-full gap-5">
+            <h1>Filtrar por Horário</h1>
+            <Input 
+              id="hora"
+              type="time" 
+              label="Hora início" 
+              value={horaInicio ? new Date(horaInicio).toTimeString().slice(0,5) : ''}
+              onChange={e => setHoraInicio(e.target.value ? new Date(`1970-01-01T${e.target.value}`).getTime() : null)} 
+            />
+          </div>
+        </div>
 
-                <div className="flex flex-col w-full gap-5 ">
-                    <div>
-                        <h1>Filtrar por Horário</h1>
-                    </div>
-                    <div className="flex flex-col gap-5 
-                    md:flex-row">
-                        <Input
-                            label="Hora inicio" 
-                            type="time"
-                            onChange={(e) => {setHoraInicio(new Date(e.target.value).getTime())}}
-                        />
-                        <Input
-                            label="Hora fim" 
-                            type="time"
-                            onChange={(e) => {setHoraFim(new Date(e.target.value).getTime())}}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <Botao texto="Limpar" onClick={() => {}}/>         
+        <Botao texto="Limpar" onClick={limparFiltros}/>
       </div>
     </section>
-    </>
   )
 }
