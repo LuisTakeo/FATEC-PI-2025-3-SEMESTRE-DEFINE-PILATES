@@ -14,7 +14,7 @@ export default function FiltrosCalendario({
   const mesesDoAno: string[] = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   
   const limparFiltros = () => {
-    setDataInicio(null);
+    setDataInicio(new Date());
   }
 
 

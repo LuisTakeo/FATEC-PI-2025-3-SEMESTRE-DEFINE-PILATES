@@ -9,7 +9,7 @@ interface BlocoCalendarioProps {
 }
 
 export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) {
-  const [dataInicio, setDataInicio] = useState<Date | null>(null);
+  const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
 
   const parseAulaDate = (dateStr: string) => {
     if (!dateStr) return null;
@@ -24,17 +24,17 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
     return new Date(dateStr);
   };
 
+  function isSameDate(a: Date, b: Date) {
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  }
+
   const aulasFiltradas = aulas.filter(aula => {
     const aulaDateObj = parseAulaDate(aula.data);
     if (!aulaDateObj) return false;
 
     const aulaDateOnly = new Date(aulaDateObj.getFullYear(), aulaDateObj.getMonth(), aulaDateObj.getDate());
 
-    if (!dataInicio) {
-      const hoje = new Date();
-      const hojeOnly = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-      return aulaDateOnly.getTime() === hojeOnly.getTime();
-    }
+    if (!dataInicio) return false;
 
     const dataInicioOnly = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
     return aulaDateOnly.getTime() >= dataInicioOnly.getTime();
@@ -83,7 +83,7 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
       {aulasFiltradas.length === 0 ? (
         <div className="text-center py-10">
           <p className="text-xl">
-            {!dataInicio 
+            {(!dataInicio || isSameDate(dataInicio, new Date()))
               ? "Não há aulas agendadas para hoje." 
               : "Nenhuma aula encontrada com o filtro de data."
             }
