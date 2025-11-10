@@ -32,7 +32,7 @@ export default function Mapa(){
                     <div>
                         <h1 className='text-[1.5rem] md:text-[1.3rem] font-bold'>Horário de serviço das nossas unidades:</h1>
                         <h1 className='text-[1.5rem] md:text-[1.3rem]'>Segunda a sexta: 14h até 21h</h1>
-                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Domingo: fechado</h1>
+                        <h1 className='text-[1.5rem] md:text-[1.3rem]'>Sábado e Domingo: fechado</h1>
                     </div>
                 </div>
             )

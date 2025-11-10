@@ -17,6 +17,9 @@ function Header() {
     "/login/instrutor",
     "/admin/home",
     "/login/funcionario",
+    "/aluno/home",
+    "/cadastro/adm-recep",
+    "/home/funcionario",
 ];
   const shouldHideButton = hidePaths.includes(currentPath);
 
