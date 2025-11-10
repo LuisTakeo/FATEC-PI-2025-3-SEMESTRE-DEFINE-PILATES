@@ -156,7 +156,7 @@ function PaginaInicio(){
             >
                 {/* Div de Conteúdo (ABSOLUTO e ALINHADO À ESQUERDA) */}
                 <div 
-                    className="absolute z-10 top-1/2 left-4 transform -translate-y-1/2 flex flex-col items-start justify-center 
+                    className="absolute z-10 top-1/2 left-4 transform -translate-y-1/5 flex flex-col items-start justify-center 
                                 md:left-6 md:right-auto" 
                 >
                     {/* Linha 1 do texto */}
