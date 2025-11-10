@@ -43,7 +43,7 @@ function PaginaInicio(){
                     <div className="flex flex-col text-center w-full mb-20">
                     <h1 className={`${Estilizacoes.titulo_principal} text-[3rem] lg:text-[2.6rem]`}>Conheça nossos planos</h1>
                     </div>
-                    <div className="-m-4 w-full lg:grid-cols-2 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] max-[1000px]:grid-cols-2 max-[900px]:grid-cols-2 max-[800px]:grid-cols-1">
+                    <div className="-m-4 w-full lg:grid-cols-2 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] max-[1000px]:grid-cols-2 max-[900px]:grid-cols-2 max-[500px]:grid-cols-1">
                         <div className="p-4">
                             <div className="flex rounded-lg h-full bg-white  shadow-2xl p-8 flex-col">
                             <div className="flex items-center mb-3">
@@ -114,6 +114,9 @@ function PaginaInicio(){
                                     <li>Aula 3x por semana — 1 parcela de <span className="font-bold">R$390,00</span></li>
                                 </ul>
                             </div>
+                            <div>
+                                <Botao texto="Saiba mais" type="button" link="/"/> 
+                            </div>
                             </div>
                         </div>
                         <div className="p-4">
@@ -132,6 +135,9 @@ function PaginaInicio(){
                                     <li>Aula 3x por semana — 6 parcela de <span className="font-bold">R$360,00</span></li>
                                 </ul>
                             </div>
+                            <div>
+                                <Botao texto="Saiba mais" type="button" link="/"/> 
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -140,7 +146,7 @@ function PaginaInicio(){
 
     {/* SEÇÃO 3: Agende sua aula experimental (MOBILE MAIOR) */}
         <section 
-            className="relative flex justify-center items-center py-[5%] w-full h-[800px]"
+            className="relative flex justify-center items-center py-[2%] w-full h-[620px]"
         >
             {/* Div de Background e Conteúdo (Container Relativo) */}
             <div 
