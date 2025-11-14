@@ -14,8 +14,8 @@ export default function Cadastro_Aula(){
 
     const [instrutorOptions, setInstrutorOptions] = useState<{value: string, label: string}[]>([]);
     const [data, setData] = useState("")
-    const [unidade, setUnidade] = useState<Unidade | null>(null)
-    const [instrutor, setInstrutor] = useState<string | null>("")
+    const [unidade, setUnidade] = useState<Unidade | any>()
+    const [instrutor, setInstrutor] = useState("")
 
     useEffect(() => {
         if (!unidade) return;

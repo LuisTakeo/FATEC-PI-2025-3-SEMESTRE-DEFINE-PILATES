@@ -1,10 +1,10 @@
 
 
 export interface Aula {
-  id: number;
+  id?: number;
   unidade: string;
   instrutor: string;
-  alunos: string[];
+  alunos?: string[];
   data: string | number | Date | any
-  horario: { inicio: string; fim: string };
+  horario: { inicio: string; fim?: string };
 }

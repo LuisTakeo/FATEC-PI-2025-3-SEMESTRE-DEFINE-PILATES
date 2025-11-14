@@ -3,10 +3,12 @@ import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import type { Unidade } from "../../../types/InstrutorUnidade";
 import { API_BASE_URL } from "../../../config/api"
+import type { Aula } from "../../../types/Aula";
+import { Cadastrar_aula } from "./../../../services/aula/cadastrar_aula"
 
 export default function AulasDisponiveis({unidade, instrutor, data}:{
-    unidade: Unidade | null;
-    instrutor: string | null;
+    unidade: Unidade | any;
+    instrutor: string;
     data: string;
 }){
 
@@ -69,10 +71,33 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
         fetchAula();
     }, [unidade, instrutor, data]);
 
+    // const horaFim = () => { 
+    //     const horaFim = new Date(horarioSelecionado)
+    //     const horaAdd: number = 1
+    //     horaFim.getHours(horaFim.getHours() + horaAdd)
+    // }
+
     async function handleAula(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        
+        const aula: Aula = {
+            unidade: unidade.valor,
+            instrutor: instrutor,
+            data: data,
+            horario: ({inicio: horarioSelecionado})
+        }
+        console.log(aula)
+
+        const isCadastrado = await Cadastrar_aula(aula);
+        if (isCadastrado)
+        {
+            alert("Aula cadastrada com sucesso!");
+            // navigate("/login/aluno");
+        }
+        else
+            alert("Erro ao cadastrar aula. Por favor, tente novamente.");
+
+        return aula
 
     }
 

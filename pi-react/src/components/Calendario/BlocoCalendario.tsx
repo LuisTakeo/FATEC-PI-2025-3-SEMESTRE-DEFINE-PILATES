@@ -75,7 +75,7 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
                 ? "Unidade: Vila Jacuí"
                 : ""}</p>
               {cargo !== "instru" && <p>Instrutor: {aula.instrutor}</p>}
-              {cargo !== "aluno" && <p>Quantidade de Alunos: {aula.alunos.length}</p>}
+              {cargo !== "aluno" && <p>Quantidade de Alunos: {aula.alunos?.length}</p>}
               <p>{aula.data}</p>
             </div>
             <div className="w-full md:w-[40%]">
