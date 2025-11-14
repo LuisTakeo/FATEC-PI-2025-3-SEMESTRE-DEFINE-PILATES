@@ -46,12 +46,13 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
 
                 const lista = await response.json();
                 
-                const horariosDisponiveis = horarios.filter(h =>
+                const horariosDisponiveis = horarios
+                .filter(h =>
                     !lista.some((aula: any) =>
-                        aula.horario === h &&
                         aula.unidade === unidade.valor &&
-                        aula.instrutor === instrutor &&
-                        aula.data === data
+                        aula.Instructors.nome === instrutor &&
+                        aula.data === data &&
+                        aula.horario === h
                     )
                 );
 
