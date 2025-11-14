@@ -3,15 +3,47 @@ import Botao from "./../../../components/Botao/Botao"
 import Input from "./../../../components/Input/Input"
 import Estilizacoes from "../../../uteis/Estilizacoes";
 import { useState } from "react";
-import PesquisarInstrutor from "./PesquisarInstrutor";
+import AulasDisponiveis from "./AulasDisponiveis";
+import { API_BASE_URL } from "../../../config/api"
+import type { Instrutor, Unidade } from "../../../types/InstrutorUnidade"
+import { useEffect } from "react";
 
 export default function Cadastro_Aula(){
 
   const navigate = useNavigate();
 
-  const [unidade, setUnidade] = useState("")
-  const [hora, setHora] = useState("")
-  const [data, setData] = useState("")
+    const [instrutorOptions, setInstrutorOptions] = useState<{value: string, label: string}[]>([]);
+    const [data, setData] = useState("")
+    const [unidade, setUnidade] = useState<Unidade | null>(null)
+    const [instrutor, setInstrutor] = useState<string | null>("")
+
+    useEffect(() => {
+        if (!unidade) return;
+
+        const fetchInstrutores = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/class`);
+                if (!response.ok) throw new Error("Erro ao buscar aulas");
+
+                const lista = await response.json();
+
+                const filtrados = lista
+                    .filter((i: any) => i.unidade === unidade.valor)
+                    .map((i: any) => ({
+                        value: i.Instructors.nome,
+                        label: i.Instructors.nome
+                    }));
+
+                setInstrutorOptions(filtrados);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchInstrutores();
+    }, [unidade]);
+
+
  
     return(
         <main className="w-full h-full flex flex-col px-[15%]">
@@ -23,77 +55,74 @@ export default function Cadastro_Aula(){
                     <Botao texto="Voltar a página anterior" type="button" onClick={() => navigate(-1)}/>
                 </div>
             </header>
-            <form action="">
+            <form>
                 <section className="w-full h-full flex flex-col justify-center items-start gap-8 py-8">
-
-                     <div>
+                    <div className="flex flec-col lg:flex-row gap-10">
+                        
                         <div>
-                            <h1 className={Estilizacoes.titulo_segundario}>Unidade</h1>
-                        </div>
-                        <Input
-                        id=""
-                        name=""
-                        as="select"
-                        options={[
-                            {value:"unidade 1", label:"São Miguel Paulista"},
-                            {value:"unidade 2", label:"Itaquera"},
-                            {value:"unidade 3", label:"Vila Jacuí"} 
-                        ]}
-                        onChange={(e) => {setUnidade(e.target.value); console.log(e.target.value)}}
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-4">
-                        <div>
-                            <h1 className={Estilizacoes.titulo_segundario}>Data e Hora de Incio</h1>
-                        </div>
-                        <div className="flex flex-col gap-10
-                        md:flex-row">
                             <div>
-                                <Input
-                                label="Data da Aula"
+                                <h1 className={Estilizacoes.titulo_segundario}>Unidade</h1>
+                            </div>
+                            <Input
+                            id="unidade-input"
+                            name="unidade-input"
+                            as="select"
+                            placeholder=""
+                            options={[
+                                {value:"unidade 1", label:"São Miguel Paulista"},
+                                {value:"unidade 2", label:"Itaquera"},
+                                {value:"unidade 3", label:"Vila Jacuí"} 
+                            ]}
+                            onChange={(e) => {
+                                const target = e.target
+                                const valor = target.value
+                                const select = target as HTMLSelectElement;
+                                const label = select.options[select.selectedIndex]?.text ?? ""
+                                setUnidade({valor: valor, nome: label})
+                            }}
+                            />
+                        </div>
+
+                        <div>
+                            <div>
+                                <h1 className={Estilizacoes.titulo_segundario}>Instrutores</h1>
+                            </div>
+                            <Input
+                                id="instrutor-input"
+                                name="instrutor-input"
+                                as="select"
+                                options={instrutorOptions}
+                                onChange={(e) => setInstrutor(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <div>
+                                <h1 className={Estilizacoes.titulo_segundario}>Data</h1>
+                            </div>
+                            <Input
+                                id="data-input"
+                                name="data-input"
                                 type="date"
-                                onChange={(e) => {setData(e.target.value); console.log(e.target.value)}}
-                                />
-                            </div>
-                            <div>
-                                
-                                <Input
-                                    label="Hora de Início"
-                                    type="select"
-                                    as="select"
-                                    options={[
-                                        { value: "07:00", label: "07:00" },
-                                        { value: "08:00", label: "08:00" },
-                                        { value: "09:00", label: "09:00" },
-                                        { value: "10:00", label: "10:00" },
-                                        { value: "11:00", label: "11:00" },
-                                        { value: "12:00", label: "12:00" },
-                                        { value: "13:00", label: "13:00" },
-                                        { value: "14:00", label: "14:00" },
-                                        { value: "15:00", label: "15:00" },
-                                        { value: "16:00", label: "16:00" },
-                                        { value: "17:00", label: "17:00" },
-                                        { value: "18:00", label: "18:00" },
-                                        { value: "19:00", label: "19:00" },
-                                        { value: "20:00", label: "20:00" },
-                                        { value: "21:00", label: "21:00" },
-                                    ]}
-                                    onChange={(e) => {setHora(e.target.value); console.log(e.target.value)}}
-                                />
-                            </div>
+                                onChange={(e) => {
+                                    const data = new Date(e.target.value)
+                                    const dia = data.getDate()
+                                    const mes = data.getMonth()
+                                    const ano = data.getFullYear()
+                                    setData(`${dia}-${mes}-${ano}`)
+                                }}
+                            />
                         </div>
+
                     </div>
 
-                    <PesquisarInstrutor
-                        unidadeAula={unidade}
-                        dataAula={data}
-                        horaAula={hora}
+                    <AulasDisponiveis
+                        unidade={unidade}
+                        instrutor={instrutor}
+                        data={data}
                     />
 
                 </section>
-
-                <Botao texto="Cadastrar Aula"/>
 
             </form>
         </main>
