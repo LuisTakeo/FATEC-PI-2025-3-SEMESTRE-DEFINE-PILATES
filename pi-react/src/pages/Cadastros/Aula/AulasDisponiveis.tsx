@@ -15,6 +15,7 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
     const [listAllow, setListAllow] = useState(false)
     const [horariosAula, setHorariosAula] = useState<string[]>([]);
     const [mensagemErro, setMensagemErro] = useState("")
+    const [horarioSelecionado, setHorarioSelecionado] = useState("")
 
 
     const tratarErroBackend = (err: any) => {
@@ -70,6 +71,9 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
 
     async function handleAula(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+
+        
+
     }
 
 
@@ -88,17 +92,20 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
                 {listAllow && (
                     <>
                         <div>
-                            <h1>{instrutor} - {data}</h1>
+                            <h1 className={Estilizacoes.titulo_principal}>{instrutor} - {data.replace("-", "/").replace("-", "/")}</h1>
                         </div>
 
-                        <div className="w-full flex flex-col gap-10">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
                             {horariosAula.map((i) => (
                                 <div 
                                 key={i}
                                 id="bloco-instrtor"
-                                className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
-                                flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 
-                                md:flex-row md:min-h-[130px] ">
+                                className={`shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
+                                            flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 
+                                            md:flex-row md:min-h-[130px] 
+                                            ${horarioSelecionado === i ? "bg-red-500" : "bg-white"}`}
+                                onClick={() => setHorarioSelecionado(i)}
+                                >
                                     <div className="w-[50%]">
                                         <h1 className="text-[1.5rem]">
                                             Horário:{i}
