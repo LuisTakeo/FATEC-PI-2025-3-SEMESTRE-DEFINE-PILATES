@@ -18,6 +18,7 @@ Route::get('/up', function() {
 
 Route::get('/aulas/types', [AulasControllerAdapter::class, 'listAulasTypes']);
 Route::get('/aulas/studios', [AulasControllerAdapter::class, 'listStudios']);
+Route::post('/aulas/cadastro', [AulasControllerAdapter::class, 'registerAula']);
 
 require __DIR__.'/api/students.php';
 require __DIR__.'/api/instructors.php';

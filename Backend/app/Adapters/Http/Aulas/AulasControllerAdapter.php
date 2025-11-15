@@ -141,4 +141,29 @@ class AulasControllerAdapter extends BaseController
         return response()->json($result, $status);
     }
 
+
+    #[OA\Post(
+        path: "/api/aulas/cadastro",
+        operationId: "registerAula",
+        tags: ["Aulas"],
+        summary: "Cadastrar nova aula"
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/AulaRegisterRequest")
+    )]
+    #[OA\Response(
+        response: 201,
+        description: "Aula cadastrada com sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/AulaSuccessResponse")
+    )]
+    #[OA\Response(response: 422, description: "Erro de validação")]
+    #[OA\Response(response: 500, description: "Erro interno")]
+    public function registerAula(AulaRegisterRequest $request): JsonResponse
+    {
+        $result = $this->aulasService->registerAula($request->toDTO());
+        $status = $result['status'] === 'success' ? 201 : 422;
+        return response()->json($result, $status);
+    }
+
 }

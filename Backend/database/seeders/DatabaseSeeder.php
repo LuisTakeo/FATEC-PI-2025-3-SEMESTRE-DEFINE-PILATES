@@ -14,7 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            PilatesSeeder::class,
+            StudioSeeder::class,
+            TypeClassesSeeder::class,
+            
         ]);
     }
 }

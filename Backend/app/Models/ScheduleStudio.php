@@ -17,6 +17,7 @@ class ScheduleStudio extends Model
     protected $fillable = [
         'Id_type_classes',
         'Id_instructors',
+        'Id_studios',
         'observation',
         'scheduledate',
         'scheduletime',
@@ -30,6 +31,11 @@ class ScheduleStudio extends Model
     public function instructor(): BelongsTo
     {
         return $this->belongsTo(Instructor::class, 'Id_instructors');
+    }
+
+    public function studio(): BelongsTo
+    {
+        return $this->belongsTo(Studio::class, 'Id_studios', 'Id_studios');
     }
 
     public function studentSchedules(): HasMany

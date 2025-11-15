@@ -26,7 +26,10 @@ class TypeClassesSeeder extends Seeder
         ];
 
         foreach ($typeClasses as $typeClass) {
-            TypeClass::create($typeClass);
+            TypeClass::updateOrCreate(
+                ['typeclass' => $typeClass['typeclass']], // Condição de busca
+                $typeClass // Dados para criar/atualizar
+            );
         }
     }
 }
