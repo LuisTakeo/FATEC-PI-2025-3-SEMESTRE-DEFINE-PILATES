@@ -88,5 +88,31 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
             return ['status'=> false,'message'=> $e->getMessage()];
         }
     }
+
+    public function getAllInstructors(): array
+    {
+        try {
+            $instructors = Instructor::with('user')
+                ->select('Id_instructors', 'Id_users')
+                ->get();
+
+            if ($instructors->isEmpty()) {
+                return [];
+            }
+
+            return $instructors->map(function ($instructor) {
+                return [
+                    'id' => $instructor->Id_instructors,
+                    'nome' => $instructor->user->fullname
+                ];
+            })->toArray();
+
+        } catch (Exception $e) {
+            Log::error('Failed to get instructors', [
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
     
 }

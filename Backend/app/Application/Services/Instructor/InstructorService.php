@@ -143,4 +143,23 @@ class InstructorService implements InstructorServiceContract
             ]
         ];
     }
+
+    public function listInstructors(): array
+    {
+        try {
+            $instructors = $this->sqlAdapter->getAllInstructors();
+
+            return [
+                'status' => 'success',
+                'message' => 'Instrutores encontrados com sucesso',
+                'data' => $instructors
+            ];
+        } catch (Exception $e) {
+            Log::error('Error listing instructors: ' . $e->getMessage());
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao listar instrutores'
+            ];
+        }
+    }
 } 
