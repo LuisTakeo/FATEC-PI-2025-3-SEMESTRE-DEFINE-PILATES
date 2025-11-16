@@ -2,6 +2,7 @@
 
 namespace App\Application\Services\Aulas;
 
+use App\Application\DTOs\AulaDTO;
 use App\Application\Ports\Aulas\AulasRepositoryPort;
 use App\Application\Ports\Aulas\AulasServiceContract;
 
@@ -44,6 +45,25 @@ class AulasService implements AulasServiceContract
             return [
                 'status' => 'error',
                 'message' => 'Failed to list studios'
+            ];
+        }
+    }
+
+    public function registerAula(AulaDTO $aulaDTO): array
+    {
+        try {
+            
+
+            $this->aulasRepository->saveAula($aulaDTO);
+            return [
+                'status' => 'success',
+                'message' => 'Aula registered successfully',
+                'data' => $aulaDTO->toArray()
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
             ];
         }
     }

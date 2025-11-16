@@ -162,6 +162,7 @@ class AulasControllerAdapter extends BaseController
     public function registerAula(AulaRegisterRequest $request): JsonResponse
     {
         $result = $this->aulasService->registerAula($request->toDTO());
+        // return response()->json(["message" => "WIP: Cadastro de aula"]);
         $status = $result['status'] === 'success' ? 201 : 422;
         return response()->json($result, $status);
     }

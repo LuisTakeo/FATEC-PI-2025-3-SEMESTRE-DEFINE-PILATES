@@ -1,5 +1,4 @@
 <?php
-// Backend/app/Swagger/Schemas/InstructorSuccessResponse.php
 
 namespace App\Swagger\Schemas;
 
