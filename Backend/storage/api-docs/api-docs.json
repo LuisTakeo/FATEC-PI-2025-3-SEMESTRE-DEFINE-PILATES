@@ -786,20 +786,11 @@
                                 },
                                 "horario": {
                                     "type": "string",
-                                    "example": "10:30:00"
+                                    "example": "10:30"
                                 },
-                                "tipo_aula": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "tipo": {
-                                            "type": "string",
-                                            "example": "Pilates"
-                                        }
-                                    },
-                                    "type": "object"
+                                "tipo": {
+                                    "type": "string",
+                                    "example": "Pilates"
                                 },
                                 "unidade": {
                                     "properties": {
@@ -810,10 +801,6 @@
                                         "name": {
                                             "type": "string",
                                             "example": "Unidade São Miguel"
-                                        },
-                                        "location": {
-                                            "type": "string",
-                                            "example": "Rua Example, 123"
                                         }
                                     },
                                     "type": "object"
@@ -833,7 +820,7 @@
                                 },
                                 "data": {
                                     "type": "string",
-                                    "example": "2025-11-16"
+                                    "example": "15-08-2024"
                                 }
                             },
                             "type": "object"

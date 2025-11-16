@@ -24,22 +24,15 @@ class AulaListResponse
             type: "object",
             properties: [
                 new OA\Property(property: "id", type: "integer", example: 1),
-                new OA\Property(property: "horario", type: "string", example: "10:30:00"),
-                new OA\Property(
-                    property: "tipo_aula",
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "tipo", type: "string", example: "Pilates")
-                    ]
-                ),
+                new OA\Property(property: "horario", type: "string", example: "10:30"),
+                
+                new OA\Property(property: "tipo", type: "string", example: "Pilates"),
                 new OA\Property(
                     property: "unidade",
                     type: "object",
                     properties: [
                         new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "name", type: "string", example: "Unidade São Miguel"),
-                        new OA\Property(property: "location", type: "string", example: "Rua Example, 123")
+                        new OA\Property(property: "name", type: "string", example: "Unidade São Miguel")
                     ]
                 ),
                 new OA\Property(
@@ -50,7 +43,7 @@ class AulaListResponse
                         new OA\Property(property: "nome", type: "string", example: "João Silva")
                     ]
                 ),
-                new OA\Property(property: "data", type: "string", example: "2025-11-16")
+                new OA\Property(property: "data", type: "string", example: "15-08-2024")
             ]
         )
     )]
