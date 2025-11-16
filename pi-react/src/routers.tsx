@@ -16,8 +16,6 @@ import Cadastro_Adm_Recep from "./pages/Cadastros/Perfil/Cadastro_RecepAdm";
 import Calendario_Funcionario from "./pages/Calendarios/Calendario_Funcionario/page";
 import Cadastro_Aula from "./pages/Cadastros/Aula/page";
 import HomeAlunoPage from "./pages/Aluno/page";
-
-// ✅ Importação da Página de Pesquisa (AdminUsuariosPage)
 import AdminUsuariosPage from "./pages/Admin/paginapesquisa/index.tsx"; 
 
 function MainRoutes() {
@@ -67,7 +65,7 @@ function MainRoutes() {
             {/* ----------------------------------------------------------------- */}
             <Route path="/admin/Home" element={<CadastroInicialPage />} />
             
-            {/* 🎯 ROTA PRINCIPAL: PESQUISA DE USUÁRIOS (ADM) */}
+            {/*  ROTA PRINCIPAL: PESQUISA DE USUÁRIOS (ADM) */}
             <Route 
                 path="/admin/usuarios" 
                 element={<AdminUsuariosPage />} 
