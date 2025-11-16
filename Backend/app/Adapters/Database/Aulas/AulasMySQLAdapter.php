@@ -226,6 +226,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                 'unidade' => [
                     'id' => $item->studio->Id_studios,
                     'name' => $item->studio->studioname,
+                    'endereco' => $item->studio->address
                 ],
                 'instructor' => [
                     'id' => $item->instructor->Id_instructors,
