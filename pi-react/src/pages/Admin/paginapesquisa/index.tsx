@@ -100,18 +100,18 @@ function PesquisaGeralContent() {
             
             <div className="w-full"> 
                 
-                <h1 className={`text-3xl font-bold ${COR_DESTAQUE_ADMIN} mb-2`}>
+                <h1 className={`text-4xl font-bold ${COR_DESTAQUE_ADMIN} mb-8`}>
                     Pesquisa geral
                 </h1>
                 
-                <p className="text-gray-900 mb-8">
-                    Pesquise por colaborador ou por aula, apenas um por vez
-                </p>
+{/*                 <p className="text-gray-900 mb-6">
+                    Pesquise por usuário, apenas um por vez
+                </p> */}
 
                 <form onSubmit={handlePesquisar} className="space-y-4">
 
-                <h2 className={`text-xl font-semibold ${COR_DESTAQUE_ADMIN} mb-2`}> 
-                    Pesquisar por Colaborador
+                <h2 className={`text-xl font-semibold ${COR_DESTAQUE_ADMIN} mb-8`}> 
+                    Pesquisar por Usuário
                 </h2>
 
                 <div>
