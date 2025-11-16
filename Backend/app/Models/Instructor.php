@@ -29,6 +29,11 @@ class Instructor extends Model
         return $this->belongsTo(Collaborator::class, 'Id_collaborators');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(UserTgi::class, 'Id_users', 'id_users');
+    }
+
     public function studios(): HasMany
     {
         return $this->hasMany(Studio::class, 'Id_instructors');

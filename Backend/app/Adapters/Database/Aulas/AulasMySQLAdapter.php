@@ -7,6 +7,8 @@ use App\Application\Ports\Aulas\AulasRepositoryPort;
 use App\Models\Studio;
 use App\Models\TypeClass;
 use App\Models\ScheduleStudio;
+use Date;
+use DateTime;
 use DB;
 use Exception;
 use Log;
@@ -98,4 +100,97 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         return true;
     }
     
+
+    // public function getAulasByDay(int $id_studio, string $data): array
+    // {
+    //     $aulas = ScheduleStudio::where('Id_studios', $id_studio)
+    //         ->where('scheduledate', $data)
+    //         ->get();
+    //     if (!$aulas) {
+    //         return [];
+    //     }
+    //     /*
+    //     Quero que me traga um array com as seguintes informações:
+            
+    //         id: 2
+    //         horario: "09:00",
+    //         unidade: "unidade 1",
+    //         instructor: {
+    //                 id: 1,
+    //                 nome:"João"
+    //         },
+    //         data: "10-11-2025"
+            
+    //     */
+    //     $aulas = collect($aulas);
+    //     $aulas = $aulas->map(function ($item) {
+    //         return [
+    //             'id' => $item->Id_schedule_studios,
+    //             'horario' => $item->scheduletime,
+    //             'unidade' => [
+    //                 'id' => $item->studio->Id_studios,
+    //                 'name' => $item->studio->studioname
+    //             ],
+    //             'instructor' => [
+    //                 'id' => $item->instructor->Id_instructors,
+    //                 'nome' => $item->instructor->collaborator->namecollaborator
+    //             ],
+    //             'data' => $item->scheduledate,
+    //         ];
+    //     });
+    //     return $aulas->toArray();
+    // }
+
+    public function getAulasByDay(?string $data = null, ?int $id_studio = null, ?int $id_instrutor = null): array
+    {
+        $query = ScheduleStudio::query()
+            ->with(['studio', 'instructor.user', 'typeClass']);
+
+        // Aplica filtro de data se fornecido
+        if ($data) {
+            $query->where('scheduledate', $data);
+        }
+
+        // Aplica filtro de estúdio se fornecido
+        if ($id_studio) {
+            $query->where('Id_studios', $id_studio);
+        }
+
+        // Aplica filtro de instrutor se fornecido
+        if ($id_instrutor) {
+            $query->where('Id_instructors', $id_instrutor);
+        }
+
+        // Ordena por data e horário
+        $query->orderBy('scheduledate', 'asc')
+              ->orderBy('scheduletime', 'asc');
+
+        $aulas = $query->get();
+
+        if ($aulas->isEmpty()) {
+            return [];
+        }
+
+        // Mapeia para o formato desejado
+        $aulas = $aulas->map(function ($item) {
+            $date = DateTime::createFromFormat('Y-m-d', $item->scheduledate);
+            $horario = DateTime::createFromFormat('H:i:s', $item->scheduletime);
+            return [
+                'id' => $item->Id_schedule_studios,
+                'horario' => $horario->format('H:i'),
+                'tipo' => $item->typeClass->typeclass,
+                'unidade' => [
+                    'id' => $item->studio->Id_studios,
+                    'name' => $item->studio->studioname,
+                ],
+                'instructor' => [
+                    'id' => $item->instructor->Id_instructors,
+                    'nome' => $item->instructor->user->fullname
+                ],
+                'data' => $date->format('d-m-Y'),
+            ];
+        });
+
+        return $aulas->toArray();
+    }
 }
