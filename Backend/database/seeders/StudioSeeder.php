@@ -17,15 +17,15 @@ class StudioSeeder extends Seeder
 
         $studios = [
             [
-                'studioname' => 'Unidade São Miguel',
+                'studioname' => 'São Miguel',
                 'address' => 'Rua José Aldo, 165 - São Miguel Paulista',
             ],
             [
-                'studioname' => 'Unidade Itaquera',
+                'studioname' => 'Itaquera',
                 'address' => 'Estrada Itaquera Guaianazes, 45 - Parada XV de Novembro',
             ],
             [
-                'studioname' => 'Unidade Vila Jacuí',
+                'studioname' => 'Vila Jacuí',
                 'address' => 'Rua Santana de Pirapama, 91 - Vila Jacuí',
             ],
         ];
