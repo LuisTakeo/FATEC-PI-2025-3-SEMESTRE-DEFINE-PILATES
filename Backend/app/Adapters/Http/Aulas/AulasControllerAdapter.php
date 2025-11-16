@@ -18,25 +18,60 @@ class AulasControllerAdapter extends BaseController
         private AulasServiceContract $aulasService
     ) {}
 
-    // #[OA\Get(
-    //     path: "/api/aulas",
-    //     operationId: "getAulas",
-    //     tags: ["Aulas"],
-    //     summary: "Test endpoint"
-    // )]
-    // #[OA\Response(
-    //     response: 200,
-    //     description: "Success response",
-    //     content: new OA\JsonContent(
-    //         properties: [
-    //             new OA\Property(property: "message", type: "string", example: "It works INDEX EEEEEEEEE")
-    //         ]
-    //     )
-    // )]
-    // public function index(Request $request)
-    // {
-    //     return $this->studentService->getStudents();
-    // }
+    #[OA\Get(
+        path: "/api/aulas",
+        operationId: "listAulas",
+        tags: ["Aulas"],
+        summary: "Listar aulas com filtros opcionais",
+        description: "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor"
+    )]
+    #[OA\Parameter(
+        name: "data",
+        in: "query",
+        description: "Data da aula no formato DD-MM-YYYY (opcional)",
+        required: false,
+        schema: new OA\Schema(type: "string", example: "16-11-2025")
+    )]
+    #[OA\Parameter(
+        name: "id_studio",
+        in: "query",
+        description: "ID do estúdio/unidade (opcional)",
+        required: false,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\Parameter(
+        name: "id_instrutor",
+        in: "query",
+        description: "ID do instrutor (opcional)",
+        required: false,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Lista de aulas retornada com sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/AulaListResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar aulas",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Failed to list aulas")
+            ]
+        )
+    )]
+    public function index(Request $request): JsonResponse
+    {
+        $data = $request->query('data');
+        $id_studio = $request->query('id_studio');
+        $id_instrutor = $request->query('id_instrutor');
+        
+        $result = $this->aulasService->listAulasByDay($data, $id_studio, $id_instrutor);
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
+    }
 
     // #[OA\Post(
     //     path: "/api/students/save",
@@ -72,29 +107,15 @@ class AulasControllerAdapter extends BaseController
     #[OA\Response(
         response: 200,
         description: "Lista de tipos de aulas retornada com sucesso",
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: "status", type: "string", example: "success"),
-                new OA\Property(
-                    property: "data",
-                    type: "array",
-                    items: new OA\Items(
-                        properties: [
-                            new OA\Property(property: "id", type: "integer", example: 1),
-                            new OA\Property(property: "type", type: "string", example: "Ioga")
-                        ]
-                    )
-                )
-            ]
-        )
+        content: new OA\JsonContent(ref: "#/components/schemas/AulaTypesResponse")
     )]
     #[OA\Response(
         response: 500,
-        description: "Erro ao buscar aulas",
+        description: "Erro ao buscar tipos de aulas",
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(property: "status", type: "string", example: "error"),
-                new OA\Property(property: "message", type: "string", example: "Failed to list aulas")
+                new OA\Property(property: "message", type: "string", example: "Failed to list aulas types")
             ]
         )
     )]
@@ -116,20 +137,15 @@ class AulasControllerAdapter extends BaseController
     #[OA\Response(
         response: 200,
         description: "Lista de estúdios retornada com sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/StudiosResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar estúdios",
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: "status", type: "string", example: "success"),
-                new OA\Property(
-                    property: "data",
-                    type: "array",
-                    items: new OA\Items(
-                        properties: [
-                            new OA\Property(property: "id", type: "integer", example: 1),
-                            new OA\Property(property: "name", type: "string", example: "Estúdio Central"),
-                            new OA\Property(property: "address", type: "string", example: "Rua das Flores, 123")
-                        ]
-                    )
-                )
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Failed to list studios")
             ]
         )
     )]

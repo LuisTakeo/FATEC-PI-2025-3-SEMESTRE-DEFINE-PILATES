@@ -121,42 +121,53 @@
                 }
             }
         },
-        "/api/aulas/types": {
+        "/api/aulas": {
             "get": {
                 "tags": [
                     "Aulas"
                 ],
-                "summary": "Listar todos os tipos de aulas com informações básicas",
-                "operationId": "listAulasTypes",
+                "summary": "Listar aulas com filtros opcionais",
+                "description": "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor",
+                "operationId": "listAulas",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "query",
+                        "description": "Data da aula no formato DD-MM-YYYY (opcional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "16-11-2025"
+                        }
+                    },
+                    {
+                        "name": "id_studio",
+                        "in": "query",
+                        "description": "ID do estúdio/unidade (opcional)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "id_instrutor",
+                        "in": "query",
+                        "description": "ID do instrutor (opcional)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Lista de tipos de aulas retornada com sucesso",
+                        "description": "Lista de aulas retornada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "type": {
-                                                        "type": "string",
-                                                        "example": "Ioga"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/AulaListResponse"
                                 }
                             }
                         }
@@ -184,6 +195,47 @@
                 }
             }
         },
+        "/api/aulas/types": {
+            "get": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Listar todos os tipos de aulas com informações básicas",
+                "operationId": "listAulasTypes",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tipos de aulas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AulaTypesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar tipos de aulas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to list aulas types"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/aulas/studios": {
             "get": {
                 "tags": [
@@ -197,30 +249,24 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "$ref": "#/components/schemas/StudiosResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar estúdios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "success"
+                                            "example": "error"
                                         },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Estúdio Central"
-                                                    },
-                                                    "address": {
-                                                        "type": "string",
-                                                        "example": "Rua das Flores, 123"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to list studios"
                                         }
                                     },
                                     "type": "object"
@@ -697,6 +743,92 @@
                 },
                 "type": "object"
             },
+            "AulaListRequest": {
+                "title": "Aula List Request",
+                "description": "Parâmetros opcionais para filtrar a listagem de aulas",
+                "properties": {
+                    "data": {
+                        "description": "Data da aula no formato DD-MM-YYYY (opcional)",
+                        "type": "string",
+                        "example": "16-11-2025"
+                    },
+                    "id_studio": {
+                        "description": "ID do estúdio/unidade (opcional)",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "id_instrutor": {
+                        "description": "ID do instrutor (opcional)",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "AulaListResponse": {
+                "title": "Aula List Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Aulas encontradas com sucesso"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "horario": {
+                                    "type": "string",
+                                    "example": "10:30"
+                                },
+                                "tipo": {
+                                    "type": "string",
+                                    "example": "Pilates"
+                                },
+                                "unidade": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Unidade São Miguel"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "instructor": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "João Silva"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "example": "15-08-2024"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "AulaRegisterRequest": {
                 "title": "Aula Register Request",
                 "description": "Request body for aula registration",
@@ -769,6 +901,36 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "AulaTypesResponse": {
+                "title": "Aula Types Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Tipos de aulas encontrados com sucesso"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "example": "Pilates"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -1177,6 +1339,40 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "StudiosResponse": {
+                "title": "Studios Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Estúdios encontrados com sucesso"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Unidade São Miguel"
+                                },
+                                "location": {
+                                    "type": "string",
+                                    "example": "Rua Example, 123 - São Paulo/SP"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
