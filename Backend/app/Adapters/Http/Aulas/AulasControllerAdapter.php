@@ -183,4 +183,179 @@ class AulasControllerAdapter extends BaseController
         return response()->json($result, $status);
     }
 
+
+    #[OA\Get(
+        path: "/api/students/{id_student}/aulas",
+        operationId: "listAulasAluno",
+        tags: ["Students"],
+        summary: "Listar aulas de um aluno específico",
+        description: "Lista todas as aulas que um aluno está matriculado"
+    )]
+    #[OA\Parameter(
+        name: "id_student",
+        in: "path",
+        description: "ID do aluno",
+        required: true,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Lista de aulas do aluno retornada com sucesso",
+        content: new OA\JsonContent(ref: "#/components/schemas/AulaListResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar aulas do aluno",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Falha ao listar aulas do aluno")
+            ]
+        )
+    )]
+    public function listAulasAluno(int $id_student): JsonResponse
+    {
+        $result = $this->aulasService->listAulasByStudent($id_student);
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
+    }
+
+    #[OA\Post(
+        path: "/api/students/aulas/{id_aula}/enroll",
+        operationId: "enrollStudentInAula",
+        tags: ["Students"],
+        summary: "Cadastrar aluno em uma aula",
+        description: "Inscreve um aluno em uma aula específica. Limite máximo: 3 alunos por aula."
+    )]
+    #[OA\Parameter(
+        name: "id_aula",
+        in: "path",
+        description: "ID da aula",
+        required: true,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["id_student"],
+            properties: [
+                new OA\Property(property: "id_student", type: "integer", example: 1, description: "ID do aluno")
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: "Aluno cadastrado na aula com sucesso",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "message", type: "string", example: "Aluno cadastrado na aula com sucesso"),
+                new OA\Property(
+                    property: "data",
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id_student", type: "integer", example: 1),
+                        new OA\Property(property: "id_aula", type: "integer", example: 1)
+                    ]
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Erro de validação ou regra de negócio",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(
+                    property: "message", 
+                    type: "string", 
+                    example: "Aula já está com a capacidade máxima de alunos (3 alunos)",
+                    description: "Possíveis erros: 'Aluno já está cadastrado nesta aula', 'Aula já está com a capacidade máxima de alunos (3 alunos)', 'Aula não encontrada'"
+                )
+            ]
+        )
+    )]
+    #[OA\Response(response: 500, description: "Erro interno")]
+    public function enrollStudentInAula(int $id_aula, StudentAulaRegisterRequest $request): JsonResponse
+    {
+        $result = $this->aulasService->enrollStudentInAula($request->validated()['id_student'], $id_aula);
+        $status = $result['status'] === 'success' ? 201 : 422;
+        
+        return response()->json($result, $status);
+    }
+
+    #[OA\Get(
+        path: "/api/students/{id_student}/aulas/available",
+        operationId: "listAvailableAulasForStudent",
+        tags: ["Students"],
+        summary: "Listar aulas disponíveis para um aluno",
+        description: "Lista aulas futuras (a partir de amanhã) onde o aluno ainda não está cadastrado e que possuem vagas disponíveis"
+    )]
+    #[OA\Parameter(
+        name: "id_student",
+        in: "path",
+        description: "ID do aluno",
+        required: true,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Lista de aulas disponíveis retornada com sucesso",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "message", type: "string", example: "Aulas disponíveis encontradas com sucesso"),
+                new OA\Property(
+                    property: "data",
+                    type: "array",
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 5),
+                            new OA\Property(property: "horario", type: "string", example: "10:30"),
+                            new OA\Property(property: "tipo", type: "string", example: "Pilates"),
+                            new OA\Property(
+                                property: "unidade",
+                                type: "object",
+                                properties: [
+                                    new OA\Property(property: "id", type: "integer", example: 1),
+                                    new OA\Property(property: "name", type: "string", example: "Unidade São Miguel"),
+                                    new OA\Property(property: "location", type: "string", example: "Rua Example, 123")
+                                ]
+                            ),
+                            new OA\Property(
+                                property: "instructor",
+                                type: "object",
+                                properties: [
+                                    new OA\Property(property: "id", type: "integer", example: 2),
+                                    new OA\Property(property: "nome", type: "string", example: "João Silva")
+                                ]
+                            ),
+                            new OA\Property(property: "data", type: "string", example: "17-11-2025"),
+                            new OA\Property(property: "inscritos", type: "integer", example: 2, description: "Quantidade de alunos já inscritos"),
+                            new OA\Property(property: "vagas_disponiveis", type: "integer", example: 1, description: "Quantidade de vagas disponíveis")
+                        ]
+                    )
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar aulas disponíveis",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Falha ao listar aulas disponíveis")
+            ]
+        )
+    )]
+    public function listAvailableAulasForStudent(int $id_student): JsonResponse
+    {
+        $result = $this->aulasService->listAvailableAulasForStudent($id_student);
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
+    }
 }

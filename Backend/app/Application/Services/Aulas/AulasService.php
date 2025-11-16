@@ -98,4 +98,68 @@ class AulasService implements AulasServiceContract
             ];
         }
     }
+
+    public function listAulasByStudent(int $id_student): array
+    {
+        try {
+            $aulas = $this->aulasRepository->getAulasByStudent($id_student);
+
+            return [
+                'status' => 'success',
+                'message' => 'Aulas do aluno encontradas com sucesso',
+                'data' => $aulas
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao listar aulas do aluno'
+            ];
+        }
+    }
+
+    public function enrollStudentInAula(int $id_student, int $id_aula): array
+    {
+        try {
+            $enrolled = $this->aulasRepository->enrollStudentInAula($id_student, $id_aula);
+
+            if ($enrolled) {
+                return [
+                    'status' => 'success',
+                    'message' => 'Aluno cadastrado na aula com sucesso',
+                    'data' => [
+                        'id_student' => $id_student,
+                        'id_aula' => $id_aula
+                    ]
+                ];
+            }
+
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao cadastrar aluno na aula'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function listAvailableAulasForStudent(int $id_student): array
+    {
+        try {
+            $aulas = $this->aulasRepository->getAvailableAulasForStudent($id_student);
+
+            return [
+                'status' => 'success',
+                'message' => 'Aulas disponíveis encontradas com sucesso',
+                'data' => $aulas
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao listar aulas disponíveis'
+            ];
+        }
+    }
 }

@@ -13,10 +13,12 @@ class StudentSchedule extends Model
     protected $table = 'student_schedules';
     protected $primaryKey = null;
     public $incrementing = false;
+    public $timestamps = false; // Desabilita created_at e updated_at
 
     protected $fillable = [
         'Id_schedule_studios',
         'Id_students',
+        'status',
     ];
 
     public function scheduleStudio(): BelongsTo

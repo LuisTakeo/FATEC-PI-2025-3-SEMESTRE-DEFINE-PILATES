@@ -13,4 +13,10 @@ interface AulasRepositoryPort
     public function saveAula(AulaDTO $aulaDTO): bool;
 
     public function getAulasByDay(?string $data = null, ?int $id_studio = null, ?int $id_instrutor = null): array;
+    
+    public function getAulasByStudent(int $id_student): array;
+    
+    public function enrollStudentInAula(int $id_student, int $id_aula): bool;
+    
+    public function getAvailableAulasForStudent(int $id_student): array;
 }
