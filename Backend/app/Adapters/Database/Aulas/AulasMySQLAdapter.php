@@ -215,8 +215,8 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
         // Mapeia para o formato desejado
         $aulas = $aulas->map(function ($item) {
-            $date = \DateTime::createFromFormat('Y-m-d', $item->scheduledate);
-            $horario = \DateTime::createFromFormat('H:i:s', $item->scheduletime);
+            $date = DateTime::createFromFormat('Y-m-d', $item->scheduledate);
+            $horario = DateTime::createFromFormat('H:i:s', $item->scheduletime);
 
             return [
                 'id' => $item->Id_schedule_studios,
@@ -225,6 +225,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                 'unidade' => [
                     'id' => $item->studio->Id_studios,
                     'name' => $item->studio->studioname,
+                    'endereco' => $item->studio->address
                 ],
                 'instructor' => [
                     'id' => $item->instructor->Id_instructors,

@@ -32,7 +32,8 @@ class AulaListResponse
                     type: "object",
                     properties: [
                         new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "name", type: "string", example: "Unidade São Miguel")
+                        new OA\Property(property: "name", type: "string", example: "São Miguel"),
+                        new OA\Property(property: "endereco", type: "string", example: "Rua Exemplo, 123 - São Miguel Paulista, SP")
                     ]
                 ),
                 new OA\Property(

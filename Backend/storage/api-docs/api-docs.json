@@ -602,18 +602,59 @@
                 "tags": [
                     "Instructors"
                 ],
-                "summary": "Test endpoint",
-                "operationId": "getInstructors",
+                "summary": "Listar todos os instrutores",
+                "description": "Lista todos os instrutores com ID e nome",
+                "operationId": "listInstructors",
                 "responses": {
                     "200": {
-                        "description": "Success response",
+                        "description": "Lista de instrutores retornada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "test"
+                                            "example": "Instrutores encontrados com sucesso"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nome": {
+                                                        "type": "string",
+                                                        "example": "João Silva"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar instrutores",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Falha ao listar instrutores"
                                         }
                                     },
                                     "type": "object"
@@ -1083,7 +1124,11 @@
                                         },
                                         "name": {
                                             "type": "string",
-                                            "example": "Unidade São Miguel"
+                                            "example": "São Miguel"
+                                        },
+                                        "endereco": {
+                                            "type": "string",
+                                            "example": "Rua Exemplo, 123 - São Miguel Paulista, SP"
                                         }
                                     },
                                     "type": "object"
@@ -1492,6 +1537,36 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "InstructorsListResponse": {
+                "title": "Instructors List Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Instrutores encontrados com sucesso"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "nome": {
+                                    "type": "string",
+                                    "example": "João Silva"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

@@ -29,21 +29,47 @@ class InstructorControllerAdapter extends BaseController {
     
     #[OA\Get(
         path: "/api/instructors",
-        operationId: "getInstructors",
+        operationId: "listInstructors",
         tags: ["Instructors"],
-        summary: "Test endpoint"
+        summary: "Listar todos os instrutores",
+        description: "Lista todos os instrutores com ID e nome"
     )]
     #[OA\Response(
         response: 200,
-        description: "Success response",
+        description: "Lista de instrutores retornada com sucesso",
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: "message", type: "string", example: "test")
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "message", type: "string", example: "Instrutores encontrados com sucesso"),
+                new OA\Property(
+                    property: "data",
+                    type: "array",
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 1),
+                            new OA\Property(property: "nome", type: "string", example: "João Silva")
+                        ]
+                    )
+                )
             ]
         )
-    )]    
-    public function index(Request $request){
-        return response()->json(["message" => "test"]);
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar instrutores",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Falha ao listar instrutores")
+            ]
+        )
+    )]
+    public function index(Request $request): JsonResponse
+    {
+        $result = $this->instructorService->listInstructors();
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
     }
 
     #[OA\Post(
