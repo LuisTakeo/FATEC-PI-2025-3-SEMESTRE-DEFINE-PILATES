@@ -121,6 +121,153 @@
                 }
             }
         },
+        "/api/aulas/types": {
+            "get": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Listar todos os tipos de aulas com informações básicas",
+                "operationId": "listAulasTypes",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tipos de aulas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "example": "Ioga"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar aulas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to list aulas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/aulas/studios": {
+            "get": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Listar todos os estúdios com informações básicas",
+                "operationId": "listStudios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de estúdios retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Estúdio Central"
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "Rua das Flores, 123"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/aulas/cadastro": {
+            "post": {
+                "tags": [
+                    "Aulas"
+                ],
+                "summary": "Cadastrar nova aula",
+                "operationId": "registerAula",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AulaRegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Aula cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AulaSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
         "/api/instructors": {
             "get": {
                 "tags": [
@@ -550,6 +697,82 @@
                 },
                 "type": "object"
             },
+            "AulaRegisterRequest": {
+                "title": "Aula Register Request",
+                "description": "Request body for aula registration",
+                "required": [
+                    "id_tipo_aula",
+                    "id_instrutor",
+                    "id_studio",
+                    "data",
+                    "horario"
+                ],
+                "properties": {
+                    "id_tipo_aula": {
+                        "description": "ID do tipo de aula",
+                        "type": "number",
+                        "example": 1
+                    },
+                    "id_instrutor": {
+                        "description": "ID do instrutor",
+                        "type": "number",
+                        "example": 1
+                    },
+                    "id_studio": {
+                        "description": "ID do studio",
+                        "type": "number",
+                        "example": 1
+                    },
+                    "data": {
+                        "description": "Data da aula (formato: DD-MM-YYYY)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "15-01-1990"
+                    },
+                    "horario": {
+                        "description": "Horário da aula (formato: HH:MM)",
+                        "type": "string",
+                        "format": "date",
+                        "example": "10:30"
+                    }
+                },
+                "type": "object"
+            },
+            "AulaSuccessResponse": {
+                "title": "Aula Success Response",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Aula cadastrada com sucesso"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "horario": {
+                                "type": "string",
+                                "example": "10:30"
+                            },
+                            "data": {
+                                "type": "string",
+                                "example": "15-01-1990"
+                            },
+                            "instrutor": {
+                                "type": "string",
+                                "example": "John Doe"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "Contato": {
                 "title": "Contact Information",
                 "required": [
@@ -972,6 +1195,10 @@
         {
             "name": "AdminReceptionist",
             "description": "Admin and Receptionist management operations"
+        },
+        {
+            "name": "Aulas",
+            "description": "Aulas management operations"
         },
         {
             "name": "Students",

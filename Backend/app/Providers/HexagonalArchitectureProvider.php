@@ -3,13 +3,17 @@
 namespace App\Providers;
 
 use App\Adapters\Database\AdminReceptionist\AdminReceptionistMySQLAdapter;
+use App\Adapters\Database\Aulas\AulasMySQLAdapter;
 use App\Adapters\Database\StudentMongoDBAdapter;
 use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
 use App\Adapters\Database\StudentMySQLAdapter;
 use App\Application\Ports\AdminReceptionist\AdminReceptionistServiceContract;
+use App\Application\Ports\Aulas\AulasRepositoryPort;
+use App\Application\Ports\Aulas\AulasServiceContract;
 use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
+use App\Application\Services\Aulas\AulasService;
 use App\Application\Services\Student\StudentService;
 use Illuminate\Support\ServiceProvider;
 use App\Application\Ports\ApplicationPort;
@@ -40,7 +44,6 @@ class HexagonalArchitectureProvider extends ServiceProvider
         $this->app->bind(SQLPort::class, MySQLAdapter::class);
         $this->app->bind(StudentRepositoryPort::class, StudentMySQLAdapter::class);
         $this->app->bind(StudentNoSQLPort::class, StudentMongoDBAdapter::class);
-
 
         // Bind NoSQL Port to MongoDB Adapter when mongodb binding is available,
         // otherwise use a Null adapter so the app can run without the package.
@@ -81,6 +84,15 @@ class HexagonalArchitectureProvider extends ServiceProvider
             AdminReceptionistRepositoryPort::class,
             AdminReceptionistMySQLAdapter::class
         );
+
+        $this->app->bind(
+            AulasServiceContract::class, 
+            AulasService::class);
+        $this->app->bind(
+            AulasRepositoryPort::class,
+            AulasMySQLAdapter::class
+        );
+
     }
 
     /**

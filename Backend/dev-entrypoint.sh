@@ -32,5 +32,8 @@ php artisan l5-swagger:generate || echo "[dev] AVISO: Falha ao gerar Swagger"
 echo "[dev] Rotas registradas:"
 php artisan route:list || true
 
+echo "[dev] Executando seeders de desenvolvimento..."
+php artisan db:seed --class=DatabaseSeeder || echo "[dev] AVISO: Falha ao executar seeder"
+
 echo "[dev] Iniciando servidor artisan em 0.0.0.0:8000"
 exec php artisan serve --host=0.0.0.0 --port=8000
