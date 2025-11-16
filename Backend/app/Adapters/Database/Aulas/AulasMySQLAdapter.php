@@ -200,7 +200,8 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         $query = ScheduleStudio::query()
             ->with(['studio', 'instructor.user', 'typeClass', 'studentSchedules'])
             ->whereHas('studentSchedules', function($q) use ($id_student) {
-                $q->where('Id_students', $id_student);
+                $q->where('Id_students', $id_student)
+                  ->where('status', '!=', 'cancelled'); // Apenas inscrições não canceladas
             });
 
         // Ordena por data e horário
@@ -215,8 +216,8 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
         // Mapeia para o formato desejado
         $aulas = $aulas->map(function ($item) {
-            $date = \DateTime::createFromFormat('Y-m-d', $item->scheduledate);
-            $horario = \DateTime::createFromFormat('H:i:s', $item->scheduletime);
+            $date = DateTime::createFromFormat('Y-m-d', $item->scheduledate);
+            $horario = DateTime::createFromFormat('H:i:s', $item->scheduletime);
 
             return [
                 'id' => $item->Id_schedule_studios,
@@ -243,32 +244,41 @@ class AulasMySQLAdapter implements AulasRepositoryPort
             // Verifica se a aula existe
             $aula = ScheduleStudio::find($id_aula);
             if (!$aula) {
-                throw new \Exception('Aula não encontrada');
+                throw new Exception('Aula não encontrada');
             }
 
-            // Verifica se o aluno já está cadastrado nesta aula
-            $exists = StudentSchedule::where('Id_students', $id_student)
+            // Verifica se o aluno já está cadastrado nesta aula com status diferente de 'cancelled'
+            $existingEnrollment = StudentSchedule::where('Id_students', $id_student)
                 ->where('Id_schedule_studios', $id_aula)
-                ->exists();
+                ->first();
 
-            if ($exists) {
-                throw new \Exception('Aluno já está cadastrado nesta aula');
+            if ($existingEnrollment) {
+                // Se existe e não está cancelada, não pode cadastrar novamente
+                if ($existingEnrollment->status !== 'cancelled') {
+                    throw new Exception('Aluno já está cadastrado nesta aula');
+                }
+                // Se existe mas está cancelada, permite reativar (será atualizado abaixo)
             }
 
-            // Verifica a quantidade de alunos já cadastrados nesta aula
+            // Verifica a quantidade de alunos já cadastrados nesta aula (excluindo cancelados)
             $totalStudents = StudentSchedule::where('Id_schedule_studios', $id_aula)
+                ->where('status', '!=', 'cancelled')
                 ->count();
 
             if ($totalStudents >= 3) {
-                throw new \Exception('Aula já está com a capacidade máxima de alunos (3 alunos)');
+                throw new Exception('Aula já está com a capacidade máxima de alunos (3 alunos)');
             }
 
-            // Cadastra o aluno na aula
-            StudentSchedule::create([
-                'Id_students' => $id_student,
-                'Id_schedule_studios' => $id_aula,
-                'status' => 'pending' // Status padrão
-            ]);
+            // Se já existe uma inscrição cancelada, reativa; caso contrário, cria nova
+            if ($existingEnrollment && $existingEnrollment->status === 'cancelled') {
+                $existingEnrollment->update(['status' => 'pending']);
+            } else {
+                StudentSchedule::create([
+                    'Id_students' => $id_student,
+                    'Id_schedule_studios' => $id_aula,
+                    'status' => 'pending' // Status padrão
+                ]);
+            }
 
             Log::info('Aluno cadastrado na aula', [
                 'id_student' => $id_student,
@@ -277,7 +287,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
             ]);
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Erro ao cadastrar aluno na aula', [
                 'id_student' => $id_student,
                 'id_aula' => $id_aula,
@@ -293,11 +303,15 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
         $query = ScheduleStudio::query()
             ->with(['studio', 'instructor.user', 'typeClass'])
-            ->withCount('studentSchedules') // Conta alunos inscritos
+            ->withCount(['studentSchedules' => function($q) {
+                // Conta apenas inscrições não canceladas
+                $q->where('status', '!=', 'cancelled');
+            }]) 
             ->where('scheduledate', '>=', $tomorrow) // Apenas aulas futuras
             ->whereDoesntHave('studentSchedules', function($q) use ($id_student) {
-                // Exclui aulas onde o aluno já está cadastrado
-                $q->where('Id_students', $id_student);
+                // Exclui aulas onde o aluno já está cadastrado com status diferente de cancelled
+                $q->where('Id_students', $id_student)
+                  ->where('status', '!=', 'cancelled');
             })
             ->having('student_schedules_count', '<', 3) // Apenas aulas com vagas
             ->orderBy('scheduledate', 'asc')
