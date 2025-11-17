@@ -5,25 +5,64 @@ import Botao from '../../../components/Botao/Botao';
 const COR_DESTAQUE_ADMIN = 'text-[var(--destaque)]'; 
 
 
-// --- INTERFACES E DADOS MOCK (Mantidos) ---
 interface UserResult {
   id: number;
   tipoUsuario: string; 
-  tipo: string;
-  data: string;
-  horario: string;
-  instrutor: string;
+  nomeCompleto: string; 
+  cpf: string;
+  estudio: string; 
+  telefone: string; 
+  registroProfissional?: string; // Opcional: CREF ou CREFITO para instrutores
 }
 
+// --- 2. DADOS MOCKADOS ---
 const mockResults: UserResult[] = [
-  { id: 1, tipoUsuario: 'instrutores', tipo: 'Pilates clássico', data: '14/10/2025', horario: '08:00 - 10:00', instrutor: 'Alexana Mosqueteiro' },
-  { id: 2, tipoUsuario: 'alunos', tipo: 'Pilates para Idosos', data: '15/10/2025', horario: '08:00 - 10:00', instrutor: 'Marcola Chupetao' },
-  { id: 3, tipoUsuario: 'administradores', tipo: 'Gerenciamento', data: '16/10/2025', horario: '10:00 - 18:00', instrutor: 'Carlos Administrador' },
-  { id: 4, tipoUsuario: 'recepcionistas', tipo: 'Atendimento', data: '13/10/2025', horario: '09:00 - 17:00', instrutor: 'Bruna Recepcionista' },
-  { id: 5, tipoUsuario: 'instrutores', tipo: 'Pilates clássico', data: '15/10/2025', horario: '13:00 - 15:00', instrutor: 'Arthur Neves' },
+  { 
+    id: 1, 
+    tipoUsuario: 'instrutores', 
+    nomeCompleto: 'Alexana Mosqueteiro', 
+    cpf: '123.456.789-01', 
+    estudio: 'Rua Santana de Pirapama, 91 - Vila Jacuí', 
+    telefone: '(11) 98765-4321',
+    registroProfissional: 'CREFITO 123456-F' 
+  },
+  { 
+    id: 2, 
+    tipoUsuario: 'alunos', 
+    nomeCompleto: 'Marcola Chupetao', 
+    cpf: '987.654.321-02', 
+    estudio: 'Estrada Itaquera Guaianazes, 45', 
+    telefone: '(11) 99999-8888' 
+  }, 
+  { 
+    id: 3, 
+    tipoUsuario: 'administradores', 
+    nomeCompleto: 'Carlos Administrador', 
+    cpf: '000.111.222-03', 
+    estudio: 'R. José Aldo Piassi, 165 - São Miguel Paulista', 
+    telefone: '(11) 97777-6666' 
+  }, 
+  { 
+    id: 4, 
+    tipoUsuario: 'recepcionistas', 
+    nomeCompleto: 'Bruna Recepcionista', 
+    cpf: '333.444.555-04', 
+    estudio: 'Rua Santana de Pirapama, 91 - Vila Jacuí', 
+    telefone: '(11) 95555-4444' 
+  }, 
+  { 
+    id: 5, 
+    tipoUsuario: 'instrutores', 
+    nomeCompleto: 'Arthur Neves', 
+    cpf: '666.777.888-05', 
+    estudio: 'Estrada Itaquera Guaianazes, 45', 
+    telefone: '(11) 93333-2222',
+    registroProfissional: 'CREF 654321-G' 
+  },
 ];
 
 const tiposDeUsuario = [
+  { value: '', label: 'Selecione o tipo de usuário' }, 
   { value: 'administradores', label: 'Administradores' },
   { value: 'alunos', label: 'Alunos' },
   { value: 'instrutores', label: 'Instrutores' },
@@ -31,50 +70,51 @@ const tiposDeUsuario = [
   { value: 'todos', label: 'Usuários (Todos)' }, 
 ];
 
+
 const applyFilters = (situacao: string, nomeFiltro: string, results: UserResult[]): UserResult[] => {
     return results.filter(item => {
-      const situacaoMatch = situacao === 'todos' || item.tipoUsuario === situacao; 
+      const situacaoMatch = situacao === 'todos' || situacao === '' || item.tipoUsuario === situacao; 
       const nomeLower = nomeFiltro.toLowerCase();
-      const nomeMatch = nomeFiltro === '' || item.instrutor.toLowerCase().includes(nomeLower);
+      const nomeMatch = nomeFiltro === '' || item.nomeCompleto.toLowerCase().includes(nomeLower);
       return situacaoMatch && nomeMatch;
     });
 };
 
 const applySorting = (results: UserResult[], currentOrder: string): UserResult[] => {
     const sorted = [...results].sort((a, b) => {
-      const dateA = new Date(a.data.split('/').reverse().join('-'));
-      const dateB = new Date(b.data.split('/').reverse().join('-'));
+      const nomeA = a.nomeCompleto.toLowerCase();
+      const nomeB = b.nomeCompleto.toLowerCase();
       
-      return currentOrder === 'crescente' 
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
+      if (nomeA < nomeB) return currentOrder === 'crescente' ? -1 : 1;
+      if (nomeA > nomeB) return currentOrder === 'crescente' ? 1 : -1;
+      return 0;
     });
     return sorted;
 };
 
+
 function PesquisaGeralContent() { 
-  const [situacao, setSituacao] = useState('todos'); 
+  // Estado inicial definido como '' para mostrar o placeholder
+  const [situacao, setSituacao] = useState(''); 
   const [nome, setNome] = useState('');
-  const [ordem, setOrdem] = useState('decrescente');
+  const [ordem, setOrdem] = useState('crescente'); 
+  // Estado inicial da lista como vazio para não mostrar resultados na entrada
   const [filteredResults, setFilteredResults] = useState<UserResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const apiResponse = applyFilters(situacao, nome, mockResults);
-    const timeout = setTimeout(() => {
-        const initialSorted = applySorting(apiResponse, ordem);
-        setFilteredResults(initialSorted);
-        setIsLoading(false);
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, []); 
-
+  
   const handlePesquisar = useCallback((e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (situacao === '') {
+        console.log("Validação: Selecione um tipo de usuário.");
+        return; 
+    }
+
     setIsLoading(true);
     
     const timeout = setTimeout(() => {
+        // Usa os filtros atuais (situacao e nome)
         const results = applyFilters(situacao, nome, mockResults); 
         const sorted = applySorting(results, ordem);
         setFilteredResults(sorted);
@@ -83,12 +123,17 @@ function PesquisaGeralContent() {
     return () => clearTimeout(timeout);
   }, [situacao, nome, ordem]);
 
+  // Efeito para aplicar ordenação sempre que a ordem mudar
   useEffect(() => {
-    setFilteredResults(prevResults => applySorting(prevResults, ordem));
+    // Só reordena se já houver resultados
+    if (filteredResults.length > 0) {
+        setFilteredResults(prevResults => applySorting(prevResults, ordem));
+    }
   }, [ordem]); 
 
+  // Handler para alternar a ordem
   const handleToggleOrdem = useCallback(() => {
-    setOrdem(prev => prev === 'decrescente' ? 'crescente' : 'decrescente');
+    setOrdem(prev => prev === 'crescente' ? 'decrescente' : 'crescente');
   }, []);
 
   return (
@@ -103,10 +148,6 @@ function PesquisaGeralContent() {
                 <h1 className={`text-4xl font-bold ${COR_DESTAQUE_ADMIN} mb-8`}>
                     Pesquisa geral
                 </h1>
-                
-{/*                 <p className="text-gray-900 mb-6">
-                    Pesquise por usuário, apenas um por vez
-                </p> */}
 
                 <form onSubmit={handlePesquisar} className="space-y-4">
 
@@ -121,13 +162,17 @@ function PesquisaGeralContent() {
                     <div className="relative">
                     <select
                         id="tipoUsuario"
-                        required
+                        required 
                         value={situacao}
                         onChange={(e) => setSituacao(e.target.value)}
                         className="block w-full py-3 px-4 pr-10 border border-gray-300 bg-gray-300 rounded-lg text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[var(--destaque)] focus:border-[var(--destaque)]"
                     >
                         {tiposDeUsuario.map((tipo) => (
-                        <option key={tipo.value} value={tipo.value}>
+                        <option 
+                            key={tipo.value} 
+                            value={tipo.value}
+                            disabled={tipo.value === ''} 
+                        >
                             {tipo.label}
                         </option>
                         ))}
@@ -154,7 +199,7 @@ function PesquisaGeralContent() {
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <AiOutlineSearch className="h-5 w-5 text-[var(--destaque)]" />
                     </div>
-                    </div>
+                </div>
                 </div>
 
                 <div className="pt-6 w-full max-w-xs mx-auto"> 
@@ -169,7 +214,7 @@ function PesquisaGeralContent() {
                 <hr className="my-4 border-gray-200" />
 
                 <h2 className={`text-xl font-semibold text-gray-900 mb-4`}> 
-                    Data em ordem
+                    Ordem Alfabética
                 </h2>
                 
                 <div className="w-full mb-6"> 
@@ -177,8 +222,8 @@ function PesquisaGeralContent() {
                         onClick={handleToggleOrdem}
                         className="w-full flex items-center justify-between py-2 px-4 bg-gray-300 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-300 transition duration-150 shadow-sm disabled:opacity-50"
                     >
-                        {ordem === 'decrescente' ? 'Decrescente' : 'Crescente'}
-                        {ordem === 'decrescente' 
+                        {ordem === 'crescente' ? 'Crescente (A-Z)' : 'Decrescente (Z-A)'}
+                        {ordem === 'crescente' 
                             ? <AiOutlineArrowDown className="ml-2 h-5 w-5 text-[var(--destaque)]" /> 
                             : <AiOutlineArrowUp className="ml-2 h-5 w-5 text-[var(--destaque)]" />}
                     </button>
@@ -195,21 +240,31 @@ function PesquisaGeralContent() {
                         >
                             
                             <div className="p-3 flex-1 bg-white rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none">
-                                <p className={`${COR_DESTAQUE_ADMIN} font-bold text-lg mb-0.5`}>{item.tipo}</p>
-                                <p className="text-sm text-gray-700">
-                                    <span className="font-semibold">{item.data}</span>
+                                <p className={`${COR_DESTAQUE_ADMIN} font-bold text-lg mb-0.5`}>
+                                    {item.nomeCompleto}
                                 </p>
                                 <p className="text-sm text-gray-700">
-                                    {item.horario}
+                                    <span className="font-semibold">Tipo:</span> {tiposDeUsuario.find(t => t.value === item.tipoUsuario)?.label || item.tipoUsuario}
                                 </p>
+                                <p className="text-sm text-gray-700">
+                                    <span className="font-semibold">Telefone:</span> {item.telefone}
+                                </p>
+                                <p className="text-sm text-gray-700">
+                                    <span className="font-semibold">CPF:</span> {item.cpf}
+                                </p>
+                                {item.tipoUsuario === 'instrutores' && item.registroProfissional && (
+                                    <p className="text-sm text-gray-700 font-bold mt-1">
+                                        Registro: {item.registroProfissional}
+                                    </p>
+                                )}
                             </div>
                             
                             <div 
-                                className="p-3 flex items-center justify-start sm:justify-center bg-gray-300 text-gray-800 w-full sm:w-auto flex-shrink-0 
+                                className="p-3 flex flex-col justify-center bg-gray-300 text-gray-800 w-full sm:w-auto flex-shrink-0 
                                 rounded-b-lg sm:rounded-r-lg sm:rounded-bl-none sm:max-w-xs"
                             >
-                                <p className="text-gray-800">
-                                    <span className="font-semibold">Instrutor:</span> {item.instrutor}
+                                <p className="text-sm text-gray-800">
+                                    <span className="font-semibold">Estúdio:</span> {item.estudio}
                                 </p>
                             </div>
                         </div>
@@ -223,7 +278,6 @@ function PesquisaGeralContent() {
           </div> 
         </section>
       </main>
-      
     </div>
   );
 }
