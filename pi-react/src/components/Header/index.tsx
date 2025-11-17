@@ -20,6 +20,7 @@ function Header() {
     "/aluno/home",
     "/cadastro/adm-recep",
     "/home/funcionario",
+    "/admin/pesquisa-usuarios",
 ];
   const shouldHideButton = hidePaths.includes(currentPath);
 
