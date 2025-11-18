@@ -597,6 +597,147 @@
                 }
             }
         },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Retorna dados do usuário autenticado",
+                "operationId": "getCurrentUser",
+                "responses": {
+                    "200": {
+                        "description": "Usuário autenticado retornado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthMeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token inválido ou expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Faz logout do usuário (invalida o token atual)",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Logout realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout realizado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Renova o token JWT do usuário",
+                "operationId": "refreshToken",
+                "responses": {
+                    "200": {
+                        "description": "Token renovado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token renovado com sucesso"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "example": "Bearer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token inválido ou expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/instructors": {
             "get": {
                 "tags": [
@@ -1263,6 +1404,113 @@
                 },
                 "type": "object"
             },
+            "AuthErrorResponse": {
+                "description": "Resposta de erro de autenticação",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "error"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Token inválido ou expirado"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Token has expired",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "AuthMeResponse": {
+                "description": "Resposta com dados do usuário autenticado",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Usuário autenticado"
+                    },
+                    "data": {
+                        "properties": {
+                            "user": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nameuser": {
+                                        "type": "string",
+                                        "example": "joao.silva"
+                                    },
+                                    "fullname": {
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "student"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "Active"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "permissions": {
+                                "properties": {
+                                    "pages": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "dashboard"
+                                        }
+                                    },
+                                    "actions": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "view_profile"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "entity": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "example": "12345678901",
+                                        "nullable": true
+                                    },
+                                    "profession": {
+                                        "type": "string",
+                                        "example": "Engenheiro",
+                                        "nullable": true
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "example": "1990-01-15",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "AvailableAulasResponse": {
                 "title": "Available Aulas Response",
                 "properties": {
@@ -1829,6 +2077,12 @@
             }
         },
         "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter JWT token obtained from login endpoint",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
             "sanctum": {
                 "type": "apiKey",
                 "description": "Enter token in format (Bearer <token>)",
@@ -1845,6 +2099,10 @@
         {
             "name": "Aulas",
             "description": "Aulas management operations"
+        },
+        {
+            "name": "Authentication",
+            "description": "JWT Authentication endpoints"
         },
         {
             "name": "Students",
