@@ -40,11 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-    ],
-    
-    'api' => [
-        'driver' => 'sanctum', // ✅ Usar Sanctum
-        'provider' => 'users',
+        'api' => [
+            'driver' => 'jwt', // ✅ Usar JWT para API
+            'provider' => 'users',
+        ],
     ],
 
     /*

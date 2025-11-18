@@ -8,11 +8,13 @@ use App\Adapters\Database\StudentMongoDBAdapter;
 use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
 use App\Adapters\Database\StudentMySQLAdapter;
 use App\Application\Ports\AdminReceptionist\AdminReceptionistServiceContract;
+use App\Application\Ports\Auth\AuthServiceContract;
 use App\Application\Ports\Aulas\AulasRepositoryPort;
 use App\Application\Ports\Aulas\AulasServiceContract;
 use App\Application\Ports\StudentNoSQLPort;
 use App\Application\Ports\StudentRepositoryPort;
 use App\Application\Ports\StudentServiceContract;
+use App\Application\Services\Auth\AuthService;
 use App\Application\Services\Aulas\AulasService;
 use App\Application\Services\Student\StudentService;
 use Illuminate\Support\ServiceProvider;
@@ -91,6 +93,12 @@ class HexagonalArchitectureProvider extends ServiceProvider
         $this->app->bind(
             AulasRepositoryPort::class,
             AulasMySQLAdapter::class
+        );
+
+        // Auth Service
+        $this->app->bind(
+            AuthServiceContract::class,
+            AuthService::class
         );
 
     }
