@@ -127,7 +127,7 @@
                     "Aulas"
                 ],
                 "summary": "Listar aulas com filtros opcionais",
-                "description": "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor",
+                "description": "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor. Requer autenticação e permissão de colaborador.",
                 "operationId": "listAulas",
                 "parameters": [
                     {
@@ -192,7 +192,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/aulas/types": {
