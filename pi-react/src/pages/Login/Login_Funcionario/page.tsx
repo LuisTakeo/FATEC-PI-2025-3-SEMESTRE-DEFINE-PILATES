@@ -10,9 +10,6 @@ import { useNavigate } from "react-router-dom";
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 20;
 
-// const KEY_IS_LOGGED = "isEmployeeLoggedIn";
-// const KEY_USER_ROLE = "userRole";
-
 export default function LoginFuncionario() {
   const navigate = useNavigate();
 
@@ -25,26 +22,34 @@ export default function LoginFuncionario() {
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
 
+  // Esta função agora será usada apenas no início do handleLogin
   const clearAllErrors = () => {
     setErroTelefone("");
     setErroSenha("");
     setErroTipoUsuario("");
   };
 
+  // --- CORREÇÃO APLICADA A PARTIR DAQUI ---
+
   const handleTelefoneChange = (val: string) => {
     setTelefone(val);
-    clearAllErrors();
+    // Limpa apenas o erro de telefone
+    setErroTelefone("");
   };
 
   const handleSenhaChange = (val: string) => {
     setSenha(val);
-    clearAllErrors();
+    // Limpa apenas o erro de senha
+    setErroSenha("");
   };
 
   const handleTipoUsuarioChange = (val: string) => {
     setTipoUsuario(val);
-    clearAllErrors();
+    // Limpa apenas o erro de tipo de usuário
+    setErroTipoUsuario("");
   };
+
+  // --- FIM DA CORREÇÃO ---
 
   const validarTelefoneBasico = (tel: string) => {
     const digits = tel.replace(/\D/g, "");
@@ -55,12 +60,10 @@ export default function LoginFuncionario() {
     const temMinuscula = /[a-z]/.test(s);
     const temMaiuscula = /[A-Z]/.test(s);
     const temNumero = /[0-9]/.test(s);
-    const temEspecial = /[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~`]/.test(s);
 
     if (!temMinuscula 
       || !temMaiuscula 
       || !temNumero 
-      // || !temEspecial
     ) {
       return "Senha inválida.";
     }
@@ -72,16 +75,14 @@ export default function LoginFuncionario() {
 
     if (isLoading) return;
 
-    clearAllErrors();
+    clearAllErrors(); 
     let hasError = false;
 
-    // Validação do Tipo de Usuário
     if (!tipoUsuario.trim()) {
-      setErroTipoUsuario("Selecione o tipo de funcionário.");
+      setErroTipoUsuario("Selecione uma opção.");
       hasError = true;
     }
 
-    // Validação do Telefone
     if (!telefone.trim()) {
       setErroTelefone("Campo obrigatório.");
       hasError = true;
@@ -90,7 +91,6 @@ export default function LoginFuncionario() {
       hasError = true;
     }
 
-    // Validação da Senha
     if (!senha.trim()) {
       setErroSenha("Campo obrigatório.");
       hasError = true;
@@ -101,7 +101,7 @@ export default function LoginFuncionario() {
       const erroConteudo = validarConteudoSenha(senha);
       if (erroConteudo) {
         setErroSenha(
-          "A senha deve conter letras maiúsculas, minúsculas, números e um caractere especial."
+          "A senha deve conter letras maiúsculas, minúsculas e números."
         );
         hasError = true;
       }
@@ -110,34 +110,25 @@ export default function LoginFuncionario() {
     if (!hasError) {
       setIsLoading(true);
       try {
-              // await new Promise((resolve) => setTimeout(resolve, 1500));
-              const authSuccess = await login_funcionario(telefone, senha, tipoUsuario);
-              // const authSuccess = true;
-              // console.log(IsLogado);
-              if (authSuccess) {
-                console.log("Tipo acesso:", tipoUsuario);
-                if (tipoUsuario == "administrator") {
-                  navigate("/admin/home");
-                } else{
-                  navigate("/home/funcionario");
-                }
+        const authSuccess = await login_funcionario(telefone, senha, tipoUsuario);
+        
+        if (authSuccess) {
+          console.log("Tipo acesso:", tipoUsuario);
+          navigate("/home/funcionario");
 
-
-                // navigate("/home/aluno");
-                
-                if (typeof window !== "undefined") {
-                  localStorage.setItem("isLoggedIn", "true");
-                }
-                console.log("Login SUCESSO. Usuário logado.");
-              } else {
-                setErroSenha("Credenciais inválidas. Verifique telefone e senha.");
-              }
-            } catch (error) {
-              console.error("Erro na API de Login:", error);
-              setErroSenha("Erro de conexão. Tente novamente mais tarde.");
-            } finally {
-              setIsLoading(false);
-            }
+          if (typeof window !== "undefined") {
+            localStorage.setItem("isLoggedIn", "true");
+          }
+          console.log("Login SUCESSO. Usuário logado.");
+        } else {
+          setErroSenha("Credenciais inválidas. Verifique telefone e senha.");
+        }
+      } catch (error) {
+        console.error("Erro na API de Login:", error);
+        setErroSenha("Erro de conexão. Tente novamente mais tarde.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -145,10 +136,8 @@ export default function LoginFuncionario() {
     <div className="flex flex-col items-center justify-center w-full mt-1">
       <main className="flex flex-col w-[80vw] px-[2%]">
         
-        {/* Cabeçalho com imagem à direita - Adaptado para o Funcionário */}
         <header className="grid grid-cols-1 md:grid-cols-2 items-center mb-1">
           
-          {/* Texto à esquerda */}
           <div className="flex flex-col justify-center gap-1 text-left">
             <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>
               Acesso de Funcionário
@@ -158,17 +147,15 @@ export default function LoginFuncionario() {
             </h2>
           </div>
 
-          {/* Imagem à direita */}
           <div className="flex justify-center md:justify-end mt-6 md:mt-0">
             <img
               src="/pilates.png" 
-              alt="Ilustração de Funcionário"
+              alt="Ilustração de um funcionário ou instrutor de pilates acessando o sistema."
               className="w-[35%] md:w-[35%] lg:w-[30%] object-contain"
             />
           </div>
         </header>
 
-        {/* Formulário */}
         <form onSubmit={handleLogin} className="flex flex-col gap-8 w-full">
           <section className="flex flex-col gap-6 w-full">
             <h3 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)] text-[1.3rem]`}>
@@ -227,21 +214,19 @@ export default function LoginFuncionario() {
             </div>
           </section>
 
-          {/* Botões */}
           <section className="mt-2 flex flex-col gap-6">
             <Botao
               texto={isLoading ? "Acessando..." : "Acessar conta"}
               type="submit"
-              // Adicionando o link condicional do funcionário
               link={authSuccess ? "/home/funcionario" : ""} 
             />
 
-            {/* <a
-              href="/" // Link de volta para o login do aluno
+            <a
+              href="/login/aluno" 
               className="text-[var(--destaque)] text-[1rem] underline font-medium self-start"
             >
               Voltar para Login do Aluno
-            </a> */}
+            </a>
           </section>
         </form>
       </main>
