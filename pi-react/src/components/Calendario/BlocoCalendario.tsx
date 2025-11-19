@@ -2,6 +2,7 @@ import type { Aula } from "../../types/Aula";
 import Botao from "./../Botao/Botao"
 import { useState } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
+import {fetchAulas} from "./../../services/aula/puxar_aula"
 
 interface BlocoCalendarioProps {
   aulas: Aula[]; 
@@ -85,6 +86,13 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
         ))}
     </>
   );
+
+  async function chamaAula(){
+    const aula = fetchAulas()
+    console.log(aula)
+  }
+
+  chamaAula()
 
   return (
     <section className="grid grid-cols-1 gap-10 w-full h-full px-[15%] text-[1.5rem] mt-10">
