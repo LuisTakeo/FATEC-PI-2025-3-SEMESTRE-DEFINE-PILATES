@@ -18,6 +18,13 @@ use OpenApi\Attributes as OA;
     url: "http://localhost:8000",
     description: "Local Server (HTTP) - Use when accessing locally"
 )]
+#[OA\SecurityScheme(
+    securityScheme: "bearerAuth",
+    type: "http",
+    scheme: "bearer",
+    bearerFormat: "JWT",
+    description: "Enter JWT token obtained from login endpoint"
+)]
 #[OA\Tag(
     name: "Students",
     description: "Student management operations"
@@ -29,5 +36,9 @@ use OpenApi\Attributes as OA;
 #[OA\Tag(
     name: "AdminReceptionist",
     description: "Admin and Receptionist management operations"
+)]
+#[OA\Tag(
+    name: "Authentication",
+    description: "JWT Authentication endpoints"
 )]
 class SwaggerInfo {}

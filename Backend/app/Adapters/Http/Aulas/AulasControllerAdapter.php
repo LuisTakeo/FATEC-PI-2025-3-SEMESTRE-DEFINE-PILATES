@@ -23,7 +23,8 @@ class AulasControllerAdapter extends BaseController
         operationId: "listAulas",
         tags: ["Aulas"],
         summary: "Listar aulas com filtros opcionais",
-        description: "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor"
+        description: "Lista todas as aulas com filtros opcionais por data, estúdio e instrutor. Requer autenticação e permissão de colaborador.",
+        security: [["bearerAuth" => []]]
     )]
     #[OA\Parameter(
         name: "data",

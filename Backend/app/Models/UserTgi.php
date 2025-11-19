@@ -78,9 +78,9 @@ class UserTgi extends Authenticatable implements JWTSubject
     public function getRelatedEntity()
     {
         return match($this->typeuser) {
-            'student' => $this->student,
-            'instructor' => $this->instructor,
-            'collaborator' => $this->collaborator,
+            'Student' => $this->student,
+            'Instructor' => $this->instructor,
+            'Collaborator' => $this->collaborator,
             default => null
         };
     }
