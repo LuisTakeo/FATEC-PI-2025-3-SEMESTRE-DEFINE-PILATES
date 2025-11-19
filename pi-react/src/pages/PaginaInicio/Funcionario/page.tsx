@@ -4,45 +4,42 @@ import { useState } from "react";
 
 interface Item {
     texto: string;
+    // 🎯 Adicionado subtexto opcional à interface Item
+    subtexto?: string; 
     link: string;
 }
 
-// interface HomeAlunoProps {
-//     itens?: Item[];
-//     cargo?: string;
-// }
-
-
-
-// const KEY_IS_LOGGED = "isEmployeeLoggedIn";
-// const KEY_USER_ROLE = "userRole";
-
 export default function HomeFuncionario(){
     const rotas = (): Item[] => {
+    const usuarioInfo = localStorage.getItem("Define-Pilates-UserInfo")
+    console.log("Usuario Info:", usuarioInfo);
+    console.log("Usuario Info Type:", typeof usuarioInfo);
 
-        // const isLogado = localStorage.getItem(KEY_IS_LOGGED) === "true";
-        // const userRole = localStorage.getItem(KEY_USER_ROLE);
-
+    const usuarioIfoObj = usuarioInfo ? JSON.parse(usuarioInfo) : null;
+    console.log("Usuario Info Obj:", usuarioIfoObj);
+    const userRole = usuarioIfoObj ? usuarioIfoObj.type : null;
+    console.log("User Role:", userRole);
+    let isLogado = true
         if (!isLogado || !userRole) return [];
 
         switch(userRole) {
-            case "adm":
+            case "Administrator":
                 return [
-                    { texto: "Cadastro de colaborador", link: "/admin/Home" },
-                    { texto: "Pesquisa geral", link: "/home/funcionario" },
-                    { texto: "Consultar agendas", link: "/home/funcionario" },
-                    { texto: "Marcar aula ou editar plano", link: "/home/funcionario" },
-                    { texto: "Financeiro", link: "/home/funcionario" }
+                    { texto: "Cadastros", link: "/admin/Home", subtexto: "Cadastro e gestão de usuários." },
+                    { texto: "Pesquisa geral", link: "/admin/pesquisa-usuarios", subtexto: "Pesquise por clientes e funcionários." },
+                    { texto: "Consultar agendas", link: "/home/funcionario", subtexto: "Consulte todas as agendas de aulas." },
+                    { texto: "Marcar aula", link: "/home/funcionario", subtexto: "Agende aulas para aluno(a) e instrutor(a) específico(a)." },
+                    // { texto: "Financeiro", link: "/home/funcionario" }
                 ];
-            case "recep":
+            case "Recepcionist":
                 return [
-                    { texto: "Cadastro de aluno", link: "/cadastro/aluno" },
-                    { texto: "Pesquisa geral", link: "/pesquisa" }
+                    { texto: "Cadastro de aluno", link: "/cadastro/aluno", subtexto: "Cadastre novos alunos rapidamente." },
+                    { texto: "Pesquisa geral", link: "/admin/pesquisa-usuarios", subtexto: "Pesquise por clientes ou outros usuários." }
                 ];
-            case "instr":
+            case "Instructor":
                 return [
-                    { texto: "Calendário aulas", link: "/calendario" },
-                    { texto: "Pesquisa geral", link: "/pesquisa" }
+                    { texto: "Calendário aulas", link: "/calendario", subtexto: "Visualize a sua agenda semanal de aulas." },
+                    { texto: "Pesquisa geral", link: "/pesquisa", subtexto: "Pesquise por informações de alunos e agendamentos." }
                 ];
             default:
                 return [];
@@ -53,20 +50,23 @@ export default function HomeFuncionario(){
     const isLogado = itensAtuais.length > 0;
 
     return (
-        <main className="w-full h-full px-[8%] flex flex-col gap-8">
+        <main className="w-full h-full px-[8%] flex flex-col gap-6 py-2">
 
             <header>
                 <h1 className={Estilizacoes.titulo_principal}>Tela de inicio de funcionário</h1>
             </header>
 
             <div>
-                <h1 className={Estilizacoes.titulo_principal}>Serviços</h1>
+                {/* Título Serviços: Preto e menor */}
+                <h1 className="text-2xl font-semibold text-gray-800 py-3">Serviços</h1>
             </div>
-            <section className="w-full h-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3
-            gap-10">
-                {isLogado && itensAtuais.map((item) => (
+            
+            <section className="w-full h-full grid grid-cols-1 sm:grid-cols-2 gap-6"> 
+                {isLogado && itensAtuais.map((item, index) => (
                     <BlocoHome 
+                        key={index}
                         texto={item.texto} 
+                        subtexto={item.subtexto}
                         link={item.link} 
                     />
                 ))}
