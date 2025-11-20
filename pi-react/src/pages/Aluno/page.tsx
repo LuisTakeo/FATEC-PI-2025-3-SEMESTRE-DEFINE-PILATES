@@ -119,7 +119,6 @@ export default function HomeAlunoPage() {
                                     </h2>
                                     <div className="mb-0">
                                         <div className="pb-1 flex items-center gap-2">
-                                            {/* Ícone de Calendário para "Sua próxima aula" */}
                                             <svg 
                                                 style={{ color: 'var(--azul-segundario)' }}
                                                 width="20" 
@@ -161,7 +160,6 @@ export default function HomeAlunoPage() {
                                                 <Botao
                                                     texto="Desmarcar"
                                                     type="button"
-                                                    // Sobrescreve o hover (azul-claro/destaque) pelo vermelho
                                                     style="hover:!bg-red-700"
                                                 />
                                             </div>
@@ -179,34 +177,27 @@ export default function HomeAlunoPage() {
                                 </div>
                             </div>
                             
-                            {/* SEÇÃO DO CALENDÁRIO COMPLETO: Ícone Responsivo e Layout Otimizado */}
                             <div className="w-full text-left bg-white rounded-xl shadow-lg p-6">
                                 
-                                {/* CONTAINER FLEX GERAL: Sempre flex-row, com espaçamento e alinhamento vertical */}
                                 <div className="flex flex-row items-center justify-between"> 
                                 
-                                    {/* A. CONTEÚDO DA ESQUERDA (Título e Botão) */}
-                                    {/* Usa flex-grow para ocupar espaço e min-w-0 para permitir que o texto quebre linha */}
+                                    
                                     <div className="flex flex-col flex-grow min-w-0">
                                         
-                                        {/* Título */}
-                                        {/* Ajustada a margem inferior para mobile (mb-2) e desktop (md:mb-4) */}
+                                        
                                         <h3 className={`${Estilizacoes.titulo_segundario} ${COR_DESTAQUE_PRINCIPAL} font-bold mb-2 md:mb-4`}>
                                             Acesse seu calendário completo de aulas abaixo
                                         </h3>
 
-                                        {/* Botão */}
                                         <div className='w-full max-w-[250px] mt-2'> 
                                             <Botao texto="Visualizar" type="button" link="/calendario/aluno" />
                                         </div>
                                         
                                     </div>
                                     
-                                    {/* B. Ícone SIMPLES RESPONSIVO */}
-                                    {/* flex-shrink-0 para garantir que ele não encolha, e ml-4 para espaçamento */}
+                                   
                                     <div className="flex-shrink-0 ml-4">
                                         <svg
-                                            // CLASSE DE TAMANHO RESPONSIVA: w-12 h-12 em mobile, md:w-32 md:h-32 em desktop
                                             className={`${COR_DESTAQUE_PRINCIPAL} w-12 h-12 md:w-32 md:h-32`}
                                             viewBox="0 0 24 24"
                                             fill="none" 
@@ -230,7 +221,6 @@ export default function HomeAlunoPage() {
                     </div>
                 </section>
                 
-                {/* Seção do Plano (Conteúdo da Imagem) */}
                 <section className="mb-10 relative overflow-hidden bg-[var(--background)] w-full">
                     
                     <div className="bg-cover bg-center h-96 flex flex-col items-center justify-center gap-2 p-4"
