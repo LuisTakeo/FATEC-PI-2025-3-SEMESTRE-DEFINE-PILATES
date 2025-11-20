@@ -179,38 +179,37 @@ export default function HomeAlunoPage() {
                             
                             <div className="w-full text-left bg-white rounded-xl shadow-lg p-6">
                                 
-                                <div className="flex flex-row items-center justify-between"> 
+                                <div className="flex flex-row items-start md:items-center justify-between"> 
                                 
-                                    
                                     <div className="flex flex-col flex-grow min-w-0">
                                         
-                                        
-                                        <h3 className={`${Estilizacoes.titulo_segundario} ${COR_DESTAQUE_PRINCIPAL} font-bold mb-2 md:mb-4`}>
+                                        <h3 className={`${Estilizacoes.titulo_segundario} text-black font-bold mb-2 md:mb-4`}>
                                             Acesse seu calendário completo de aulas abaixo
                                         </h3>
 
-                                        <div className='w-full max-w-[250px] mt-2'> 
-                                            <Botao texto="Visualizar" type="button" link="/calendario/aluno" />
+                                        <div className="flex items-end justify-between w-full"> 
+                                            <div className='w-full max-w-[250px] mt-2'> 
+                                                <Botao texto="Visualizar" type="button" link="/calendario/aluno" />
+                                            </div>
+                                            
+                                            <div className="flex-shrink-0 ml-4">
+                                                <svg
+                                                    className={`${COR_DESTAQUE_PRINCIPAL} w-12 h-12 md:w-32 md:h-32`}
+                                                    viewBox="0 0 24 24"
+                                                    fill="none" 
+                                                    stroke="currentColor" 
+                                                    strokeWidth="1.5" 
+                                                    strokeLinecap="round" 
+                                                    strokeLinejoin="round"
+                                                >
+                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                </svg>
+                                            </div>
                                         </div>
                                         
-                                    </div>
-                                    
-                                   
-                                    <div className="flex-shrink-0 ml-4">
-                                        <svg
-                                            className={`${COR_DESTAQUE_PRINCIPAL} w-12 h-12 md:w-32 md:h-32`}
-                                            viewBox="0 0 24 24"
-                                            fill="none" 
-                                            stroke="currentColor" 
-                                            strokeWidth="1.5" 
-                                            strokeLinecap="round" 
-                                            strokeLinejoin="round"
-                                        >
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                                        </svg>
                                     </div>
                                     
                                 </div>
@@ -263,7 +262,6 @@ export default function HomeAlunoPage() {
                 
             </main>
 
-            {/* Modais */}
             <SimpleModal
                 isVisible={showConfirmModal}
                 title="Confirmar Aula"
