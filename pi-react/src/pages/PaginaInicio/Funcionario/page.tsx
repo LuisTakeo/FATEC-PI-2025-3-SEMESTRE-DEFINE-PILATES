@@ -25,7 +25,7 @@ export default function HomeFuncionario(){
                     { texto: "Cadastros", link: "/admin/Home", subtexto: "Cadastro e gestão de usuários." },
                     { texto: "Pesquisa geral", link: "/admin/pesquisa-usuarios", subtexto: "Pesquise por clientes e funcionários." },
                     { texto: "Consultar agendas", link: "/home/funcionario", subtexto: "Consulte todas as agendas de aulas." },
-                    { texto: "Marcar aula", link: "/home/funcionario", subtexto: "Agende aulas para aluno(a) e instrutor(a) específico(a)." },
+                    { texto: "Marcar aula", link: "/cadastro/aula", subtexto: "Agende aulas para aluno(a) e instrutor(a) específico(a)." },
                 ];
             case "receptionist":
                 return [
