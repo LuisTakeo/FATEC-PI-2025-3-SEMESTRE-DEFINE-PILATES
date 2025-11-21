@@ -17,6 +17,7 @@ import Calendario_Funcionario from "./pages/Calendarios/Calendario_Funcionario/p
 import Cadastro_Aula from "./pages/Cadastros/Aula/page";
 import HomeAlunoPage from "./pages/Aluno/page";
 import AdminUsuariosPage from "./pages/Admin/paginapesquisa";   
+import AulasPendentes from "./pages/Calendarios/Calendario_Aluno/aulasPendentes"
 
 function MainRoutes() {
     return (
@@ -53,11 +54,13 @@ function MainRoutes() {
             {/* ----------------------------------------------------------------- */}
             <Route path="/aluno/home" element={<HomeAlunoPage/>}/>
             <Route path="/calendario/aluno" element={<Calendario_Aluno/>}/>
+            <Route path="/aluno/aula-pendente" element={<AulasPendentes/>}/>
 
             {/* ----------------------------------------------------------------- */}
             {/* ROTAS DE FUNCIONÁRIO (INSTRUTOR/RECEPCIONISTA) */}
             {/* ----------------------------------------------------------------- */}
             <Route path="/home/funcionario" element={<HomeFuncionario/>}/>
+            
             <Route path="/calendario/funcionario" element={<Calendario_Funcionario/>}/>
 
             {/* ----------------------------------------------------------------- */}

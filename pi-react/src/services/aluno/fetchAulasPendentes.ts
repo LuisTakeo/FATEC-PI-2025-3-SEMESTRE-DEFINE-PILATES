@@ -2,10 +2,11 @@
 //puxar dados de login
 
 import { API_BASE_URL } from "../../config/api";
-import { dadosLogin } from "./../dadoslogin"
+import { dadosLogin } from "../dadoslogin"
+import type { aulasPendentesType } from "../../types/aulasPendentesType"
 
 
-export async function aulasPendentes() {
+export async function FetchAulasPendentes() {
 
     const acesso = await dadosLogin()
     const id = acesso.user.id
@@ -14,10 +15,11 @@ export async function aulasPendentes() {
 
     const response = await fetch(`${API_BASE_URL}/students/${id}/aulas/available`)
     const data = await response.json();
-    return data.data; 
+    const aulas: aulasPendentesType[] = data.data
+    return aulas; 
 
     } catch (error) {
-    console.error('Erro ao buscar aulas pendentes:', error);
+        console.error('Erro ao buscar aulas pendentes:', error);
     return []; 
     }
 }
