@@ -38,11 +38,12 @@ export default function CadastroInicialPage() {
           </div>
         
           <a
-            href="/" 
-            className="text-[var(--destaque)] text-[1rem] underline font-medium mt-6 text-center"
+            className="text-[var(--destaque)] text-[1rem] underline font-medium mt-6 text-center cursor-pointer"
+            onClick={() => navigate("/home/funcionario")} 
           >
             Voltar
           </a>
+          
         </div>
       </main>
     </div>
