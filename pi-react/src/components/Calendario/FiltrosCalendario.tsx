@@ -7,6 +7,8 @@ interface FiltrosCalendarioProps {
   setDataInicio: (date: Date | null) => void;
 }
 
+//api/aulas?11-11-2025
+
 export default function FiltrosCalendario({
   dataInicio, setDataInicio
 }: FiltrosCalendarioProps) {

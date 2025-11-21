@@ -3,7 +3,7 @@ import Estilizacoes from "../../../../uteis/Estilizacoes";
 import Input_Arquivo from "../../../../components/Input/Input_Arquivo";
 import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"
-import inputCPF from "../../../../services/inputCPF"
+import inputCPF from "../../../../services/cadastro/inputCPF"
 import React, { useState } from "react";
 import { cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
 import type {Aluno} from "../../../../types/Aluno"

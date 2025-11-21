@@ -3,7 +3,7 @@ import type { ChangeEvent } from "react";
 import type { FormEvent } from "react";
 import "./stylesCadastroInstrutor.css";
 import Input from "../../../../components/Input/Input";
-import { registerInstructor } from "../../../../services/instructorService";
+import { registerInstructor } from "../../../../services/funcionarios/instructorService";
 import type { FormData } from "../../../../types/FormData";
 
 function Cadastro_Instrutor(){

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL } from "../../config/api";
 
 interface InstructorPayload {
     name: string;

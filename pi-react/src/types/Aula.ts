@@ -1,10 +1,19 @@
+interface Unidade {
+  id: number;
+  name: string;
+}
 
+interface Instructor {
+  id: number;
+  nome: string;
+}
 
 export interface Aula {
-  id?: number;
-  unidade: string;
-  instrutor: string;
-  alunos?: string[];
-  data: string | number | Date | any
-  horario: { inicio: string; fim?: string };
+  id: number;
+  horario: string;
+  tipo: string;
+  unidade: Unidade;
+  instructor: Instructor;
+  data: string;
 }
+

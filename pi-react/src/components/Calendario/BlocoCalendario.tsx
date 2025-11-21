@@ -1,42 +1,33 @@
 import type { Aula } from "../../types/Aula";
 import Botao from "./../Botao/Botao"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
-import {fetchAulas} from "./../../services/aula/puxar_aula"
+import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
 
-interface BlocoCalendarioProps {
-  aulas: Aula[]; 
-  cargo?: "adm" | "recep" | "aluno" | "instru" | null;
-}
 
-function getBrazilToday() {
-  try {
-    const parts = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date());
-    const year = Number(parts.find(p => p.type === 'year')?.value ?? new Date().getFullYear());
-    const month = Number(parts.find(p => p.type === 'month')?.value ?? (new Date().getMonth() + 1));
-    const day = Number(parts.find(p => p.type === 'day')?.value ?? new Date().getDate());
-    return new Date(year, month - 1, day);
-  } catch (e) {
-    const d = new Date();
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  }
-}
+export default function BlocoCalendario() {
 
-export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) {
-  const [dataInicio, setDataInicio] = useState<Date | null>(getBrazilToday());
+  const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
+  const [aulas, setAulas] = useState<Aula[]>([]);
+  const [cargo, setCargo] = useState(null)
 
-  const parseAulaDate = (dateStr: string) => {
-    if (!dateStr) return null;
-    if (dateStr.includes('/')) {
-      const [d, m, y] = dateStr.split('/').map(x => Number(x));
-      return new Date(y, (m || 1) - 1, d || 1);
+
+  useEffect(() => {
+    async function load() {
+      const {aulas, cargo} = await separadorRequisicoes();
+      setAulas(aulas);
+      setCargo(cargo)
     }
-    if (dateStr.includes('-')) {
-      const [y, m, d] = dateStr.split('-').map(x => Number(x));
-      return new Date(y || new Date().getFullYear(), (m || 1) - 1, d || 1);
-    }
-    return new Date(dateStr);
-  };
+
+    load();
+  }, []);
+
+  console.log("Aulas", aulas)
+  console.log("Cargo", cargo)
+
+  const parseAulaDate = (dateStr: string) =>
+    dateStr ? new Date(dateStr) : null;
+
 
   function isSameDate(a: Date, b: Date) {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -68,15 +59,15 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
             className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
           >
             <div className="w-full flex flex-col gap-2 md:gap-3">
-              <p>{aula.unidade === "unidade 1"
+              <p>{aula.unidade.id === 1
                 ? "Unidade: São Miguel Paulista"
-                : aula.unidade === "unidade 2"
+                : aula.unidade.id === 2
                 ? "Unidade: Itaquera"
-                : aula.unidade === "unidade 3"
+                : aula.unidade.id === 3
                 ? "Unidade: Vila Jacuí"
                 : ""}</p>
-              {cargo !== "instru" && <p>Instrutor: {aula.instrutor}</p>}
-              {cargo !== "aluno" && <p>Quantidade de Alunos: {aula.alunos?.length}</p>}
+              {cargo !== "instructor" && <p>Instrutor: {aula.instructor.nome}</p>}
+              {/* {cargo !== "aluno" && <p>Quantidade de Alunos: {aula.alunos?.length}</p>} */}
               <p>{aula.data}</p>
             </div>
             <div className="w-full md:w-[40%]">
@@ -87,12 +78,7 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
     </>
   );
 
-  async function chamaAula(){
-    const aula = fetchAulas()
-    console.log(aula)
-  }
 
-  chamaAula()
 
   return (
     <section className="grid grid-cols-1 gap-10 w-full h-full px-[15%] text-[1.5rem] mt-10">
@@ -100,6 +86,8 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
         dataInicio={dataInicio}
         setDataInicio={setDataInicio}
       />
+
+      
 
       {aulasFiltradas.length === 0 ? (
         <div className="text-center py-10">
@@ -111,7 +99,9 @@ export default function BlocoCalendario({ aulas, cargo }: BlocoCalendarioProps) 
           </p>
         </div>
       ) : (
+
         <Componente/>
+
       )}
     </section>
   );
