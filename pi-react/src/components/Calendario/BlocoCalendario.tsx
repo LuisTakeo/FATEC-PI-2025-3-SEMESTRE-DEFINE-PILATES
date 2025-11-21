@@ -1,6 +1,5 @@
 import type { Aula } from "../../types/Aula";
 import Botao from "./../Botao/Botao"
-import Input from "../Input/Input";
 import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
 import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
@@ -28,9 +27,17 @@ export default function BlocoCalendario() {
 
   console.log(dataInicio)
 
+  const aulasFiltradas = aulas
+  .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())        
+  .filter((aula) => {
+        if (!dataInicio) return true
+        const data = dataInicio?.getDate() + "-" + dataInicio?.getMonth() + "-" + dataInicio?.getFullYear()
+        return aula.data >= data  
+  })
+
  
   return(
-    
+   
     
       <section className="grid grid-cols-1 gap-10 w-full h-full px-[15%] text-[1.5rem] mt-10">
 
@@ -39,25 +46,16 @@ export default function BlocoCalendario() {
           setDataInicio={setDataInicio}
         />
 
-        {aulas
-        .sort((a, b) => {
-            const data1 = new Date(a.data)
-            const data2 = new Date(b.data)
-            return data1.getTime() - data2.getTime()
-        })
-        .filter((aula) => {
-          if (!dataInicio) return true
-          const data = dataInicio?.getDate() + "-" + dataInicio?.getMonth() + "-" + dataInicio?.getFullYear()
-          return aula.data >= data 
-          
-        })
-        .map((aula) => (
-
-            aulas.length === 0 ? (
-              <div>
-                <h1>Nenhuma aula encontrada.</h1>
-              </div>
-            ):(
+        {aulasFiltradas.length === 0 ? (
+          <div className="flex flex-row w-full h-full items-end justify-center gap-5 p-15">
+            <div>
+              <h1>Não existe nenhuma aula nesta data, procure por outras datas.</h1>
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#26a269" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dumbbell-icon lucide-dumbbell"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/></svg>            </div>
+          </div>
+          ) : (
+          aulasFiltradas.map(aula => (
               <div
                 key={aula.id}
                 className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
@@ -98,21 +96,13 @@ export default function BlocoCalendario() {
                     }
                   }}
                     />
-
-                    {/* {aula.data > new Date().toLocaleDateString('pt-BR') && (
-                        <Botao texto="Desmarcar presença" type="button" />
-                    )} */}
                 </div>
             </div>
-            )))}
+          ))
+        )}
 
-            
-            
-         
-         
-        
       </section>
-    
+      
   )
     
   
