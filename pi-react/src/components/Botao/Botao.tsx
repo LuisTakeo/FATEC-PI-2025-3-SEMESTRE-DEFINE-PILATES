@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 interface BotaoProps {
     texto: string;
     link?: string;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
     type?: "button" | "submit" | "reset" | undefined;
     style?: string;
 }
