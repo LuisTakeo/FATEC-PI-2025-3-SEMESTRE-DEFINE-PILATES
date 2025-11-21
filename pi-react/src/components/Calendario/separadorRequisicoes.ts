@@ -1,9 +1,8 @@
 
 import { dadosLogin } from "../../services/dadoslogin"
 import { fetchAulasAluno } from "../../services/aula/puxar_aula_aluno"
-import { fetchAulasFuncionario
+import { fetchAulasFuncionario} from "../../services/aula/puxar_aula_funcionario"
 
- } from "../../services/aula/puxar_aula_funcionario"
  export default async function separadorRequisicoes(){
     
     const acesso = await dadosLogin()

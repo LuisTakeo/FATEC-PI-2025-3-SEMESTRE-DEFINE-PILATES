@@ -16,17 +16,8 @@ export default function FiltrosCalendario({
   const mesesDoAno: string[] = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   
   const limparFiltros = () => {
-    // resetar para data atual no fuso de São Paulo
-    try {
-      const parts = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date());
-      const year = Number(parts.find(p => p.type === 'year')?.value ?? new Date().getFullYear());
-      const month = Number(parts.find(p => p.type === 'month')?.value ?? (new Date().getMonth() + 1));
-      const day = Number(parts.find(p => p.type === 'day')?.value ?? new Date().getDate());
-      setDataInicio(new Date(year, month - 1, day));
-    } catch (e) {
-      const d = new Date();
-      setDataInicio(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
-    }
+    const d = new Date();
+    setDataInicio(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
   }
 
 
@@ -47,7 +38,7 @@ export default function FiltrosCalendario({
             <Input
               id="data"
               type="date"
-              value={dataInicio ? `${dataInicio.getFullYear()}-${String(dataInicio.getMonth()+1).padStart(2,'0')}-${String(dataInicio.getDate()).padStart(2,'0')}` : ''}
+              value={dataInicio ? `${dataInicio.getFullYear()}-${String(dataInicio.getMonth()+1).padStart(2,'0')}-${dataInicio.getDate()}` : ''}
               onChange={e => {
                 const v = e.target.value; // 'YYYY-MM-DD'
                 if (!v) {

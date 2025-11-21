@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BlocoCalendario from "./../../../components/Calendario/teste";
+import BlocoCalendario from "./../../../components/Calendario/BlocoCalendario";
 import Botao from "./../../../components/Botao/Botao"
 
 export default function Calendario_Aluno() {
@@ -20,7 +20,7 @@ export default function Calendario_Aluno() {
                 <h1>Marcar aula pendente, atualmente voce tem {aulaPendente} aulas pendentes</h1>
             </div>
             <div className="w-full">
-                <Botao texto="Marcar aula pendente" link="/cadastro/aula" type="button"/>
+                <Botao texto="Marcar aula pendente" link="/calendario/aluno" type="button"/>
             </div>
           </div>
         </section>

@@ -1,5 +1,6 @@
 import type { Aula } from "../../types/Aula";
 import Botao from "./../Botao/Botao"
+import Input from "../Input/Input";
 import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
 import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
@@ -25,84 +26,95 @@ export default function BlocoCalendario() {
   console.log("Aulas", aulas)
   console.log("Cargo", cargo)
 
-  const parseAulaDate = (dateStr: string) =>
-    dateStr ? new Date(dateStr) : null;
+  console.log(dataInicio)
 
+ 
+  return(
+    
+    
+      <section className="grid grid-cols-1 gap-10 w-full h-full px-[15%] text-[1.5rem] mt-10">
 
-  function isSameDate(a: Date, b: Date) {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-  }
+        <FiltrosCalendario
+          dataInicio={dataInicio}
+          setDataInicio={setDataInicio}
+        />
 
-  const aulasFiltradas = aulas.filter(aula => {
-    const aulaDateObj = parseAulaDate(aula.data);
-    if (!aulaDateObj) return false;
-
-    const aulaDateOnly = new Date(aulaDateObj.getFullYear(), aulaDateObj.getMonth(), aulaDateObj.getDate());
-
-    if (!dataInicio) return false;
-
-    const dataInicioOnly = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
-    return aulaDateOnly.getTime() >= dataInicioOnly.getTime();
-  });
-
-  const Componente: React.FC = () => (
-    <>
-      {aulasFiltradas
+        {aulas
         .sort((a, b) => {
-          const dateAObj = parseAulaDate(a.data) || new Date();
-          const dateBObj = parseAulaDate(b.data) || new Date();
-          return dateAObj.getTime() - dateBObj.getTime();
+            const data1 = new Date(a.data)
+            const data2 = new Date(b.data)
+            return data1.getTime() - data2.getTime()
+        })
+        .filter((aula) => {
+          if (!dataInicio) return true
+          const data = dataInicio?.getDate() + "-" + dataInicio?.getMonth() + "-" + dataInicio?.getFullYear()
+          return aula.data >= data 
+          
         })
         .map((aula) => (
-          <div
-            key={aula.id}
-            className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
-          >
-            <div className="w-full flex flex-col gap-2 md:gap-3">
-              <p>{aula.unidade.id === 1
-                ? "Unidade: São Miguel Paulista"
-                : aula.unidade.id === 2
-                ? "Unidade: Itaquera"
-                : aula.unidade.id === 3
-                ? "Unidade: Vila Jacuí"
-                : ""}</p>
-              {cargo !== "instructor" && <p>Instrutor: {aula.instructor.nome}</p>}
-              {/* {cargo !== "aluno" && <p>Quantidade de Alunos: {aula.alunos?.length}</p>} */}
-              <p>{aula.data}</p>
+
+            aulas.length === 0 ? (
+              <div>
+                <h1>Nenhuma aula encontrada.</h1>
+              </div>
+            ):(
+              <div
+                key={aula.id}
+                className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
+                >
+                <div className="w-full flex flex-col gap-2 md:gap-3">
+                    <p>{aula.data.replace('-','/').replace('-','/')}</p>
+                    <p>{aula.unidade.id === 1
+                    ? "Unidade: São Miguel Paulista"
+                    : aula.unidade.id === 2
+                    ? "Unidade: Itaquera"
+                    : aula.unidade.id === 3
+                    ? "Unidade: Vila Jacuí"
+                    : ""}</p>
+                    
+                    {cargo !== "Instructor" && (<p>Instrutor: {aula.instructor.nome}</p>)}
+                </div>
+                <div className="w-full md:w-[40%] flex flex-col gap-5">
+
+                    <Botao texto="Mais informações" type="button"
+                    onClick={() =>
+                    {if (cargo == "student"){  
+                    alert(`Aula do tipo ${aula.tipo}, ela ocorrerá as ${aula.horario} na ${aula.unidade.id === 1
+                    ? "unidade São Miguel Paulista, endereço R. José Aldo Piassi, 165 - São Miguel Paulista, São Paulo - SP, 08011-300"
+                    : aula.unidade.id === 2
+                    ? "unidade: Itaquera, endereço Estrada Itaquera Guaianazes, 45 - Parada XV de Novembro, São Paulo - SP, 08246-000"
+                    : aula.unidade.id === 3
+                    ? "unidade: Vila Jacuí, endereço Rua Santana de Pirapama, 91 - Vila Jacuí, São Paulo - SP, 08060-370"
+                    : ""}, com o(a) instrutor/instrutora ${aula.instructor.nome}` + `. Caso você desmarque a aula em 3 horas antes do início dela, ela poderá ser reposta, caso desmarque depois, não terá direito de reposição e perderá a aula.`)
+                    
+                    }else{
+                    alert(`Aula do tipo ${aula.tipo}, ela ocorrerá as ${aula.horario} na ${aula.unidade.id === 1
+                    ? "unidade São Miguel Paulista, endereço R. José Aldo Piassi, 165 - São Miguel Paulista, São Paulo - SP, 08011-300"
+                    : aula.unidade.id === 2
+                    ? "unidade: Itaquera, endereço Estrada Itaquera Guaianazes, 45 - Parada XV de Novembro, São Paulo - SP, 08246-000"
+                    : aula.unidade.id === 3
+                    ? "unidade: Vila Jacuí, endereço Rua Santana de Pirapama, 91 - Vila Jacuí, São Paulo - SP, 08060-370"
+                    : ""}, com o(a) instrutor/instrutora ${aula.instructor.nome}.`)
+                    }
+                  }}
+                    />
+
+                    {/* {aula.data > new Date().toLocaleDateString('pt-BR') && (
+                        <Botao texto="Desmarcar presença" type="button" />
+                    )} */}
+                </div>
             </div>
-            <div className="w-full md:w-[40%]">
-              <Botao texto="Mais informações" />
-            </div>
-          </div>
-        ))}
-    </>
-  );
+            )))}
 
+            
+            
+         
+         
+        
+      </section>
+    
+  )
+    
+  
 
-
-  return (
-    <section className="grid grid-cols-1 gap-10 w-full h-full px-[15%] text-[1.5rem] mt-10">
-      <FiltrosCalendario
-        dataInicio={dataInicio}
-        setDataInicio={setDataInicio}
-      />
-
-      
-
-      {aulasFiltradas.length === 0 ? (
-        <div className="text-center py-10">
-          <p className="text-xl">
-            {(!dataInicio || isSameDate(dataInicio, new Date()))
-              ? "Não há aulas agendadas para hoje." 
-              : "Nenhuma aula encontrada com o filtro de data."
-            }
-          </p>
-        </div>
-      ) : (
-
-        <Componente/>
-
-      )}
-    </section>
-  );
 }
