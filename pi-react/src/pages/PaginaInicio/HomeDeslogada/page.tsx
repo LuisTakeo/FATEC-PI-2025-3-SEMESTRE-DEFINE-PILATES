@@ -10,7 +10,7 @@ function PaginaInicio(){
 
     return(
     <main className={`${Estilizacoes.container_main} w-full`}>
-    {/* SEÇÃO 1: Conheça nosso estudio */}
+    {/* SEÇÃO 1: Conheça nosso estudio (Inalterada) */}
     <section className="relative flex w-full min-h-[620px] h-auto justify-end items-center 
         bg-[url('/background.jpg')] bg-center bg-cover sm:bg-[length:150%_auto] md:bg-[length:100%_auto] 
         bg-no-repeat overflow-visible">
@@ -37,14 +37,17 @@ function PaginaInicio(){
     </section>
 
 
-    {/* SEÇÃO 2: Conheça nossos planos */}
+    {/* SEÇÃO 2: Conheça nossos planos (2 colunas em telas maiores / 1 coluna em mobile) */}
         <section className="text-gray-600 body-font w-full px-[8%]">
                     <div className="px-5 py-5 mx-auto">
                     <div className="flex flex-col text-center w-full mb-20">
                     <h1 className={`${Estilizacoes.titulo_principal} text-[3rem] lg:text-[2.6rem]`}>Conheça nossos planos</h1>
                     </div>
-                    <div className="-m-4 w-full lg:grid-cols-2 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] max-[1000px]:grid-cols-2 max-[900px]:grid-cols-2 max-[500px]:grid-cols-1">
-                        <div className="p-4">
+                    {/* Grid: 1 coluna em mobile, 2 colunas a partir de sm (tablet/desktop) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 -m-4 mx-auto max-w-screen-xl"> 
+                        
+                        {/* Cartão Plano Anual */}
+                        <div className="p-4">
                             <div className="flex rounded-lg h-full bg-white  shadow-2xl p-8 flex-col">
                             <div className="flex items-center mb-3">
                                 <h2 className={`${Estilizacoes.titulo_principal}`}>Plano Anual</h2>
@@ -75,6 +78,7 @@ function PaginaInicio(){
                         </div>
 
                         
+                        {/* Cartão Plano Trimestral */}
                         <div className="p-4">
                             <div className="flex rounded-lg h-full bg-white  shadow-2xl p-8 flex-col">
                             <div className="flex items-center mb-3">
@@ -98,6 +102,7 @@ function PaginaInicio(){
                             </div>
                         </div>
 
+                        {/* Cartão Plano Mensal */}
                         <div className="p-4">
                             <div className="flex rounded-lg h-full bg-white  shadow-2xl p-8 flex-col">
                             <div className="flex items-center mb-3">
@@ -114,11 +119,13 @@ function PaginaInicio(){
                                     <li>Aula 3x por semana — 1 parcela de <span className="font-bold">R$390,00</span></li>
                                 </ul>
                             </div>
-                            <div>
+                            <div>
                                 <Botao texto="Saiba mais" type="button" link="/"/> 
                             </div>
                             </div>
                         </div>
+
+                        {/* Cartão Plano Semestral */}
                         <div className="p-4">
                             <div className="flex rounded-lg h-full bg-white  shadow-2xl p-8 flex-col">
                             <div className="flex items-center mb-3">
@@ -135,58 +142,45 @@ function PaginaInicio(){
                                     <li>Aula 3x por semana — 6 parcela de <span className="font-bold">R$360,00</span></li>
                                 </ul>
                             </div>
-                            <div>
+                            <div>
                                 <Botao texto="Saiba mais" type="button" link="/"/> 
                             </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
         </section>
-
-    {/* SEÇÃO 3: Agende sua aula experimental (MOBILE MAIOR) */}
-        <section 
-            className="relative flex justify-center items-center py-[2%] w-full h-[620px]"
-        >
-            {/* Div de Background e Conteúdo (Container Relativo) */}
-            <div 
-                className="flex items-start justify-end flex-col w-full h-full 
-                           bg-[url('/womanbackgrounf.png')] bg-right bg-no-repeat bg-cover 
-                           px-[8%] py-[8%]" 
-            >
-                {/* Div de Conteúdo (ABSOLUTO e ALINHADO À ESQUERDA) */}
-                <div 
-                    className="absolute z-10 top-1/2 left-4 transform -translate-y-1/5 flex flex-col items-start justify-center 
-                                md:left-6 md:right-auto" 
-                >
-                    {/* Linha 1 do texto */}
-                        <div className="bg-gray-400 bg-opacity-70 px-6 py-2 mb-2 rounded-md w-fit">
-                            <h2 className="text-5xl md:text-6xl text-white font-bold drop-shadow-md whitespace-nowrap">
-                                Agende sua aula
-                            </h2>
-                        </div>
-                        
-                    {/* Linha 2 do texto */}
-                        <div className="bg-gray-400 bg-opacity-70 px-6 py-2 rounded-md w-fit">
-                            <h2 className="text-5xl md:text-6xl text-white font-bold drop-shadow-md whitespace-nowrap">
-                                experimental
-                            </h2>
-                        </div>
-                        
-                    {/* Botão */}
-                        <div className='w-full max-w-[200px] md:max-w-[280px] mt-6'>
-                            <Botao texto="Saiba mais" type="button" link="/"/>
-                        </div>
-                </div>
-            </div>
-        </section>
-
         
+    {/* SEÇÃO 3: Agende sua aula experimental (AGORA COM IMAGEM DE FUNDO E CAIXAS ESCURAS) */}
+    <section className="relative flex justify-center items-center py-[2%] w-full h-[620px]">
+        <div className="flex items-start justify-end flex-col w-full h-full 
+            bg-[url('/womanbackgrounf.png')] bg-right bg-no-repeat bg-cover 
+            px-[8%] py-[8%]">
+            
+            <div className="absolute z-10 top-1/2 left-4 transform -translate-y-1/3 flex flex-col items-start justify-center 
+                md:left-8 md:right-auto">
+
+                <h1 className="text-[3rem] lg:text-[3rem] text-white bg-gray-400 py-1 px-3 mb-2 font-bold inline-block">
+                    Agende sua aula
+                </h1>
+                <h1 className="text-[3rem] lg:text-[3rem] text-white bg-gray-400 py-1 px-3 mb-2 font-bold inline-block">
+                    experimental
+                </h1>
+                
+                <div className="mt-2 w-60">
+                    <Botao texto="Saiba mais" type="button" link="/"/>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    
+    {/* SEÇÃO 4: Mapa */}
+    <section className="w-full">
         <Mapa />
-                    
+    </section>
     </main>
     )
-    
 }
 
-export default PaginaInicio;
+export default PaginaInicio
