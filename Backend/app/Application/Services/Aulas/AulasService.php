@@ -117,6 +117,32 @@ class AulasService implements AulasServiceContract
         }
     }
 
+    public function getNextAulaByStudent(int $id_student): array
+    {
+        try {
+            $nextAula = $this->aulasRepository->getNextAulaByStudent($id_student);
+
+            if (!$nextAula) {
+                return [
+                    'status' => 'success',
+                    'message' => 'Nenhuma próxima aula encontrada',
+                    'data' => null
+                ];
+            }
+
+            return [
+                'status' => 'success',
+                'message' => 'Próxima aula encontrada com sucesso',
+                'data' => $nextAula
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Erro ao buscar próxima aula'
+            ];
+        }
+    }
+
     public function enrollStudentInAula(int $id_student, int $id_aula): array
     {
         try {

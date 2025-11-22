@@ -222,6 +222,76 @@ class AulasControllerAdapter extends BaseController
         return response()->json($result, $status);
     }
 
+    #[OA\Get(
+        path: "/api/students/{id_student}/aulas/next",
+        operationId: "getNextAulaAluno",
+        tags: ["Students"],
+        summary: "Obter próxima aula de um aluno",
+        description: "Retorna a próxima aula agendada para o aluno (considerando data e horário atual)"
+    )]
+    #[OA\Parameter(
+        name: "id_student",
+        in: "path",
+        description: "ID do aluno",
+        required: true,
+        schema: new OA\Schema(type: "integer", example: 1)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Próxima aula retornada com sucesso ou null se não houver",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "message", type: "string", example: "Next aula retrieved successfully"),
+                new OA\Property(
+                    property: "data",
+                    type: "object",
+                    nullable: true,
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 5),
+                        new OA\Property(property: "horario", type: "string", example: "14:00"),
+                        new OA\Property(property: "tipo", type: "string", example: "Pilates Reformer"),
+                        new OA\Property(
+                            property: "unidade",
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "id", type: "integer", example: 1),
+                                new OA\Property(property: "name", type: "string", example: "Studio Centro"),
+                                new OA\Property(property: "endereco", type: "string", example: "Rua Central, 123")
+                            ]
+                        ),
+                        new OA\Property(
+                            property: "instructor",
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "id", type: "integer", example: 2),
+                                new OA\Property(property: "nome", type: "string", example: "Maria Silva")
+                            ]
+                        ),
+                        new OA\Property(property: "data", type: "string", example: "25-11-2025")
+                    ]
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Erro ao buscar próxima aula",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "error"),
+                new OA\Property(property: "message", type: "string", example: "Failed to retrieve next aula")
+            ]
+        )
+    )]
+    public function getNextAulaAluno(int $id_student): JsonResponse
+    {
+        $result = $this->aulasService->getNextAulaByStudent($id_student);
+        $status = $result['status'] === 'success' ? 200 : 500;
+        
+        return response()->json($result, $status);
+    }
+
     #[OA\Post(
         path: "/api/students/aulas/{id_aula}/enroll",
         operationId: "enrollStudentInAula",

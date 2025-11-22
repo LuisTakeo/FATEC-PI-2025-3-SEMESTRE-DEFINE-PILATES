@@ -13,6 +13,7 @@ Route::prefix('students')->name('students.')->group(function () {
     Route::post('/login', [StudentControllerAdapter::class, 'login'])->name('login');
 
     Route::get('/{id_student}/aulas', [AulasControllerAdapter::class, 'listAulasAluno'])->name('aulas');
+    Route::get('/{id_student}/aulas/next', [AulasControllerAdapter::class, 'getNextAulaAluno'])->name('aulas.next');
     Route::get('/{id_student}/aulas/available', [AulasControllerAdapter::class, 'listAvailableAulasForStudent'])->name('aulas.available');
     Route::post('/aulas/{id_aula}/enroll', [AulasControllerAdapter::class, 'enrollStudentInAula'])->name('aulas.enroll');
     // Route::post('save-validation', [StudentControllerAdapter::class, 'postWithValidation'])->name('store');

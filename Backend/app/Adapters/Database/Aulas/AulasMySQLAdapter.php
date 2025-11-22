@@ -239,6 +239,55 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         return $aulas->toArray();
     }
 
+    public function getNextAulaByStudent(int $id_student): ?array
+    {
+        $now = \Carbon\Carbon::now();
+        $currentDate = $now->format('Y-m-d');
+        $currentTime = $now->format('H:i:s');
+
+        $nextAula = ScheduleStudio::query()
+            ->with(['studio', 'instructor.user', 'typeClass'])
+            ->whereHas('studentSchedules', function($q) use ($id_student) {
+                $q->where('Id_students', $id_student)
+                  ->where('status', '!=', 'cancelled');
+            })
+            ->where(function($q) use ($currentDate, $currentTime) {
+                // Aulas futuras (data maior que hoje)
+                $q->where('scheduledate', '>', $currentDate)
+                  // OU aulas de hoje que ainda não passaram
+                  ->orWhere(function($q2) use ($currentDate, $currentTime) {
+                      $q2->where('scheduledate', '=', $currentDate)
+                         ->where('scheduletime', '>', $currentTime);
+                  });
+            })
+            ->orderBy('scheduledate', 'asc')
+            ->orderBy('scheduletime', 'asc')
+            ->first();
+
+        if (!$nextAula) {
+            return null;
+        }
+
+        $date = \DateTime::createFromFormat('Y-m-d', $nextAula->scheduledate);
+        $horario = \DateTime::createFromFormat('H:i:s', $nextAula->scheduletime);
+
+        return [
+            'id' => $nextAula->Id_schedule_studios,
+            'horario' => $horario->format('H:i'),
+            'tipo' => $nextAula->typeClass->typeclass,
+            'unidade' => [
+                'id' => $nextAula->studio->Id_studios,
+                'name' => $nextAula->studio->studioname,
+                'endereco' => $nextAula->studio->address
+            ],
+            'instructor' => [
+                'id' => $nextAula->instructor->Id_instructors,
+                'nome' => $nextAula->instructor->user->fullname
+            ],
+            'data' => $date->format('d-m-Y'),
+        ];
+    }
+
     public function enrollStudentInAula(int $id_student, int $id_aula): bool
     {
         try {
