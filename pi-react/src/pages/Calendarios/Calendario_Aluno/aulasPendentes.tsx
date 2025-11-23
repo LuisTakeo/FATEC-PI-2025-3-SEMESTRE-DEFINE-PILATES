@@ -30,8 +30,6 @@ export default function AulasPendentes(){
 
     }
 
-
-
     return(
         <section className="flex flex-col px-[15%]">
             <h1 className={Estilizacoes.titulo_principal}>Cadastre-se em alguma aula disponível abaixo</h1>

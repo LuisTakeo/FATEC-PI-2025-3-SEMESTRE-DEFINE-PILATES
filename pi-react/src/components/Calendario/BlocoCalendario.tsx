@@ -3,7 +3,7 @@ import Botao from "./../Botao/Botao"
 import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
 import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
-
+import presencaInstrutor from "../../services/funcionarios/presencaInstrutor";
 
 export default function BlocoCalendario() {
 
@@ -34,6 +34,10 @@ export default function BlocoCalendario() {
         const data = dataInicio?.getDate() + "-" + dataInicio?.getMonth() + "-" + dataInicio?.getFullYear()
         return aula.data >= data  
   })
+
+  async function confirmarPresencaInstructor(id) {  
+    const response = await presencaInstrutor(id)
+  }
 
  
   return(
@@ -84,8 +88,14 @@ export default function BlocoCalendario() {
                     : aula.unidade.id === 3
                     ? "unidade: Vila Jacuí, endereço Rua Santana de Pirapama, 91 - Vila Jacuí, São Paulo - SP, 08060-370"
                     : ""}, com o(a) instrutor/instrutora ${aula.instructor.nome}` + `. Caso você desmarque a aula em 3 horas antes do início dela, ela poderá ser reposta, caso desmarque depois, não terá direito de reposição e perderá a aula.`)
-                    
-                    }else{
+                    }else if (cargo == "instructor"){
+                      <>
+                        <div>
+                            <Botao texto="Confirmar presença" type="button" onClick={() => confirmarPresencaInstructor(aula.id ? aula.id : null)}/>
+                        </div>
+                      </>
+                    }
+                    else{
                     alert(`Aula do tipo ${aula.tipo}, ela ocorrerá as ${aula.horario} na ${aula.unidade.id === 1
                     ? "unidade São Miguel Paulista, endereço R. José Aldo Piassi, 165 - São Miguel Paulista, São Paulo - SP, 08011-300"
                     : aula.unidade.id === 2

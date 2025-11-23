@@ -9,6 +9,7 @@ import { fetchAulasFuncionario} from "../../services/aula/puxar_aula_funcionario
     const cargo = acesso.user.type
     const id = acesso.user.id
 
+
     if (cargo == "student"){
         const aulas = await fetchAulasAluno(id)
         return {aulas, cargo}
