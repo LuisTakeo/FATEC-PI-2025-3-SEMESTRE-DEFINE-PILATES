@@ -1,17 +1,28 @@
-// import type {Aluno} from "./../../types/Aluno"
+// Caminho: services/aluno/loginservice.ts
 
 import { API_BASE_URL } from "../../config/api";
 
-export async function login_aluno(login: string , password: string) {
-    try{
+// Define a interface para o retorno esperado no componente LoginPage
+interface AuthResult {
+    success: boolean;
+    token?: string;
+    alunoId?: string; 
+    message?: string;
+}
+
+// Função auxiliar para formatar o telefone, removendo caracteres não numéricos.
+function formatar_telefone(telefone: string): string {
+    return telefone.replace(/\D/g, '');
+}
+
+export async function login_aluno(login: string, password: string): Promise<AuthResult> {
+    try {
         const telefoneLogin = formatar_telefone(login);
-        console.log(telefoneLogin);
-        console.log(password);
-        console.log(API_BASE_URL);
+
         const response = await fetch(`${API_BASE_URL}/students/login`, 
             {
                 method: "POST",
-                headers:{
+                headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
@@ -20,61 +31,53 @@ export async function login_aluno(login: string , password: string) {
                     password
                 })
             }
-        )
-        console.log(response)
-        const data = await response.json()
-        console.log(data.data.user)
-        console.log(data.data.token)
-        localStorage.setItem("Define-Pilates-AuthToken", data.data.token);
-        localStorage.setItem("Define-Pilates-UserInfo", (JSON.stringify(data.data.user)));
-        if(response.status !== 200){
-            return false
+        );
+        
+        const data = await response.json();
+
+        // 🔑 1. VERIFICAÇÃO DE SUCESSO E EXISTÊNCIA DO TOKEN
+        if (response.status === 200 && data.data?.token) {
+            
+            const token = data.data.token;
+            const user = data.data.user;
+            const student = data.data.student; // Incluímos 'student' para garantir a coleta do ID, se necessário
+            
+            // 💥 CORREÇÃO PRINCIPAL: Usa a chave 'fullname' para extrair o nome
+            const nomeDoAluno = user?.fullname?.toString().trim() || 'Aluno(a)'; 
+            
+            // Cria o objeto para salvar no localStorage
+            const userInfoParaStorage = {
+                id: student?.id?.toString() || user?.id?.toString(), // Tenta ID de 'student' primeiro
+                alunoId: student?.id?.toString() || user?.id?.toString(),
+                // MAPEAR 'fullname' (API) para 'nome' (HomeAlunoPage)
+                nome: nomeDoAluno 
+            };
+
+            // 2. ARMAZENAMENTO NO localStorage
+            localStorage.setItem("Define-Pilates-AuthToken", token);
+            localStorage.setItem("Define-Pilates-UserInfo", JSON.stringify(userInfoParaStorage));
+
+            // 3. RETORNA O OBJETO DE SUCESSO
+            return {
+                success: true,
+                token: token,
+                alunoId: student?.id?.toString() || user?.id?.toString() 
+            };
+        } else {
+            // Caso de falha de credenciais
+            const errorMessage = data.message || "Credenciais inválidas. Verifique telefone e senha.";
+            
+            return {
+                success: false,
+                message: errorMessage
+            };
         }
-        return true
 
     }catch(error){
-        console.log(error)
-        return false
+        console.error("Erro de rede/servidor:", error);
+        return {
+            success: false,
+            message: "Erro de conexão. Tente novamente mais tarde."
+        };
     }
-
-    return true
 }
-
-function formatar_telefone(telefone: string)
-{
-    return telefone.replace(/\D/g, '');
-
-}
-
-
-// {
-//   "name": "João Silva",
-//   "phone": "(11)99999-9999",
-//   "password": "abc123A",
-//   "cpf": "12345678901",
-//   "profession": "Engenheiro",
-//   "birth_date": "15-01-1990",
-//   "fotos": [
-//     "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD"
-//   ],
-//   "contatos": [
-//     {
-//       "tipo": "email",
-//       "valor": "joao@email.com",
-//       "observacao": "Email pessoal"
-//     }
-//   ],
-//   "enderecos": [
-//     {
-//       "tipo": "residencial",
-//       "rua": "Rua das Flores",
-//       "numero": "123",
-//       "complemento": "Apto 45",
-//       "bairro": "Centro",
-//       "cidade": "São Paulo",
-//       "estado": "SP",
-//       "cep": "01234-567",
-//       "principal": true
-//     }
-//   ]
-// }
