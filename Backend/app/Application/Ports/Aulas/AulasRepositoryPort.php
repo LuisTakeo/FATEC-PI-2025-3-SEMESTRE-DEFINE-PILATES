@@ -21,4 +21,8 @@ interface AulasRepositoryPort
     public function enrollStudentInAula(int $id_student, int $id_aula): bool;
     
     public function getAvailableAulasForStudent(int $id_student): array;
+    
+    public function updateStudentAulaStatus(int $id_student, int $id_aula, string $status): bool;
+    
+    public function getAulaById(int $id_aula): ?array;
 }

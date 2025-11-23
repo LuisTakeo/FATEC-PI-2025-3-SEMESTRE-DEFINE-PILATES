@@ -5,6 +5,7 @@ namespace App\Application\Services\Aulas;
 use App\Application\DTOs\AulaDTO;
 use App\Application\Ports\Aulas\AulasRepositoryPort;
 use App\Application\Ports\Aulas\AulasServiceContract;
+use Carbon\Carbon;
 
 class AulasService implements AulasServiceContract
 {
@@ -185,6 +186,113 @@ class AulasService implements AulasServiceContract
             return [
                 'status' => 'error',
                 'message' => 'Falha ao listar aulas disponíveis'
+            ];
+        }
+    }
+
+    
+    private function cancelAula(int $id_aula): array
+    {
+        $aula = $this->aulasRepository->getAulaById($id_aula);
+                
+        if (!$aula) {
+            return [
+                'canCancel' => false,
+                'data' => [
+                    'status' => 'error',
+                    'message' => 'Aula não encontrada'
+                ]
+            ];
+        }
+
+        // Combina data e hora da aula
+        $aulaDateTime = Carbon::createFromFormat(
+            'Y-m-d H:i:s',
+            $aula['scheduledate'] . ' ' . $aula['scheduletime']
+        );
+
+        $now = Carbon::now();
+        $hoursUntilClass = $now->diffInHours($aulaDateTime, false);
+
+        // Se a aula já passou
+        if ($hoursUntilClass < 0) {
+            return [
+                'canCancel' => false,
+                'data' => [
+                    'status' => 'error',
+                    'message' => 'Não é possível cancelar uma aula que já ocorreu.'
+                ]
+            ];
+        }
+
+        // Se faltam menos de 3 horas
+        if ($hoursUntilClass < 3) {
+            return [
+                'canCancel' => false,
+                'data' => [
+                    'status' => 'error',
+                    'message' => 'Não é possível cancelar a aula. O cancelamento deve ser feito com no mínimo 3 horas de antecedência.'
+                ]
+            ];
+        }
+
+        // Pode cancelar
+        return [
+            'canCancel' => true,
+            'data' => []
+        ];
+    }
+
+    public function updateStudentAulaStatus(int $id_student, int $id_aula, string $action): array
+    {
+        try {
+            // Mapeia ações para status
+            $statusMap = [
+                'cancel' => 'cancelled',
+                'confirm' => 'confirmed'
+            ];
+
+            if (!isset($statusMap[$action])) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Ação inválida. Use: cancel ou confirm'
+                ];
+            }
+
+            $status = $statusMap[$action];
+
+            // Validação de regra de negócio: cancelamento com 3 horas de antecedência
+            if ($action === 'cancel') {
+                $cancelCheck = $this->cancelAula($id_aula);
+                if (!$cancelCheck['canCancel']) {
+                    return $cancelCheck['data'];
+                }
+            }
+
+            $updated = $this->aulasRepository->updateStudentAulaStatus($id_student, $id_aula, $status);
+
+            if ($updated) {
+                $actionMessage = $action === 'cancel' ? 'cancelada' : 'confirmada';
+                return [
+                    'status' => 'success',
+                    'message' => "Inscrição {$actionMessage} com sucesso",
+                    'data' => [
+                        'id_student' => $id_student,
+                        'id_aula' => $id_aula,
+                        'action' => $action,
+                        'new_status' => $status
+                    ]
+                ];
+            }
+
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao atualizar status da inscrição'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
             ];
         }
     }

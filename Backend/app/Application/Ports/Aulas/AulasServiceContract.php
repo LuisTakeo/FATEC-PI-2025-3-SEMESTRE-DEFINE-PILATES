@@ -21,4 +21,6 @@ interface AulasServiceContract
     public function enrollStudentInAula(int $id_student, int $id_aula): array;
     
     public function listAvailableAulasForStudent(int $id_student): array;
+    
+    public function updateStudentAulaStatus(int $id_student, int $id_aula, string $action): array;
 }

@@ -8,6 +8,7 @@ use App\Models\Studio;
 use App\Models\TypeClass;
 use App\Models\ScheduleStudio;
 use App\Models\StudentSchedule;
+use Carbon\Carbon;
 use Date;
 use DateTime;
 use DB;
@@ -321,7 +322,10 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
             // Se já existe uma inscrição cancelada, reativa; caso contrário, cria nova
             if ($existingEnrollment && $existingEnrollment->status === 'cancelled') {
-                $existingEnrollment->update(['status' => 'pending']);
+                // Usa query builder com WHERE para atualizar apenas este registro
+                StudentSchedule::where('Id_students', $id_student)
+                    ->where('Id_schedule_studios', $id_aula)
+                    ->update(['status' => 'pending']);
             } else {
                 StudentSchedule::create([
                     'Id_students' => $id_student,
@@ -349,7 +353,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
     public function getAvailableAulasForStudent(int $id_student): array
     {
-        $tomorrow = \Carbon\Carbon::tomorrow()->format('Y-m-d');
+        $tomorrow = Carbon::tomorrow()->format('Y-m-d');
 
         $query = ScheduleStudio::query()
             ->with(['studio', 'instructor.user', 'typeClass'])
@@ -398,5 +402,50 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         });
 
         return $aulas->toArray();
+    }
+
+    public function updateStudentAulaStatus(int $id_student, int $id_aula, string $status): bool
+    {
+        try {
+            // Atualiza diretamente com as chaves compostas
+            $updated = StudentSchedule::where('Id_students', $id_student)
+                ->where('Id_schedule_studios', $id_aula)
+                ->update(['status' => $status]);
+
+            if ($updated === 0) {
+                throw new Exception('Inscrição não encontrada');
+            }
+
+            Log::info('Status da inscrição atualizado', [
+                'id_student' => $id_student,
+                'id_aula' => $id_aula,
+                'new_status' => $status
+            ]);
+
+            return true;
+        } catch (Exception $e) {
+            Log::error('Erro ao atualizar status da inscrição', [
+                'id_student' => $id_student,
+                'id_aula' => $id_aula,
+                'status' => $status,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
+    public function getAulaById(int $id_aula): ?array
+    {
+        $aula = ScheduleStudio::find($id_aula);
+        
+        if (!$aula) {
+            return null;
+        }
+
+        return [
+            'id' => $aula->Id_schedule_studios,
+            'scheduledate' => $aula->scheduledate,
+            'scheduletime' => $aula->scheduletime
+        ];
     }
 }

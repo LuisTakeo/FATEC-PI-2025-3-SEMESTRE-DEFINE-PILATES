@@ -590,6 +590,128 @@
                 }
             }
         },
+        "/api/students/{id_student}/aulas/{id_aula}/status": {
+            "patch": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Atualizar status da inscrição do aluno em uma aula",
+                "description": "Permite cancelar ou confirmar a presença do aluno em uma aula específica",
+                "operationId": "updateStudentAulaStatus",
+                "parameters": [
+                    {
+                        "name": "id_student",
+                        "in": "path",
+                        "description": "ID do aluno",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "id_aula",
+                        "in": "path",
+                        "description": "ID da aula",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "action"
+                                ],
+                                "properties": {
+                                    "action": {
+                                        "description": "Ação a ser executada: 'cancel' para cancelar ou 'confirm' para confirmar presença",
+                                        "type": "string",
+                                        "enum": [
+                                            "cancel",
+                                            "confirm"
+                                        ],
+                                        "example": "confirm"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Inscrição confirmada com sucesso"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id_student": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "id_aula": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "action": {
+                                                    "type": "string",
+                                                    "example": "confirm"
+                                                },
+                                                "new_status": {
+                                                    "type": "string",
+                                                    "example": "confirmed"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação ou regra de negócio",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Inscrição não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
         "/api/students/{id_student}/aulas/available": {
             "get": {
                 "tags": [
