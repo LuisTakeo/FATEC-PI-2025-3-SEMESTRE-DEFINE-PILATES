@@ -70,7 +70,7 @@ export default function LoginFuncionario() {
     clearAllErrors(); 
     let hasError = false;
 
-    // --- Validações (Idênticas) ---
+    // --- Validações ---
     if (!tipoUsuario.trim()) {
       setErroTipoUsuario("Selecione uma opção.");
       hasError = true;
@@ -104,20 +104,20 @@ export default function LoginFuncionario() {
     if (!hasError) {
       setIsLoading(true);
       try {
+        // 🔑 Assumindo que login_funcionario retorna um boolean simples (true para sucesso)
         const authSuccess = await login_funcionario(telefone, senha, tipoUsuario);
         
         if (authSuccess) {
             
-            // ✅ CORREÇÃO CRÍTICA: Não capitaliza. Usa o valor exato do select ('instructor').
             const userRoleExact = tipoUsuario; 
             
             const userInfoToStore = {
-                type: userRoleExact, // Garante que o menu leia o valor correto em minúsculo
+                // Salva o tipo de usuário selecionado (administrator, receptionist, instructor)
+                type: userRoleExact, 
             };
 
             if (typeof window !== "undefined") {
               localStorage.setItem("isLoggedIn", "true");
-              // Salva o tipo de usuário que foi selecionado no formulário
               localStorage.setItem("Define-Pilates-UserInfo", JSON.stringify(userInfoToStore)); 
             }
             
@@ -126,7 +126,8 @@ export default function LoginFuncionario() {
             // Redireciona
             navigate("/home/funcionario"); 
         } else {
-          setErroSenha("Credenciais inválidas. Verifique telefone e senha.");
+          // 🎯 AJUSTE: Mensagem padronizada para falha de credenciais
+          setErroSenha("Telefone ou senha incorretos.");
         }
       } catch (error) {
         console.error("Erro na API de Login:", error);
