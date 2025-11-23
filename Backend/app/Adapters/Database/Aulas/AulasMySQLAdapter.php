@@ -8,6 +8,7 @@ use App\Models\Studio;
 use App\Models\TypeClass;
 use App\Models\ScheduleStudio;
 use App\Models\StudentSchedule;
+use Carbon\Carbon;
 use Date;
 use DateTime;
 use DB;
@@ -239,6 +240,55 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         return $aulas->toArray();
     }
 
+    public function getNextAulaByStudent(int $id_student): ?array
+    {
+        $now = \Carbon\Carbon::now();
+        $currentDate = $now->format('Y-m-d');
+        $currentTime = $now->format('H:i:s');
+
+        $nextAula = ScheduleStudio::query()
+            ->with(['studio', 'instructor.user', 'typeClass'])
+            ->whereHas('studentSchedules', function($q) use ($id_student) {
+                $q->where('Id_students', $id_student)
+                  ->where('status', '!=', 'cancelled');
+            })
+            ->where(function($q) use ($currentDate, $currentTime) {
+                // Aulas futuras (data maior que hoje)
+                $q->where('scheduledate', '>', $currentDate)
+                  // OU aulas de hoje que ainda não passaram
+                  ->orWhere(function($q2) use ($currentDate, $currentTime) {
+                      $q2->where('scheduledate', '=', $currentDate)
+                         ->where('scheduletime', '>', $currentTime);
+                  });
+            })
+            ->orderBy('scheduledate', 'asc')
+            ->orderBy('scheduletime', 'asc')
+            ->first();
+
+        if (!$nextAula) {
+            return null;
+        }
+
+        $date = \DateTime::createFromFormat('Y-m-d', $nextAula->scheduledate);
+        $horario = \DateTime::createFromFormat('H:i:s', $nextAula->scheduletime);
+
+        return [
+            'id' => $nextAula->Id_schedule_studios,
+            'horario' => $horario->format('H:i'),
+            'tipo' => $nextAula->typeClass->typeclass,
+            'unidade' => [
+                'id' => $nextAula->studio->Id_studios,
+                'name' => $nextAula->studio->studioname,
+                'endereco' => $nextAula->studio->address
+            ],
+            'instructor' => [
+                'id' => $nextAula->instructor->Id_instructors,
+                'nome' => $nextAula->instructor->user->fullname
+            ],
+            'data' => $date->format('d-m-Y'),
+        ];
+    }
+
     public function enrollStudentInAula(int $id_student, int $id_aula): bool
     {
         try {
@@ -272,7 +322,10 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
             // Se já existe uma inscrição cancelada, reativa; caso contrário, cria nova
             if ($existingEnrollment && $existingEnrollment->status === 'cancelled') {
-                $existingEnrollment->update(['status' => 'pending']);
+                // Usa query builder com WHERE para atualizar apenas este registro
+                StudentSchedule::where('Id_students', $id_student)
+                    ->where('Id_schedule_studios', $id_aula)
+                    ->update(['status' => 'pending']);
             } else {
                 StudentSchedule::create([
                     'Id_students' => $id_student,
@@ -300,7 +353,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
 
     public function getAvailableAulasForStudent(int $id_student): array
     {
-        $tomorrow = \Carbon\Carbon::tomorrow()->format('Y-m-d');
+        $tomorrow = Carbon::tomorrow()->format('Y-m-d');
 
         $query = ScheduleStudio::query()
             ->with(['studio', 'instructor.user', 'typeClass'])
@@ -349,5 +402,50 @@ class AulasMySQLAdapter implements AulasRepositoryPort
         });
 
         return $aulas->toArray();
+    }
+
+    public function updateStudentAulaStatus(int $id_student, int $id_aula, string $status): bool
+    {
+        try {
+            // Atualiza diretamente com as chaves compostas
+            $updated = StudentSchedule::where('Id_students', $id_student)
+                ->where('Id_schedule_studios', $id_aula)
+                ->update(['status' => $status]);
+
+            if ($updated === 0) {
+                throw new Exception('Inscrição não encontrada');
+            }
+
+            Log::info('Status da inscrição atualizado', [
+                'id_student' => $id_student,
+                'id_aula' => $id_aula,
+                'new_status' => $status
+            ]);
+
+            return true;
+        } catch (Exception $e) {
+            Log::error('Erro ao atualizar status da inscrição', [
+                'id_student' => $id_student,
+                'id_aula' => $id_aula,
+                'status' => $status,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
+    public function getAulaById(int $id_aula): ?array
+    {
+        $aula = ScheduleStudio::find($id_aula);
+        
+        if (!$aula) {
+            return null;
+        }
+
+        return [
+            'id' => $aula->Id_schedule_studios,
+            'scheduledate' => $aula->scheduledate,
+            'scheduletime' => $aula->scheduletime
+        ];
     }
 }

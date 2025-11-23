@@ -373,6 +373,122 @@
                 }
             }
         },
+        "/api/students/{id_student}/aulas/next": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Obter próxima aula de um aluno",
+                "description": "Retorna a próxima aula agendada para o aluno (considerando data e horário atual)",
+                "operationId": "getNextAulaAluno",
+                "parameters": [
+                    {
+                        "name": "id_student",
+                        "in": "path",
+                        "description": "ID do aluno",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Próxima aula retornada com sucesso ou null se não houver",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Next aula retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "horario": {
+                                                    "type": "string",
+                                                    "example": "14:00"
+                                                },
+                                                "tipo": {
+                                                    "type": "string",
+                                                    "example": "Pilates Reformer"
+                                                },
+                                                "unidade": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Studio Centro"
+                                                        },
+                                                        "endereco": {
+                                                            "type": "string",
+                                                            "example": "Rua Central, 123"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "instructor": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "nome": {
+                                                            "type": "string",
+                                                            "example": "Maria Silva"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "data": {
+                                                    "type": "string",
+                                                    "example": "25-11-2025"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar próxima aula",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to retrieve next aula"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/students/aulas/{id_aula}/enroll": {
             "post": {
                 "tags": [
@@ -461,6 +577,128 @@
                                             "description": "Possíveis erros: 'Aluno já está cadastrado nesta aula', 'Aula já está com a capacidade máxima de alunos (3 alunos)', 'Aula não encontrada'",
                                             "type": "string",
                                             "example": "Aula já está com a capacidade máxima de alunos (3 alunos)"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
+        "/api/students/{id_student}/aulas/{id_aula}/status": {
+            "patch": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Atualizar status da inscrição do aluno em uma aula",
+                "description": "Permite cancelar ou confirmar a presença do aluno em uma aula específica",
+                "operationId": "updateStudentAulaStatus",
+                "parameters": [
+                    {
+                        "name": "id_student",
+                        "in": "path",
+                        "description": "ID do aluno",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "id_aula",
+                        "in": "path",
+                        "description": "ID da aula",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "action"
+                                ],
+                                "properties": {
+                                    "action": {
+                                        "description": "Ação a ser executada: 'cancel' para cancelar ou 'confirm' para confirmar presença",
+                                        "type": "string",
+                                        "enum": [
+                                            "cancel",
+                                            "confirm"
+                                        ],
+                                        "example": "confirm"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Inscrição confirmada com sucesso"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id_student": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "id_aula": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "action": {
+                                                    "type": "string",
+                                                    "example": "confirm"
+                                                },
+                                                "new_status": {
+                                                    "type": "string",
+                                                    "example": "confirmed"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação ou regra de negócio",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Inscrição não encontrada"
                                         }
                                     },
                                     "type": "object"
