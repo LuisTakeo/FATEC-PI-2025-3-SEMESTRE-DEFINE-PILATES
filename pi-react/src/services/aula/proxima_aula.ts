@@ -40,7 +40,7 @@ export async function fetchProximaAula(alunoId: string): Promise<ProximaAulaApi 
     
     try {
         // Usa o endpoint otimizado: /students/{id}/next-aula
-        const url = `${ API_BASE_URL }/students/${alunoId}/next-aula`; 
+        const url = `${ API_BASE_URL }/students/${alunoId}/aulas/next`; 
         
         const response = await fetch(url, {
             method: "GET",
