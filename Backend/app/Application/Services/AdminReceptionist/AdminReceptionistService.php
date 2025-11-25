@@ -111,14 +111,13 @@ class AdminReceptionistService implements AdminReceptionistServiceContract
                 'message' => 'Login realizado com sucesso',
                 'data' => [
                     'user' => [
-                        'id' => $userData->id_users,
+                        'id' => $collaborator->Id_collaborators,
                         'nameuser' => $userData->nameuser,
                         'fullname' => $userData->fullname,
                         'type' => $userData->typeuser,
                         'status' => $userData->statususer,
                     ],
                     'collaborator' => [
-                        'id' => $collaborator->Id_collaborators,
                         'role' => $collaborator->typecollaborator,
                     ],
                     'token' => $token, // ✅ Token JWT-like

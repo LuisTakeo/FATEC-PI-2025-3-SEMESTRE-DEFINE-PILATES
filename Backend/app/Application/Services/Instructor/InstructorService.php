@@ -127,14 +127,13 @@ class InstructorService implements InstructorServiceContract
             'message' => 'Login realizado com sucesso',
             'data' => [
                 'user' => [
-                    'id' => $userData->id_users,
+                    'id' => $instructor->Id_instructors,
                     'nameuser' => $userData->nameuser,
                     'fullname' => $userData->fullname,
                     'type' => $userData->typeuser,
                     'status' => $userData->statususer,
                 ],
                 'instructor' => [
-                    'id' => $instructor->Id_instructors,
                     'cref' => $instructor->cref,
                     'crefito' => $instructor->crefito,
                 ],
