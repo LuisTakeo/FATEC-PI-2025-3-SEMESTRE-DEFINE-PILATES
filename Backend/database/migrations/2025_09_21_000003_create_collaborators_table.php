@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('classification', 50)->nullable();
             $table->timestamps();
 
-            $table->foreign('id_users')->references('id_users')->on('users')->onDelete('cascade');
+            $table->foreign('Id_users')->references('id_users')->on('users')->onDelete('cascade');
         });
     }
 

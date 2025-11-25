@@ -7,15 +7,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // ✅ Migrar nomes de students para users.fullname
-        DB::statement("
-            UPDATE users u
-            INNER JOIN students s ON u.id_users = s.Id_users
-            SET u.fullname = s.namestudent
-            WHERE u.typeuser = 'student' AND s.namestudent IS NOT NULL
-        ");
+        $driver = DB::connection()->getDriverName();
 
-        
+        if ($driver === 'mysql') {
+            // MySQL: INNER JOIN syntax
+            DB::statement("
+                UPDATE users u
+                INNER JOIN students s ON u.id_users = s.id_users
+                SET u.fullname = s.namestudent
+                WHERE u.typeuser = 'Student' AND s.namestudent IS NOT NULL
+            ");
+        } else {
+            // PostgreSQL: FROM syntax
+            DB::statement("
+                UPDATE users u
+                SET fullname = s.namestudent
+                FROM students s
+                WHERE u.id_users = s.id_users 
+                AND u.typeuser = 'Student' 
+                AND s.namestudent IS NOT NULL
+            ");
+        }
     }
 
     public function down(): void
@@ -24,7 +36,7 @@ return new class extends Migration
         DB::statement("
             UPDATE users 
             SET fullname = NULL 
-            WHERE typeuser IN ('student')
+            WHERE typeuser = 'Student'
         ");
     }
 };

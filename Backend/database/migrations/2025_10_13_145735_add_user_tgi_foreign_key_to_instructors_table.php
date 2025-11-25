@@ -13,21 +13,21 @@ return new class extends Migration
     {
         Schema::table('instructors', function (Blueprint $table) {
             // ✅ Adicionar coluna para FK do UserTgi
-            // Assumindo que existe Id_instructors como primeira coluna
-            $table->unsignedBigInteger('Id_users')->after('Id_instructors');
+            // Assumindo que existe id_instructors como primeira coluna
+            $table->unsignedBigInteger('id_users')->after('id_instructors');
             
             // ✅ Criar foreign key constraint
-            $table->foreign('Id_users')
-                  ->references('Id_users')
+            $table->foreign('id_users')
+                  ->references('id_users')
                   ->on('users')
                   ->onDelete('cascade') // Se deletar user, deleta instructor
                   ->onUpdate('cascade'); // Se atualizar ID user, atualiza instructor
             
             // ✅ Criar índice para performance
-            $table->index('Id_users');
+            $table->index('id_users');
             
             // ✅ Garantir que cada UserTgi só pode ter um Instructor
-            $table->unique('Id_users');
+            $table->unique('id_users');
         });
     }
 
@@ -38,16 +38,16 @@ return new class extends Migration
     {
         Schema::table('instructors', function (Blueprint $table) {
             // ✅ Remover constraint unique primeiro
-            $table->dropUnique(['Id_users']);
+            $table->dropUnique(['id_users']);
             
             // ✅ Remover foreign key
-            $table->dropForeign(['Id_users']);
+            $table->dropForeign(['id_users']);
             
             // ✅ Remover índice
-            $table->dropIndex(['Id_users']);
+            $table->dropIndex(['id_users']);
             
             // ✅ Remover coluna
-            $table->dropColumn('Id_users');
+            $table->dropColumn('id_users');
         });
     }
 };

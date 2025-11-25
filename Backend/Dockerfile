@@ -25,13 +25,23 @@ RUN apt-get install -y --no-install-recommends \
     libssl-dev \
     libcurl4-openssl-dev \
     pkg-config \
-    tzdata
+    tzdata \
+    ca-certificates \
+    openssl
 
 # Configurar e instalar extensão GD
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
+# Instalar dependências do PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev
+
+# Atualizar certificados SSL do sistema
+RUN update-ca-certificates
+
 # Instalar extensões PHP uma por uma (melhor para debug)
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-install pgsql
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install pcntl

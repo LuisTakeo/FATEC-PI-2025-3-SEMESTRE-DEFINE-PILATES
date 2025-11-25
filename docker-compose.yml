@@ -139,21 +139,6 @@ services:
       start_period: 15s
     networks:
       - app-network
-    
-    # ngrok-backend:
-    #   build:
-    #     context: ./ngrok
-    #     dockerfile: Dockerfile
-    #     args:
-    #       - NGROK_CONFIG=ngrok-backend.yml
-    #   ports:
-    #     - "4041:4040"  # Expose on different host port
-    #   environment:
-    #     - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN_BACKEND}
-    #   depends_on:
-    #     - backend
-    #   restart: unless-stopped
-
   ngrok-backend:
     build:
       context: ./Ngrok
