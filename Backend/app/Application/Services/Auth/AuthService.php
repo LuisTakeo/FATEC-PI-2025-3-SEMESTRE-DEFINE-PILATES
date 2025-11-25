@@ -25,13 +25,25 @@ class AuthService implements AuthServiceContract
 
             // Carrega relacionamento baseado no tipo de usuário
             $relatedEntity = $user->getRelatedEntity();
-
+            // quero guardar o Id_ dependendo do tipo de user
+            $entityId = null;
+            switch($user->typeuser) {
+                case 'Student':
+                    $entityId = $relatedEntity->Id_students;
+                    break;
+                case 'Instructor':
+                    $entityId = $relatedEntity->Id_instructor;
+                    break;
+                case 'Collaborator':
+                    $entityId = $relatedEntity->Id_collaborator;
+                    break;
+            }
             return [
                 'status' => 'success',
                 'message' => 'Usuário autenticado',
                 'data' => [
                     'user' => [
-                        'id' => $user->id_users,
+                        'id' => $entityId,
                         'login' => $user->nameuser,
                         'name' => $user->fullname,
                         'type' => $user->typeuser,
