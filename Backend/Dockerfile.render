@@ -1,0 +1,77 @@
+############################################################
+# Dockerfile PRODUCTION - Laravel para Render
+############################################################
+FROM php:8.3-fpm
+
+# Configurar timezone
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Instalar dependências do sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    curl \
+    zip \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libpq-dev \
+    pkg-config \
+    tzdata \
+    ca-certificates \
+    openssl \
+    nginx \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Configurar extensão GD
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+# Instalar extensões PHP
+RUN docker-php-ext-install \
+    pdo_mysql \
+    pdo_pgsql \
+    pgsql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip
+
+# Instalar MongoDB
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+
+# Atualizar certificados SSL
+RUN update-ca-certificates
+
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Definir diretório de trabalho
+WORKDIR /var/www/html
+
+# Copiar arquivos do projeto
+COPY . .
+
+# Instalar dependências do Composer (sem dev)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Configurar permissões
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Copiar script de inicialização
+COPY render-entrypoint.sh /usr/local/bin/render-entrypoint.sh
+RUN chmod +x /usr/local/bin/render-entrypoint.sh
+
+# Expor porta
+EXPOSE 8000
+
+# Comando de inicialização
+CMD ["/usr/local/bin/render-entrypoint.sh"]
