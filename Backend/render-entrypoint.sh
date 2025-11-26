@@ -17,7 +17,8 @@ php artisan migrate --force
 # Limpar e cachear configurações
 echo "[render] Otimizando aplicação..."
 php artisan config:cache
-php artisan route:cache
+# Não cacheia rotas em produção para evitar problemas com health check
+# php artisan route:cache
 
 # View cache só se o diretório existir
 if [ -d "resources/views" ]; then
