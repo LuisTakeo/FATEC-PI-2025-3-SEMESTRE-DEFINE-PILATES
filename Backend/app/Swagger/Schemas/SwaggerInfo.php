@@ -15,6 +15,10 @@ use OpenApi\Attributes as OA;
     description: "Ngrok Server (HTTPS) - Use when accessing via Ngrok"
 )]
 #[OA\Server(
+    url: "https://define-pilates-server-dev.onrender.com/",
+    description: "Render Server - Use when accessing via Render"
+)]
+#[OA\Server(
     url: "http://localhost:8000",
     description: "Local Server (HTTP) - Use when accessing locally"
 )]
