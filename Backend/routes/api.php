@@ -13,7 +13,7 @@ Route::get('/', function () {
 // Route::get('/hello', [PilatesController::class, 'hello']);
 
 Route::get('/up', function() {
-    return response()->json(['status' => 'up']);
+    return response()->json(['status' => 'ok'], 200);
 });
 
 Route::get('/aulas/types', [AulasControllerAdapter::class, 'listAulasTypes']);

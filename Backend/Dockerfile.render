@@ -62,6 +62,13 @@ COPY . .
 # Instalar dependências do Composer (sem dev)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Criar diretórios necessários se não existirem
+RUN mkdir -p storage/framework/cache/data \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache
+
 # Configurar permissões
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
