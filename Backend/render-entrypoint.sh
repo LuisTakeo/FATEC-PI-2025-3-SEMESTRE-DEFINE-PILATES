@@ -14,11 +14,15 @@ echo "[render] Iniciando aplicação Laravel..."
 echo "[render] Executando migrations..."
 php artisan migrate --force
 
-# Limpar e cachear configurações
-echo "[render] Otimizando aplicação..."
-php artisan config:cache
-# Não cacheia rotas em produção para evitar problemas com health check
-# php artisan route:cache
+# Limpar caches antes de tudo
+echo "[render] Limpando caches antigos..."
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan cache:clear || true
+
+# Cachear configurações (sem rotas para evitar problemas com health check)
+echo "[render] Cacheando configurações..."
+php artisan config:cache || echo "[render] AVISO: Falha ao cachear config"
 
 # View cache só se o diretório existir
 if [ -d "resources/views" ]; then
@@ -31,6 +35,15 @@ fi
 echo "[render] Gerando documentação Swagger..."
 php artisan l5-swagger:generate || echo "[render] AVISO: Falha ao gerar Swagger"
 
+# Verificar rotas disponíveis
+echo "[render] Verificando rotas registradas..."
+php artisan route:list --path=up || true
+
 # Iniciar servidor
-echo "[render] Iniciando servidor na porta ${PORT:-8000}..."
-exec php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+echo "[render] =========================================="
+echo "[render] Porta configurada: ${PORT:-10000}"
+echo "[render] Host: 0.0.0.0"
+echo "[render] Health check: /up"
+echo "[render] Iniciando servidor Laravel..."
+echo "[render] =========================================="
+exec php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
