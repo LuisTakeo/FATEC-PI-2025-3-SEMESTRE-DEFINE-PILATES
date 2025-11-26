@@ -5,10 +5,10 @@ echo "[render] Iniciando aplicação Laravel..."
 
 
 # Gerar chave da aplicação se necessário
-if ! grep -q "APP_KEY=base64:" .env 2>/dev/null; then
-    echo "[render] Gerando APP_KEY..."
-    php artisan key:generate --force
-fi
+# if ! grep -q "APP_KEY=base64:" .env 2>/dev/null; then
+#     echo "[render] Gerando APP_KEY..."
+#     php artisan key:generate --force
+# fi
 
 # Executar migrations
 echo "[render] Executando migrations..."
