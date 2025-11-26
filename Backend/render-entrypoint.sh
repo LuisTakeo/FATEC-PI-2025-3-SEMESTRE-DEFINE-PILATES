@@ -18,7 +18,13 @@ php artisan migrate --force
 echo "[render] Otimizando aplicação..."
 php artisan config:cache
 php artisan route:cache
-php artisan view:cache
+
+# View cache só se o diretório existir
+if [ -d "resources/views" ]; then
+    php artisan view:cache || echo "[render] AVISO: Falha ao cachear views"
+else
+    echo "[render] Diretório resources/views não existe, pulando view:cache"
+fi
 
 # Gerar documentação Swagger
 echo "[render] Gerando documentação Swagger..."
