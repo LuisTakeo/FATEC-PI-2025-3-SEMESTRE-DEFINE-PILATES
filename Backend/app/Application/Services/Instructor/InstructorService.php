@@ -6,6 +6,7 @@ use App\Application\DTOs\InstructorDTO;
 use App\Application\Ports\NoSQLPort;
 use App\Application\Ports\Instructor\InstructorRepositoryPort;
 use App\Application\Ports\Instructor\InstructorServiceContract;
+use App\Application\Ports\Aulas\AulasRepositoryPort;
 use Exception;
 use Hash;
 use Illuminate\Support\Facades\Log;
@@ -16,14 +17,17 @@ class InstructorService implements InstructorServiceContract
 {
     private InstructorRepositoryPort $sqlAdapter;
     private NoSQLPort $noSQLAdapter;
+    private AulasRepositoryPort $aulasAdapter;
 
 
    public function __construct(
         InstructorRepositoryPort $sqlAdapter,
-        NoSQLPort $noSQLAdapter
+        NoSQLPort $noSQLAdapter,
+        AulasRepositoryPort $aulasAdapter
     ) {
         $this->sqlAdapter = $sqlAdapter;
         $this->noSQLAdapter = $noSQLAdapter;
+        $this->aulasAdapter = $aulasAdapter;
     }
 
     /**
@@ -158,6 +162,80 @@ class InstructorService implements InstructorServiceContract
             return [
                 'status' => 'error',
                 'message' => 'Falha ao listar instrutores'
+            ];
+        }
+    }
+
+    public function getInstructorClasses(int $instructorId): array
+    {
+        try {
+            // Usa o AulasAdapter diretamente
+            $classes = $this->aulasAdapter->getInstructorClassesWithStudents($instructorId);
+
+            return [
+                'status' => 'success',
+                'message' => 'Aulas do instrutor encontradas com sucesso',
+                'data' => $classes
+            ];
+        } catch (Exception $e) {
+            Log::error('Error getting instructor classes: ' . $e->getMessage(), [
+                'instructor_id' => $instructorId,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao buscar aulas do instrutor',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function updateStudentAttendance(int $instructorId, int $studentId, int $classId, string $status): array
+    {
+        try {
+            // Validar status
+            $validStatuses = ['pending', 'confirmed', 'completed', 'absent', 'cancelled'];
+            if (!in_array($status, $validStatuses)) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Status inválido. Valores aceitos: ' . implode(', ', $validStatuses)
+                ];
+            }
+
+            // Verifica se a aula pertence ao instrutor
+            if (!$this->sqlAdapter->verifyInstructorOwnsClass($instructorId, $classId)) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Aula não encontrada ou não pertence a este instrutor'
+                ];
+            }
+
+            // Usa o AulasAdapter para atualizar o status
+            $updated = $this->aulasAdapter->updateStudentAulaStatus($studentId, $classId, $status);
+
+            if ($updated) {
+                return [
+                    'status' => 'success',
+                    'message' => 'Status de presença atualizado com sucesso'
+                ];
+            }
+
+            return [
+                'status' => 'error',
+                'message' => 'Falha ao atualizar status'
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Error updating student attendance: ' . $e->getMessage(), [
+                'instructor_id' => $instructorId,
+                'student_id' => $studentId,
+                'class_id' => $classId,
+                'status' => $status,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
             ];
         }
     }
