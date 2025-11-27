@@ -416,14 +416,21 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                 throw new Exception('Inscrição não encontrada');
             }
 
-            // Atualiza o status
-            $enrollment->status = $status;
-            $enrollment->save();
+            $oldStatus = $enrollment->status;
+
+            // Atualiza o status usando query builder com WHERE explícito
+            $updated = StudentSchedule::where('Id_students', $id_student)
+                ->where('Id_schedule_studios', $id_aula)
+                ->update(['status' => $status]);
+
+            if ($updated === 0 && $oldStatus !== $status) {
+                throw new Exception('Falha ao atualizar status da inscrição');
+            }
 
             Log::info('Status da inscrição atualizado', [
                 'id_student' => $id_student,
                 'id_aula' => $id_aula,
-                'old_status' => $enrollment->getOriginal('status'),
+                'old_status' => $oldStatus,
                 'new_status' => $status
             ]);
 
@@ -462,7 +469,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                     'typeClass:Id_type_classes,typeclass',
                     'studio:Id_studios,studioname',
                     'studentSchedules' => function ($query) {
-                        $query->whereIn('status', ['Confirmed', 'Pending'])
+                        $query->whereIn('status', ['confirmed', 'pending', 'absent', 'completed'])
                             ->with('student.userTgi:id_users,fullname');
                     }
                 ])
