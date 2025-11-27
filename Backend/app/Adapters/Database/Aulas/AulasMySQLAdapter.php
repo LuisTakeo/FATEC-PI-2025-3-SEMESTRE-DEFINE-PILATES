@@ -487,6 +487,7 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                     'observacao' => $class->observation,
                     'alunos' => $class->studentSchedules->map(function ($studentSchedule) {
                         return [
+                            'id_student' => $studentSchedule->Id_students,
                             'nome' => $studentSchedule->student->userTgi->fullname ?? 'Nome não disponível',
                             'status' => $studentSchedule->status
                         ];
