@@ -24,7 +24,7 @@ class Student extends Model
     // ✅ Student PERTENCE a um UserTgi (BelongsTo)
     public function userTgi(): BelongsTo
     {
-        return $this->belongsTo(UserTgi::class, 'Id_users', 'Id_users');
+        return $this->belongsTo(UserTgi::class, 'Id_users', 'id_users');
     }
 
     public function professionClassification(): BelongsTo

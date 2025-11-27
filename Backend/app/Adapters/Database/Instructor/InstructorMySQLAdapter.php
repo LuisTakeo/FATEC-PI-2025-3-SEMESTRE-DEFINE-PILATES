@@ -7,6 +7,8 @@ use App\Application\Ports\Instructor\InstructorRepositoryPort;
 use App\Models\Collaborator;
 use App\Models\Instructor;
 use App\Models\UserTgi;
+use App\Models\ScheduleStudio;
+use App\Models\StudentSchedule;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -113,6 +115,13 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
             ]);
             throw $e;
         }
+    }
+
+    public function verifyInstructorOwnsClass(int $instructorId, int $classId): bool
+    {
+        return ScheduleStudio::where('Id_schedule_studios', $classId)
+            ->where('Id_instructors', $instructorId)
+            ->exists();
     }
     
 }

@@ -1149,6 +1149,231 @@
                 }
             }
         },
+        "/api/instructors/{instructorId}/classes": {
+            "get": {
+                "tags": [
+                    "Instructors"
+                ],
+                "summary": "Listar aulas do instrutor com alunos inscritos",
+                "description": "Retorna todas as aulas do instrutor com a lista de alunos confirmados ou pendentes",
+                "operationId": "getInstructorClasses",
+                "parameters": [
+                    {
+                        "name": "instructorId",
+                        "in": "path",
+                        "description": "ID do instrutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Aulas encontradas com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Aulas do instrutor encontradas com sucesso"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id_aula": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "tipo_aula": {
+                                                        "type": "string",
+                                                        "example": "Pilates Mat"
+                                                    },
+                                                    "studio": {
+                                                        "type": "string",
+                                                        "example": "Studio Principal"
+                                                    },
+                                                    "data": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-11-26"
+                                                    },
+                                                    "horario": {
+                                                        "type": "string",
+                                                        "format": "time",
+                                                        "example": "09:00:00"
+                                                    },
+                                                    "observacao": {
+                                                        "type": "string",
+                                                        "example": "Trazer toalha"
+                                                    },
+                                                    "alunos": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "nome": {
+                                                                    "type": "string",
+                                                                    "example": "Maria Silva"
+                                                                },
+                                                                "status": {
+                                                                    "type": "string",
+                                                                    "example": "confirmed"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar aulas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Falha ao buscar aulas do instrutor"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/instructors/attendance": {
+            "patch": {
+                "tags": [
+                    "Instructors"
+                ],
+                "summary": "Atualizar status de presença/falta do aluno",
+                "description": "Permite ao instrutor marcar presença, falta ou outros status do aluno em uma aula específica",
+                "operationId": "updateStudentAttendance",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "instructor_id": {
+                                        "description": "ID do instrutor",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "class_id": {
+                                        "description": "ID da aula",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "student_id": {
+                                        "description": "ID do aluno",
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "status": {
+                                        "description": "Novo status do aluno",
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "confirmed",
+                                            "completed",
+                                            "absent",
+                                            "cancelled"
+                                        ],
+                                        "example": "completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Status de presença atualizado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Status inválido ou dados incorretos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Status inválido. Valores aceitos: pending, confirmed, completed, absent, cancelled"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aula não encontrada ou não pertence ao instrutor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Aula não encontrada ou não pertence a este instrutor"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/students": {
             "get": {
                 "tags": [
