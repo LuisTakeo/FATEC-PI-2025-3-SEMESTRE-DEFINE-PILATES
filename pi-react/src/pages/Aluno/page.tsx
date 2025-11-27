@@ -33,11 +33,11 @@ export default function HomeAlunoPage() {
     return (
         <div className="w-full min-h-screen flex flex-col bg-gray-150 font-sans">
             
-            <main className="flex-grow w-full pt-2 pb-4 md:pt-1 md:pb-1">
+            <main className="flex flex-col w-full pt-2 md:pt-1 md:pb-1">
                 
                 <section className="mb-20 relative overflow-hidden bg-[var(--background)] w-full">
                     
-                    <div className="max-w-6xl mx-auto px-8 md:px-2">
+                    <div className="w-full px-[18%]">
                         
                         <h1 className="text-2xl font-bold text-gray-800 mb-4 pt-6">
                             Olá, {userInfo ?? "Aluno(a)"}!
@@ -49,7 +49,7 @@ export default function HomeAlunoPage() {
                 </section>
                 
                 <section className="mb-10 relative overflow-hidden bg-[var(--background)] w-full">
-                    <div className="bg-cover bg-center h-96 flex flex-col items-center justify-center gap-2 p-4"
+                    <div className="bg-cover bg-center h-[80vh] flex flex-col items-center justify-center gap-2 p-4"
                         style={{
                             backgroundImage: "url('/mulherpilates.png')",
                             backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
