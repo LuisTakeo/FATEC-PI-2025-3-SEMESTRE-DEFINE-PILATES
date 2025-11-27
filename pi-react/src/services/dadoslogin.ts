@@ -7,7 +7,7 @@ export async function dadosLogin() {
 
   const token = localStorage.getItem("Define-Pilates-AuthToken")
   if (!token) return;
-  console.log(token)
+  // console.log(token)
 
   try {
     
