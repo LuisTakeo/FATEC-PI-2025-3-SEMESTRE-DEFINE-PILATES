@@ -1,16 +1,17 @@
-// import type {Aluno} from "./../../types/Aluno"
+// Caminho: services/funcionarios/loginservice.ts
 
 import { API_BASE_URL } from "../../config/api";
+// ✅ Importa a função formatar_telefone do serviço de aluno, usando o caminho corrigido.
+import { formatar_telefone } from "../aluno/loginservice"; 
 
 export async function login_funcionario(login: string , password: string, acesso: string) {
     try{
         const telefoneLogin = formatar_telefone(login);
-        console.log(telefoneLogin);
-        console.log(password);
-        console.log(API_BASE_URL);
+
         const requestURL = acesso === "instructor" ? 
             `${API_BASE_URL}/instructors/login` 
             : `${API_BASE_URL}/admin_receptionist/login`;
+
         const response = await fetch(requestURL, 
             {
                 method: "POST",
@@ -24,12 +25,21 @@ export async function login_funcionario(login: string , password: string, acesso
                 })
             }
         )
-        console.log(response)
+
         const data = await response.json()
-        console.log(data.data.user)
-        console.log(data.data.token)
-        localStorage.setItem("Define-Pilates-AuthToken", data.data.token);
-        localStorage.setItem("Define-Pilates-UserInfo", (JSON.stringify(data.data.user)));
+        const user = data.data.user; // Objeto user contém o 'type' (Ex: "Instructor")
+
+        if (typeof window !== "undefined") {
+            // Salva o token e informações do usuário
+            localStorage.setItem("Define-Pilates-AuthToken", data.data.token);
+            localStorage.setItem("Define-Pilates-UserInfo", (JSON.stringify(user)));
+            
+            // ✅ CHAVES DE CONTROLE DO HEADER
+            // Estas chaves corrigem o problema do redirecionamento do logo na Home pública (/)
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userType", user.type); // Salva o tipo da API
+        }
+
         if(response.status !== 200){
             return false
         }
@@ -42,42 +52,3 @@ export async function login_funcionario(login: string , password: string, acesso
 
     return true
 }
-
-function formatar_telefone(telefone: string)
-{
-    return telefone.replace(/\D/g, '');
-
-}
-
-
-// {
-//   "name": "João Silva",
-//   "phone": "(11)99999-9999",
-//   "password": "abc123A",
-//   "cpf": "12345678901",
-//   "profession": "Engenheiro",
-//   "birth_date": "15-01-1990",
-//   "fotos": [
-//     "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD"
-//   ],
-//   "contatos": [
-//     {
-//       "tipo": "email",
-//       "valor": "joao@email.com",
-//       "observacao": "Email pessoal"
-//     }
-//   ],
-//   "enderecos": [
-//     {
-//       "tipo": "residencial",
-//       "rua": "Rua das Flores",
-//       "numero": "123",
-//       "complemento": "Apto 45",
-//       "bairro": "Centro",
-//       "cidade": "São Paulo",
-//       "estado": "SP",
-//       "cep": "01234-567",
-//       "principal": true
-//     }
-//   ]
-// }

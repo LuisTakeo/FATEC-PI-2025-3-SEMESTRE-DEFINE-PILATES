@@ -10,8 +10,8 @@ interface AuthResult {
     message?: string;
 }
 
-// Função auxiliar para formatar o telefone, removendo caracteres não numéricos.
-function formatar_telefone(telefone: string): string {
+// ✅ EXPORTAÇÃO: A função é definida aqui e exportada para evitar duplicação em outros arquivos.
+export function formatar_telefone(telefone: string): string {
     return telefone.replace(/\D/g, '');
 }
 
@@ -35,27 +35,29 @@ export async function login_aluno(login: string, password: string): Promise<Auth
         
         const data = await response.json();
 
-        // 🔑 1. VERIFICAÇÃO DE SUCESSO E EXISTÊNCIA DO TOKEN
         if (response.status === 200 && data.data?.token) {
             
             const token = data.data.token;
-            const user = data.data.user;
-            const student = data.data.student; // Incluímos 'student' para garantir a coleta do ID, se necessário
+            const user = data.data.user; 
+            const student = data.data.student; 
             
-            // 💥 CORREÇÃO PRINCIPAL: Usa a chave 'fullname' para extrair o nome
             const nomeDoAluno = user?.fullname?.toString().trim() || 'Aluno(a)'; 
             
-            // Cria o objeto para salvar no localStorage
             const userInfoParaStorage = {
-                id: student?.id?.toString() || user?.id?.toString(), // Tenta ID de 'student' primeiro
+                id: student?.id?.toString() || user?.id?.toString(),
                 alunoId: student?.id?.toString() || user?.id?.toString(),
-                // MAPEAR 'fullname' (API) para 'nome' (HomeAlunoPage)
                 nome: nomeDoAluno 
             };
 
             // 2. ARMAZENAMENTO NO localStorage
-            localStorage.setItem("Define-Pilates-AuthToken", token);
-            localStorage.setItem("Define-Pilates-UserInfo", JSON.stringify(userInfoParaStorage));
+            if (typeof window !== "undefined") {
+                localStorage.setItem("Define-Pilates-AuthToken", token);
+                localStorage.setItem("Define-Pilates-UserInfo", JSON.stringify(userInfoParaStorage));
+                
+                // CHAVES DE CONTROLE DO HEADER
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userType", user.type); // Salva o valor da API
+            }
 
             // 3. RETORNA O OBJETO DE SUCESSO
             return {
@@ -64,7 +66,6 @@ export async function login_aluno(login: string, password: string): Promise<Auth
                 alunoId: student?.id?.toString() || user?.id?.toString() 
             };
         } else {
-            // Caso de falha de credenciais
             const errorMessage = data.message || "Credenciais inválidas. Verifique telefone e senha.";
             
             return {
