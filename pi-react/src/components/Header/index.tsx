@@ -2,116 +2,183 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../index.css";
 "use client";
 import Botao from "../Botao/Botao";
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+
+interface NavLink {
+    name: string;
+    path: string;
+}
+
+const getAuthStatus = () => {
+    if (typeof window === "undefined") {
+        return { isLoggedIn: false, userType: 'nao-logado' };
+    }
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userType = localStorage.getItem("userType") || 'nao-logado';
+    return { isLoggedIn: loggedIn, userType: userType };
+};
+
+const navLinks: { [key: string]: NavLink[] } = {
+    // Links centrais e finais para USUÁRIO DESLOGADO
+    'public_middle_end': [
+        { name: "Contato", path: "https://api.whatsapp.com/send/?phone=5511941424166&text&type=phone_number&app_absent=0&utm_source=ig" },
+        { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
+    ],
+    // Links centrais e finais para ALUNO LOGADO
+    'Student_middle_end': [ 
+        { name: "Calendário", path: "/calendario/aluno" },
+        { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
+    ],
+    // Links para ADMINISTRADOR (Pesquisa)
+    'Administrator_middle_end': [ 
+        { name: "Pesquisa", path: "/admin/pesquisa-usuarios" }, 
+        { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
+    ],
+    // Links para RECEPCIONISTA (Agenda)
+    'Receptionist_middle_end': [ 
+        { name: "Agenda", path: "/calendario/funcionario" }, 
+        { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
+    ],
+    // Links para INSTRUTOR (Apenas Saiba Mais)
+    'Instructor_middle_end': [ 
+        // Removemos o Calendário/Agenda para o instrutor, deixando apenas Saiba Mais
+        { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
+    ],
+};
+
+const getProfileHomePath = (type: string) => {
+    switch (type) {
+        case 'Student': return "/aluno/home";
+        case 'Administrator':
+        case 'Receptionist':
+        case 'Instructor': return "/home/funcionario";
+        default: return "/";
+    }
+};
+
 
 function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { isLoggedIn, userType } = getAuthStatus(); 
 
-  // MOCK DE ESTADO DE LOGIN
-  const [isLoggedIn, setIsLoggedIn] = useState(true); 
+    useEffect(() => {
+        if (location.state && location.state.loginSuccess) {
+            navigate(location.pathname, { replace: true, state: {} }); 
+        }
+    }, [location, navigate]);
 
-  const currentPath = location.pathname.toLowerCase().replace(/\/$/, "");
+    const currentPath = location.pathname.toLowerCase().replace(/\/$/, "");
+    const hideButtonPaths = ["/login/aluno", "/login/funcionario"];
+    const shouldHideCompletely = hideButtonPaths.includes(currentPath);
+    const shouldShowLogout = isLoggedIn && !shouldHideCompletely; 
+    
+    const handleLogout = () => {
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userType");
+            localStorage.removeItem("Define-Pilates-AuthToken");
+            localStorage.removeItem("Define-Pilates-UserInfo");
+        }
+        navigate("/", { replace: true }); 
+    };
+    
+    let buttonOrPlaceholder;
+    if (shouldHideCompletely) { 
+        buttonOrPlaceholder = (<div className="hidden w-full h-full">&nbsp;</div>); 
+    } else if (shouldShowLogout) { 
+        buttonOrPlaceholder = (<Botao texto="Sair da conta" onClick={handleLogout} style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" />); 
+    } else {
+        buttonOrPlaceholder = (<Botao texto="Acessar conta" onClick={() => navigate("/login/aluno")} />);
+    }
 
-  // 1. ROTAS ONDE O BOTÃO DEVE SER OCULTADO
-  const hideButtonPaths = [
-    "/login/aluno",
-    "/login/funcionario",
-  ];
+    const userHomePath = getProfileHomePath(userType);
+    const userHomePathNormalized = userHomePath.toLowerCase().replace(/\/$/, "");
+    const isOnHomePage = currentPath === userHomePathNormalized;
+    
+    let firstLink: NavLink;
 
-  // 2. ROTAS ONDE DEVE APARECER "SAIR DA CONTA"
-  const logoutButtonPaths = [
-    // Rotas de Cadastro/Admin/Home/Pesquisa (existentes)
-    "/cadastro/aluno",
-    "/cadastro/instrutor",
-    "/cadastro/administrador/recepcionista",
-    "/login/instrutor",
-    "/admin/home",
-    "/aluno/home",
-    "/cadastro/adm-recep",
-    "/home/funcionario",
-    "/admin/pesquisa-usuarios",
-    // ✅ NOVAS ROTAS ADICIONADAS:
-    "/calendario/aluno",
-    "/calendario/funcionario",
-  ];
+    if (isLoggedIn) {
+        if (isOnHomePage) {
+            firstLink = { name: "Planos", path: "/" };
+        } else {
+            firstLink = { name: "Minha Página", path: userHomePath };
+        }
+    } else {
+        firstLink = { name: "Planos", path: "/" };
+    }
 
-  // Verificações
-  const shouldHideCompletely = hideButtonPaths.includes(currentPath);
-  const shouldShowLogout = logoutButtonPaths.includes(currentPath);
+    let middleEndLinks: NavLink[];
+    if (isLoggedIn) {
+        if (userType === 'Student') { 
+            middleEndLinks = navLinks['Student_middle_end'];
+        } else if (userType === 'Administrator') { 
+            // Administrador: Usa Pesquisa
+            middleEndLinks = navLinks['Administrator_middle_end'];
+        } else if (userType === 'Receptionist') { 
+            // Recepcionista: Usa Agenda
+            middleEndLinks = navLinks['Receptionist_middle_end'];
+        } else if (userType === 'Instructor') { 
+            // Instrutor: Apenas Saiba Mais (Regra nova aplicada)
+            middleEndLinks = navLinks['Instructor_middle_end'];
+        } else {
+            middleEndLinks = navLinks['public_middle_end'];
+        }
+    } else {
+        middleEndLinks = navLinks['public_middle_end'];
+    }
 
-  const handleLogout = () => {
-    // Lógica real de logout aqui
-    setIsLoggedIn(false); 
-    navigate("/"); 
-  };
-  
-  // Lógica de renderização
-  let buttonOrPlaceholder;
+    const activeLinks: NavLink[] = [firstLink, ...middleEndLinks];
 
-  if (shouldHideCompletely) {
-    // 1. Ocultar totalmente o botão nas rotas de login específicas
-    buttonOrPlaceholder = (
-      <div 
-        className="hidden w-full h-full"
-      >
-        &nbsp; 
-      </div>
-    );
-  } else if (shouldShowLogout) {
-    // 2. Mostrar "Sair da conta" nas rotas restritas restantes
-    buttonOrPlaceholder = (
-      <Botao 
-        texto="Sair da conta" 
-        onClick={handleLogout}
-        // ✅ CORREÇÃO FINAL: Usando var(--azul-segundario) para a cor base.
-        style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" 
-      />
-    );
-  } else {
-    // 3. Mostrar "Acessar conta" nas demais rotas (públicas)
-    buttonOrPlaceholder = (
-      <Botao 
-        texto="Acessar conta" 
-        onClick={() => navigate("/login/aluno")}
-      />
-    );
-  }
 
-  return(
-    <header className={`text-black-600 body-font bg-[var(--background] ${window.location.href === 'http://localhost:5173/' ? "" : "py-[3%]"}`}>
-      <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
+    return(
+        <header className={`text-black-600 body-font bg-[var(--background] py-6`}> 
+            <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
 
-        <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
-          <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
-            Planos
-          </Link>
+                <nav className="flex flex-nowrap overflow-x-auto lg:w-2/5 items-center text-base">
+                    {activeLinks.map((link) => (
+                        link.path.startsWith('http') ? (
+                            <a 
+                                key={link.path} 
+                                href={link.path} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] inline-block whitespace-nowrap" 
+                            >
+                                {link.name}
+                            </a>
+                        ) : (
+                            <Link 
+                                key={link.path} 
+                                to={link.path} 
+                                className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] inline-block whitespace-nowrap" 
+                            >
+                                {link.name}
+                            </Link>
+                        )
+                    ))}
+                </nav>
 
-          <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
-            Calendário
-          </Link>
+                {/* LOGO (DESABILITADO) */}
+                <span 
+                    className=" flex order-first lg:order-none lg:w-1/5 lg:items-center lg:justify-center mb-4 md:mb-0 cursor-default" 
+                >
+                    <span className="text-[2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
+                        Defıne Pilates
+                        <span className="font-extrabold text-[3rem]">.</span>
+                    </span>
+                </span>
+                
+                <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+                    
+                    <div className="w-[200px] my-4"> 
+                        {buttonOrPlaceholder}
+                    </div>
 
-          <Link to="/" className="mr-7 text-[var(--foreground)] hover:text-[var(--destaque)] text-[1.8rem] md:text-[1.8rem] lg:text-[1.3rem] ">
-            Saiba Mais
-          </Link>      
-        </nav>
-
-        <a href="/" className=" flex order-first lg:order-none lg:w-1/5 lg:items-center lg:justify-center mb-4 md:mb-0">
-          <span className="text-[2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
-            Defıne Pilates
-            <span className="font-extrabold text-[3rem]">.</span>
-          </span>
-        </a>
-        <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-          
-          <div className="w-[200px] my-8">
-            {buttonOrPlaceholder}
-          </div>
-
-        </div>
-      </div>
-    </header>
-  );
+                </div>
+            </div>
+        </header>
+    );
 }
 
 export default Header;
