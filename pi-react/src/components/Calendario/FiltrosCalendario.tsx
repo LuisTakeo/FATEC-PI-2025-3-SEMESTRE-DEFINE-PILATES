@@ -38,7 +38,7 @@ export default function FiltrosCalendario({
             <Input
               id="data"
               type="date"
-              value={dataInicio ? `${dataInicio.getFullYear()}-${String(dataInicio.getMonth()+1).padStart(2,'0')}-${dataInicio.getDate()}` : ''}
+              value={dataInicio ? `${dataInicio.getFullYear()}-${String(dataInicio.getMonth()+1).padStart(2,'0')}-${String(dataInicio.getDate()).padStart(2,'0')}` : ''}
               onChange={e => {
                 const v = e.target.value; // 'YYYY-MM-DD'
                 if (!v) {
@@ -46,7 +46,7 @@ export default function FiltrosCalendario({
                   return;
                 }
                 const [y, m, d] = v.split('-').map(Number);
-                setDataInicio(new Date(y, (m || 1) - 1, d || 1));
+                setDataInicio(new Date(y, m - 1, d));
               }}
             />
           </div>
