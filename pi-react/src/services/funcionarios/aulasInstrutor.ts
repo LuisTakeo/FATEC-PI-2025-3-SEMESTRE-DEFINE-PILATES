@@ -1,32 +1,10 @@
-import { useEffect } from "react";
 import { API_BASE_URL } from "../../config/api";
 
+export async function InstrutorUnidade() {
 
-//ACHAR AULA A PARTIR DO ID DO INSTRUTOR
-export async function aulasInstrutor(){
-      useEffect(() => {
-        if (!unidade) return;
+    const response = await fetch(`${API_BASE_URL}/instructors/${instrutor_id}/classes`);
+    if (!response.ok) throw new Error("Erro ao buscar aulas do instrutor");
 
-        const fetchInstrutores = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/class`);
-                if (!response.ok) throw new Error("Erro ao buscar aulas");
-
-                const lista = await response.json();
-
-                const filtrados = lista
-                    .filter((i: any) => i.unidade === unidade.valor)
-                    .map((i: any) => ({
-                        value: i.Instructors.nome,
-                        label: i.Instructors.nome
-                    }));
-
-                setInstrutorOptions(filtrados);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchInstrutores();
-    }, [unidade]);
+    const data = await response.json();
+    return data.data
 }

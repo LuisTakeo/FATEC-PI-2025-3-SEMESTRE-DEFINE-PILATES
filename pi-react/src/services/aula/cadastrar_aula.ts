@@ -1,11 +1,10 @@
 import { API_BASE_URL } from "../../config/api";
-import type {Aula} from "./../../types/Aula"
 
-export async function Cadastrar_aula(aula: Aula) {
+export async function Cadastrar_aula(aula: any) {
     try{
         console.log(aula);
         console.log(API_BASE_URL);
-        const response = await fetch(`${API_BASE_URL}/class/save`, 
+        const response = await fetch(`${API_BASE_URL}/aulas/cadastro`, 
             {
                 method: "POST",
                 headers:{
@@ -16,8 +15,10 @@ export async function Cadastrar_aula(aula: Aula) {
             }
         )
         console.log(response)
+        
         const data = await response.json()
-        console.log(data)
+        console.log("RESPOSTA", data)
+        
         if(response.status !== 201){
             return false
         }

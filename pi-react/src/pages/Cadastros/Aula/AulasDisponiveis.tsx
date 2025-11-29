@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Estilizacoes from "../../../uteis/Estilizacoes";
-import Botao from "../../../components/Botao/Botao"
 import type { Unidade } from "../../../types/InstrutorUnidade";
 import { API_BASE_URL } from "../../../config/api"
-import type { Aula } from "../../../types/Aula";
 import { Cadastrar_aula } from "./../../../services/aula/cadastrar_aula"
+
 
 export default function AulasDisponiveis({unidade, instrutor, data}:{
     unidade: Unidade | any;
@@ -12,13 +11,10 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
     data: string;
 }){
 
-    console.log("VALOR CHEGOU",unidade, instrutor,  data)
-
-    const [listAllow, setListAllow] = useState(false)
     const [horariosAula, setHorariosAula] = useState<string[]>([]);
     const [mensagemErro, setMensagemErro] = useState("")
-    const [horarioSelecionado, setHorarioSelecionado] = useState("")
-
+    const [horarioSelecionado, setHorarioSelecionado] = useState<string | null>("")
+    const [instrutorNome, setInstrutorNome] = useState("")
 
     const tratarErroBackend = (err: any) => {
         if (err.status === 404) {
@@ -44,55 +40,83 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
 
         const fetchAula = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/class`);
+                const response = await fetch(`${API_BASE_URL}/aulas`);
                 if (!response.ok) throw new Error("Erro ao buscar aulas");
 
                 const lista = await response.json();
                 
-                const horariosDisponiveis = horarios
-                .filter(h =>
-                    !lista.some((aula: any) =>
-                        aula.unidade === unidade.valor &&
-                        aula.Instructors.nome === instrutor &&
+                console.log("Horarios",lista.data)
+
+                const horariosDisponiveis = horarios.filter(h =>
+                    !lista.data.some((aula: any) =>
+                        aula.unidade.id == unidade &&
+                        aula.instructor.id == instrutor &&
                         aula.data === data &&
                         aula.horario === h
                     )
                 );
 
                 setHorariosAula(horariosDisponiveis);
-                setListAllow(true);
+                setMensagemErro("");
+         
             } catch (err: any) {
                 const erroTratado = tratarErroBackend(err);
                 setMensagemErro(erroTratado.mensagem);
-                setListAllow(false);
+                setHorariosAula([]);
             }
         };
 
         fetchAula();
     }, [unidade, instrutor, data]);
 
-    // const horaFim = () => { 
-    //     const horaFim = new Date(horarioSelecionado)
-    //     const horaAdd: number = 1
-    //     horaFim.getHours(horaFim.getHours() + horaAdd)
-    // }
+        useEffect(() => {
+            async function fetchInstrutor() {
+                const response = await fetch(`${API_BASE_URL}/instructors`);
+                if (!response.ok) throw new Error("Erro ao buscar nome do instrutor");
 
-    async function handleAula(e: React.FormEvent<HTMLFormElement>) {
+                const data = await response.json();
+
+                const instrutorEncontrado = data.data.find((i) => i.id == instrutor);
+                setInstrutorNome(instrutorEncontrado.nome); 
+            }
+
+            fetchInstrutor();
+        }, [instrutor]);
+
+
+    
+
+
+    async function handleAula(e: React.MouseEvent<HTMLButtonElement>, instrutor: string, unidade: number, horarioSelecionado: string | null, data: string) {
         e.preventDefault()
 
-        const aula: Aula = {
-            unidade: unidade.valor,
-            instrutor: instrutor,
-            data: data,
-            horario: ({inicio: horarioSelecionado})
+        // console.log("dados chegou", instrutor, unidade, horarioSelecionado )
+
+        // const resposta_cancelar = window.confirm(`Tem certeza que deseja cadastrar uma aula para ${instrutorNome} as ${horarioSelecionado} na data ${data.replace("-", "/").replace("-", "/")}? Clique em "Ok" se sim ou em "Cancelar" para voltar`)
+
+        // if (!resposta_cancelar) {
+        //     console.log("Cancelamento de presença cancelado");
+        //     return
+        // }else{
+        //     console.log("continuar")
+        // }
+
+        const aula = {
+            id_tipo_aula: 1, 
+            id_instrutor: instrutor, 
+            id_studio: unidade,
+            data: data, 
+            horario: horarioSelecionado 
         }
+
+
         console.log(aula)
 
         const isCadastrado = await Cadastrar_aula(aula);
+        
         if (isCadastrado)
         {
             alert("Aula cadastrada com sucesso!");
-            // navigate("/login/aluno");
         }
         else
             alert("Erro ao cadastrar aula. Por favor, tente novamente.");
@@ -106,7 +130,7 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
 
 
     return(
-        <form onSubmit={(e) => handleAula(e)}>
+        <form>
 
             <section className="flex flex-col gap-10 w-full">
                 <div className="flex flex-col gap-4 justify-center w-full pb-10">
@@ -114,24 +138,26 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
                     <h1 className={Estilizacoes.titulo_segundario}>Escolha qual horário o instrutor selecionado irá ministrar sua aula, conforme a data selecionada</h1>
                 </div>
 
-                {listAllow && (
-                    <>
+                
+                    
                         <div>
-                            <h1 className={Estilizacoes.titulo_principal}>{instrutor} - {data.replace("-", "/").replace("-", "/")}</h1>
+                            <h1 className={`${Estilizacoes.titulo_principal} ${!unidade || !instrutor || !data ? "hidden" : ""}`}>{instrutorNome} - {data.replace("-", "/").replace("-", "/")}</h1>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 mb-10 py-[3%]">
                             {horariosAula.map((i) => (
                                 <div 
                                 key={i}
                                 id="bloco-instrtor"
-                                className={`shadow-2xl rounded-[8px] min-w-full min-h-[230px] 
-                                            flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 
+                                className={`shadow-2xl rounded-[8px] min-w-full min-h-[100px] 
+                                            flex flex-col items-center justify-center px-[30px]  gap-5 
                                             md:flex-row md:min-h-[130px] 
                                             ${horarioSelecionado === i ? "bg-red-500" : "bg-white"}`}
-                                onClick={() => setHorarioSelecionado(i)}
+                                onClick={() => {
+                                    setHorarioSelecionado(horarioSelecionado === String(i) ? null : String(i))
+                                }}
                                 >
-                                    <div className="w-[50%]">
+                                    <div className="w-[50%] h-5 flex items-center justify-center">
                                         <h1 className="text-[1.5rem]">
                                             Horário:{i}
                                         </h1>
@@ -139,8 +165,7 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
                                 </div>
                             ))}
                         </div>
-                    </>
-                )} 
+                 
 
                 {mensagemErro !== "" && (
                     <div>
@@ -149,7 +174,14 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
                 )}
             </section>
 
-        <Botao texto="Cadastrar Aula" type="submit"/>
+        <button onClick={(e) => handleAula(e, instrutor, unidade, horarioSelecionado, data)}
+        type="submit"
+        className="w-full flex justify-center items-center  p-5 m-0 
+        text-white hover:!text-white text-[1.5rem] md:text-[1.3rem] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap h-[50px] cursor-pointer 
+        transition-all duration-200 bg-[var(--azul-segundario)] hover:!bg-[var(--destaque)] "
+        >
+        Cadastrar Aula
+        </button>
 
         </form>
     )
