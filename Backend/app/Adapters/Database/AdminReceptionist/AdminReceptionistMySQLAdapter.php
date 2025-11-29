@@ -17,6 +17,7 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
             return DB::transaction(function () use ($adminReceptionistDTO) {
                 $userTgi = UserTgi::create([
                 'nameuser' => $adminReceptionistDTO->phone,
+                'fullname' => $adminReceptionistDTO->name,
                 'passworduser' => $adminReceptionistDTO->password,
                 'typeuser' => strtolower($adminReceptionistDTO->typecollaborator),
                 'statususer' => 'active',
@@ -75,6 +76,46 @@ class AdminReceptionistMySQLAdapter implements AdminReceptionistRepositoryPort {
         {
             Log::error("". $e->getMessage());
             return ['status'=> false,'message'=> $e->getMessage()];
+        }
+    }
+
+    public function getAllAdminReceptionists(): array
+    {
+        try {
+            $collaborators = Collaborator::with('user')
+                ->whereIn('typecollaborator', ['Administrator', 'Receptionist'])
+                ->select('Id_collaborators', 'Id_users', 'typecollaborator', 'birthday', 'fulladdress', 'hiring', 'classification')
+                ->get();
+
+            if ($collaborators->isEmpty()) {
+                return [];
+            }
+
+            return $collaborators->map(function ($collaborator) {
+                $birthday = $collaborator->birthday 
+                    ? \Carbon\Carbon::parse($collaborator->birthday)->format('d-m-Y')
+                    : null;
+                $hiring = $collaborator->hiring 
+                    ? \Carbon\Carbon::parse($collaborator->hiring)->format('d-m-Y')
+                    : null;
+
+                return [
+                    'id' => $collaborator->Id_collaborators,
+                    'nome' => $collaborator->user->fullname,
+                    'phone' => $collaborator->user->nameuser,
+                    'birthday' => $birthday,
+                    'fulladdress' => $collaborator->fulladdress,
+                    'hiring' => $hiring,
+                    'classification' => $collaborator->classification,
+                    'type' => $collaborator->typecollaborator,
+                ];
+            })->toArray();
+
+        } catch (Exception $e) {
+            Log::error('Failed to get admin/receptionists', [
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
         }
     }
 }
