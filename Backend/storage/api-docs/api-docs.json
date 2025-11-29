@@ -1015,6 +1015,18 @@
                                                     "nome": {
                                                         "type": "string",
                                                         "example": "João Silva"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "11951999999"
+                                                    },
+                                                    "cref": {
+                                                        "type": "string",
+                                                        "example": "CREF123456"
+                                                    },
+                                                    "crefito": {
+                                                        "type": "string",
+                                                        "example": "CREFITO654321"
                                                     }
                                                 },
                                                 "type": "object"
