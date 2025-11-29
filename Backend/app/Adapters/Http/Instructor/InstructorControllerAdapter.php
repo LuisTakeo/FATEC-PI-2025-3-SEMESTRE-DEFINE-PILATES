@@ -47,7 +47,10 @@ class InstructorControllerAdapter extends BaseController {
                     items: new OA\Items(
                         properties: [
                             new OA\Property(property: "id", type: "integer", example: 1),
-                            new OA\Property(property: "nome", type: "string", example: "João Silva")
+                            new OA\Property(property: "nome", type: "string", example: "João Silva"),
+                            new OA\Property(property: "phone", type: "string", example: "11951999999"),
+                            new OA\Property(property: "cref", type: "string", example: "CREF123456"),
+                            new OA\Property(property: "crefito", type: "string", example: "CREFITO654321")
                         ]
                     )
                 )

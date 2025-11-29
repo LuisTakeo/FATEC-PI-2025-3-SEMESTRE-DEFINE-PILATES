@@ -125,4 +125,14 @@ class AdminReceptionistService implements AdminReceptionistServiceContract
                 ]
             ];
     }
+
+    public function getAllAdminReceptionists(): array
+    {
+        try {
+            return $this->repository->getAllAdminReceptionists();
+        } catch (Exception $e) {
+            Log::error('Error fetching admin/receptionists: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }

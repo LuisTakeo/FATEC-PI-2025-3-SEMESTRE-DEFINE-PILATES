@@ -24,7 +24,7 @@ export default function HomeFuncionario(){
                 return [
                     { texto: "Cadastros", link: "/admin/Home", subtexto: "Cadastro e gestão de usuários." },
                     { texto: "Pesquisa geral", link: "/admin/pesquisa-usuarios", subtexto: "Pesquise por clientes e funcionários." },
-                    { texto: "Consultar agendas", link: "/home/funcionario", subtexto: "Consulte todas as agendas de aulas." },
+//                     { texto: "Consultar agendas", link: "/home/funcionario", subtexto: "Consulte todas as agendas de aulas." },
                     { texto: "Marcar aula", link: "/cadastro/aula", subtexto: "Agende aulas para aluno(a) e instrutor(a) específico(a)." },
                 ];
             case "receptionist":
@@ -50,7 +50,7 @@ export default function HomeFuncionario(){
     // Define as classes da seção: se for um item, usa flexbox centralizado, se não, usa o grid original.
     const sectionClasses = isSingleItem 
         ? "w-full h-full flex justify-center items-start" // Flexbox para centralizar um único item
-        : "w-full h-full grid grid-cols-1 sm:grid-cols-2 gap-6"; // Grid original (para Admin/Recepcionista)
+        : "w-full h-full grid grid-cols-1 sm:grid-cols-3 gap-6"; // Grid original (para Admin/Recepcionista)
     
 
     return (
