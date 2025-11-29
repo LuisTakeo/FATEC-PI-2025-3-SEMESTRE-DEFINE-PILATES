@@ -32,13 +32,8 @@ export default function BlocoCalendario() {
   .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())        
   .filter((aula) => {
         if (!dataInicio) return true
-
         const [dia, mes, ano] = aula.data.split("-").map(d => parseInt(d))
-
         const data_aula = new Date(ano, mes - 1, dia)
-        console.log(aula.data)
-        console.log(data_aula.getDate(), data_aula.getMonth(), data_aula.getFullYear())
-        
         return data_aula >= dataInicio
   })
 

@@ -53,21 +53,25 @@ export default function ProximaAula({aluno_id}: ProximaAulaProps){
 
         //requisição
         const resultado = await confirmCancelAula(aula_id, aluno_id!, status)
-        console.log("Resultado: ", resultado)
 
         if (!resultado) {
             console.log("Erro: Resposta vazia de confirmCancelAula")
             return
         }
 
+        console.log(resultado.data.action)
+
         if(resultado.status === "error"){
             setMsgConfirmCancelAula("Você já confirmou ou cancelou sua presença nesta aula")
         }
-        else if (resultado.status === "success"){
-            setMsgConfirmCancelAula(`Você ${status === "confirm" ? "confirmou" : "cancelou"} sua presença nesta aula com sucesso.`)
+        else if (resultado.data.action === "confirm"){
+            setMsgConfirmCancelAula(`Você confirmou sua presença nesta aula com sucesso.`)
+        }else if (resultado.data.action === "cancel"){
+            setMsgConfirmCancelAula(`Você cancelou sua presença nesta aula com sucesso.`)
         }
 
     }
+
 
     return(
         <>
@@ -101,12 +105,14 @@ export default function ProximaAula({aluno_id}: ProximaAulaProps){
                             <h1 className={Estilizacoes.titulo_principal}>Próxima Aula</h1>
                             <div className="flex flex-col gap-5 text-[1.4rem]">
                                 <div className="flex flex-row aling-center items-center gap-3">
+
                                     <div> 
                                         <h1 className="font-semibold text-[1.6rem]">{msgConfirmCancelAula}</h1>
                                     </div>
                                     <div className={`${!msgConfirmCancelAula ? "hidden" : ""}`}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#26a269" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-smile-icon lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
                                     </div>
+
                                 </div>
                                 <div>
                                     <h1><span className="font-semibold">Data da Aula:</span> {aula.data.replace("-", "/").replace("-", "/")}</h1>
