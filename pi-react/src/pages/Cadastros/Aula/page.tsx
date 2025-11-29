@@ -8,6 +8,8 @@ import { API_BASE_URL } from "../../../config/api"
 import type { Instrutor, Unidade } from "../../../types/InstrutorUnidade"
 import { useEffect } from "react";
 
+import { InstrutorUnidade } from "./../../../services/funcionarios/InstrutorUnidade"
+
 export default function Cadastro_Aula(){
 
   const navigate = useNavigate();
@@ -18,35 +20,23 @@ export default function Cadastro_Aula(){
     const [instrutor, setInstrutor] = useState("")
 
     useEffect(() => {
-        if (!unidade) return;
+        async function carregar() {
+            const instrutores = await InstrutorUnidade();
 
-        const fetchInstrutores = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/class`);
-                if (!response.ok) throw new Error("Erro ao buscar aulas");
-
-                const lista = await response.json();
-
-                const filtrados = lista
-                    .filter((i: any) => i.unidade === unidade.valor)
-                    .map((i: any) => ({
-                        value: i.Instructors.nome,
-                        label: i.Instructors.nome
-                    }));
-
-                setInstrutorOptions(filtrados);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchInstrutores();
-    }, [unidade]);
+            const options = instrutores.map((i: any) => ({
+            value: i.id,
+            label: i.nome
+            }));
 
 
- 
+            setInstrutorOptions(options)
+        }
+
+        carregar();
+    }, []);
+  
     return(
-        <main className="w-full h-full flex flex-col px-[15%]">
+        <main className="w-full h-full flex flex-col px-[15%] py-[5%]">
             <header className="w-full h-full flex gap-5 flex-col md:flex-row">
                 <div className={`${Estilizacoes.titulo_principal} w-full`}>
                     <h1>Cadastrar aula</h1>
@@ -69,9 +59,10 @@ export default function Cadastro_Aula(){
                             as="select"
                             placeholder=""
                             options={[
-                                {value:"unidade 1", label:"São Miguel Paulista"},
-                                {value:"unidade 2", label:"Itaquera"},
-                                {value:"unidade 3", label:"Vila Jacuí"} 
+                                {value:"", label:"Selecione Unidade"},
+                                {value:"1", label:"São Miguel Paulista"},
+                                {value:"2", label:"Itaquera"},
+                                {value:"3", label:"Vila Jacuí"} 
                             ]}
                             onChange={(e) => {
                                 const target = e.target
@@ -79,6 +70,7 @@ export default function Cadastro_Aula(){
                                 const select = target as HTMLSelectElement;
                                 const label = select.options[select.selectedIndex]?.text ?? ""
                                 setUnidade({valor: valor, nome: label})
+                                console.log(unidade)
                             }}
                             />
                         </div>
@@ -92,7 +84,10 @@ export default function Cadastro_Aula(){
                                 name="instrutor-input"
                                 as="select"
                                 options={instrutorOptions}
-                                onChange={(e) => setInstrutor(e.target.value)}
+                                onChange={(e) => {
+                                    setInstrutor(e.target.value)
+                                    console.log(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -105,11 +100,15 @@ export default function Cadastro_Aula(){
                                 name="data-input"
                                 type="date"
                                 onChange={(e) => {
-                                    const data = new Date(e.target.value)
-                                    const dia = data.getDate()
-                                    const mes = data.getMonth()
-                                    const ano = data.getFullYear()
-                                    setData(`${dia}-${mes}-${ano}`)
+                                    const value = e.target.value
+                                    if (value) {
+                                        const [y, m, d] = value.split("-").map(Number)
+                                        const novaData = `${d}-${m}-${y}`
+                                        setData(novaData)
+                                        console.log(novaData)
+                                    } else {
+                                        setData("")
+                                    }
                                 }}
                             />
                         </div>
@@ -117,7 +116,7 @@ export default function Cadastro_Aula(){
                     </div>
 
                     <AulasDisponiveis
-                        unidade={unidade}
+                        unidade={unidade?.valor}
                         instrutor={instrutor}
                         data={data}
                     />

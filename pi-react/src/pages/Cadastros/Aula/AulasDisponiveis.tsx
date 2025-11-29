@@ -12,7 +12,7 @@ export default function AulasDisponiveis({unidade, instrutor, data}:{
     data: string;
 }){
 
-    console.log(unidade, instrutor,  data)
+    console.log("VALOR CHEGOU",unidade, instrutor,  data)
 
     const [listAllow, setListAllow] = useState(false)
     const [horariosAula, setHorariosAula] = useState<string[]>([]);
