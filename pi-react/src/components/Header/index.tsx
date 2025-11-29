@@ -41,7 +41,6 @@ const navLinks: { [key: string]: NavLink[] } = {
     ],
     // Links para INSTRUTOR (Apenas Saiba Mais)
     'Instructor_middle_end': [ 
-        // Removemos o Calendário/Agenda para o instrutor, deixando apenas Saiba Mais
         { name: "Saiba Mais", path: "https://business.google.com/v/define-pilates/012366385222516970590/b9c1/_?" },
     ],
 };
@@ -73,14 +72,27 @@ function Header() {
     const shouldHideCompletely = hideButtonPaths.includes(currentPath);
     const shouldShowLogout = isLoggedIn && !shouldHideCompletely; 
     
+    // Função de Logout Refinada
     const handleLogout = () => {
         if (typeof window !== "undefined") {
+            // 1. Limpa o localStorage
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("userType");
             localStorage.removeItem("Define-Pilates-AuthToken");
             localStorage.removeItem("Define-Pilates-UserInfo");
         }
+        
+        // 2. Navega para a Home (Garante que o path esteja correto)
         navigate("/", { replace: true }); 
+
+        // 3. Força o recarregamento APENAS se o usuário estiver na Home (/)
+        // Isso força a renderização completa do componente PaginaInicio no estado deslogado.
+        const currentPathNormalized = location.pathname.toLowerCase().replace(/\/$/, "");
+        const currentPathIsHome = currentPathNormalized === "/";
+        
+        if (currentPathIsHome && typeof window !== "undefined") {
+            window.location.reload(); 
+        }
     };
     
     let buttonOrPlaceholder;
@@ -113,13 +125,10 @@ function Header() {
         if (userType === 'Student') { 
             middleEndLinks = navLinks['Student_middle_end'];
         } else if (userType === 'Administrator') { 
-            // Administrador: Usa Pesquisa
             middleEndLinks = navLinks['Administrator_middle_end'];
         } else if (userType === 'Receptionist') { 
-            // Recepcionista: Usa Agenda
             middleEndLinks = navLinks['Receptionist_middle_end'];
         } else if (userType === 'Instructor') { 
-            // Instrutor: Apenas Saiba Mais (Regra nova aplicada)
             middleEndLinks = navLinks['Instructor_middle_end'];
         } else {
             middleEndLinks = navLinks['public_middle_end'];
