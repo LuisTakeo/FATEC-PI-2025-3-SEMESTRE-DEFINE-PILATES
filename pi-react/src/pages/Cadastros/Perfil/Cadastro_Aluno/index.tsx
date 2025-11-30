@@ -41,6 +41,7 @@ function Cadastro_Aluno(){
     const [password, setPassword] = useState("");
     const [confirmarPassword, setConfirmarPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
 
     // Endereços como array
     const [enderecos, setEnderecos] = useState<EnderecoState[]>([
@@ -68,6 +69,31 @@ function Cadastro_Aluno(){
 
     const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: File}>({})
 
+    // Função para buscar endereço pelo CEP usando ViaCEP
+    const fetchAddressByCep = async (cep: string) => {
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+
+            if (data.erro) {
+                console.error("CEP não encontrado.");
+                return null;
+            } else {
+                return {
+                    rua: data.logradouro,
+                    bairro: data.bairro,
+                    // Se precisar salvar cidade/estado, use:
+                    // cidade: data.localidade,
+                    // estado: data.uf,
+                };
+            }
+        } catch (error) {
+            console.error("Falha ao buscar o CEP:", error);
+            return null;
+        }
+    };
+
+
     // Adicionar novo endereço
     const adicionarEndereco = () => {
         const novoId = Math.max(...enderecos.map(e => e.id), 0) + 1;
@@ -89,11 +115,46 @@ function Cadastro_Aluno(){
         }
     };
 
-    // Atualizar endereço específico
-    const atualizarEndereco = (id: number, campo: keyof EnderecoState, valor: any) => {
-        setEnderecos(enderecos.map(e => 
+    // Atualizar endereço específico (AGORA ASSÍNCRONO PARA A BUSCA DE CEP)
+    const atualizarEndereco = async (id: number, campo: keyof EnderecoState, valor: any) => {
+        
+        // 1. Atualiza o valor do campo (CEP, Rua, Número, etc.)
+        let novoEnderecos = enderecos.map(e => 
             e.id === id ? { ...e, [campo]: valor } : e
-        ));
+        );
+        
+        // 2. Lógica de busca automática de CEP
+        if (campo === 'cep') {
+            const cepDigits = String(valor).replace(/\D/g, '');
+
+            if (cepDigits.length === 8) {
+                const addressData = await fetchAddressByCep(cepDigits);
+
+                if (addressData) {
+                    // Atualiza a rua e o bairro com base na resposta da API
+                    novoEnderecos = novoEnderecos.map(e => 
+                        e.id === id ? { 
+                            ...e, 
+                            rua: addressData.rua || '', 
+                            bairro: addressData.bairro || '',
+                            // Se EnderecoState tivesse cidade/estado, eles seriam atualizados aqui
+                        } : e
+                    );
+                } else {
+                    // Limpa rua e bairro se o CEP não for encontrado
+                    novoEnderecos = novoEnderecos.map(e => 
+                        e.id === id ? { ...e, rua: '', bairro: '' } : e
+                    );
+                }
+            } else {
+                 // Limpa campos se o CEP for apagado ou incompleto
+                 novoEnderecos = novoEnderecos.map(e => 
+                    e.id === id ? { ...e, rua: '', bairro: '' } : e
+                );
+            }
+        }
+
+        setEnderecos(novoEnderecos);
     };
 
     function permitirInputs(state: boolean){
@@ -103,7 +164,17 @@ function Cadastro_Aluno(){
     async function submitAluno(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
+        if (isLoading) return; 
+        setIsLoading(true); 
+
         console.log("chego")
+        
+        if (password !== confirmarPassword) {
+            alert("As senhas não coincidem. Por favor, verifique.");
+            setIsLoading(false);
+            return;
+        }
+
 
         // Criar array de contatos apenas se houver alguma opção selecionada (não "Nenhum")
         const contatos: Contato[] = [];
@@ -123,8 +194,8 @@ function Cadastro_Aluno(){
             numero: end.numero,
             complemente: end.complemento,
             bairro: end.bairro,
-            cidade: "São Paulo",
-            estado: "SP",
+            cidade: "São Paulo", // Assumindo valor fixo ou preenchido via CEP se o type permitisse
+            estado: "SP",       // Assumindo valor fixo ou preenchido via CEP se o type permitisse
             cep: end.cep,
             principal: end.isPrincipal,
         }));
@@ -142,13 +213,17 @@ function Cadastro_Aluno(){
         }
 
         const isCadastrado = await cadastrar_aluno(aluno);
+        
         if (isCadastrado)
         {
             alert("Aluno cadastrado com sucesso!");
+            setIsLoading(false); 
             navigate("/login/aluno");
         }
-        else
+        else {
             alert("Erro ao cadastrar aluno. Por favor, tente novamente.");
+            setIsLoading(false); 
+        }
 
         return aluno
 
@@ -159,8 +234,8 @@ function Cadastro_Aluno(){
     console.log("Arquivos:", arquivoComprimido);
 
     return(
-        <div className="flex flex-col items-center justify-center w-full mt-10">
-            <main className="flex flex-col  w-[80vw] px-[2%]">
+        <div className="flex flex-col items-start w-full mt-10"> 
+            <main className="flex flex-col w-[80vw] px-[2%] self-center"> 
                 <header className="flex justify-start flex-col mb-10">
                     <div>
                         <h1 className={`${Estilizacoes.titulo_principal} text-[2rem]`}>Cadastro de Aluno</h1>
@@ -184,23 +259,24 @@ function Cadastro_Aluno(){
                                     type = "text"
                                     pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite o nome"
-                                    
+                                    required // Adicionado
                                 />
                                 
                             </div>
 
+                            {/* INÍCIO DO AJUSTE DE DDD E TELEFONE */}
                             <div id="campo-numero" className="flex justify-start items-start flex-row w-full  gap-4">
                                 <div className="w-1/5">
                                     <Input
                                         id="ddd"
                                         label="DDD"
                                         value={ddd}
-                                        onChange={(e) => setDDD(e.target.value)}
-                                        type = "numeric"
-                                        pattern=".*"
-                                        placeholder = "DDD"
-                                        
-                                        maxLength={4}
+                                        onChange={(e) => setDDD(e.target.value.replace(/\D/g, ''))} // Limpa caracteres não numéricos
+                                        type = "tel" // Alterado para tel, mas a validação de numérico é feita no onChange
+                                        pattern="[0-9]+"
+                                        placeholder = "Ex: 11" // AJUSTADO O PLACEHOLDER
+                                        required // Adicionado
+                                        maxLength={2} // AJUSTADO O MAXLENGTH PARA 2
                                     />
                                 </div>
 
@@ -209,26 +285,29 @@ function Cadastro_Aluno(){
                                         id="telefone"
                                         label="Telefone"
                                         value={telefone}
-                                        onChange={(e) => setTelefone(e.target.value)}
-                                        type = "text"
+                                        onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))} // Limpa caracteres não numéricos
+                                        type = "tel" // Alterado para tel, mas a validação de numérico é feita no onChange
                                         pattern="[0-9]+"
-                                        placeholder = "Digite o Telefone"
-                                        
+                                        placeholder = "999999999" // AJUSTADO O PLACEHOLDER
+                                        required // Adicionado
+                                        maxLength={9} // AJUSTADO O MAXLENGTH PARA 9
                                     />
                                 </div>
 
                             </div>
+                            {/* FIM DO AJUSTE DE DDD E TELEFONE */}
 
                             <div className="w-full">
                                 <Input
                                     id="senha"
                                     label="Senha"
+                                    name="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     type = "password"
                                     pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite a senha"
-
+                                    required // Adicionado
                                 />
                             </div>
                             <div className="w-full">
@@ -249,6 +328,7 @@ function Cadastro_Aluno(){
                                     placeholder = "Confirme a senha"
                                     error={passwordError && confirmarPassword !== ""}
                                     errorMessage="As senhas não coincidem"
+                                    required // Adicionado
                                 />
                             </div>
 
@@ -277,7 +357,7 @@ function Cadastro_Aluno(){
                                     type = "text"
                                     pattern="[.-0-9]+"
                                     placeholder = "Digite o CPF"
-                                    
+                                    required // Adicionado
                                     // maxLength={15}
                                 />
                             </div>
@@ -290,6 +370,7 @@ function Cadastro_Aluno(){
                                     onChange={(e) => setData(e.target.value)}
                                     type = "date"
                                     pattern="[0-9]+"
+                                    required // Adicionado
                                     
                                     maxLength={8}
                                 />
@@ -311,13 +392,13 @@ function Cadastro_Aluno(){
                         {/* ✅ SEÇÃO DE ENDEREÇOS REFATORADA */}
                         <div id="endereco-complementar" className="w-full my-11 flex flex-col gap-6">
                             
-
                             <div className="flex flex-col gap-6">
                                 {enderecos.map((endereco, index) => (
                                     <Endereco
                                         key={endereco.id}
                                         titulo={index === 0 ? "Endereço Principal" : `Endereço ${index + 1}`}
                                         cep={endereco.cep}
+                                        // Passando a função atualizarEndereco para o componente filho
                                         setCep={(valor) => atualizarEndereco(endereco.id, 'cep', typeof valor === 'function' ? valor(endereco.cep) : valor)}
                                         rua={endereco.rua}
                                         setRua={(valor) => atualizarEndereco(endereco.id, 'rua', typeof valor === 'function' ? valor(endereco.rua) : valor)}
@@ -344,7 +425,9 @@ function Cadastro_Aluno(){
                                             type="button"
                                             className="flex items-center justify-center w-[50px] h-full rounded-full text-[2rem] text-white cursor-pointer bg-[var(--azul-segundario)]"
                                             onClick={adicionarEndereco}
-                                        >+</button>
+                                        >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -355,21 +438,21 @@ function Cadastro_Aluno(){
                             <div id="option-info-medica" className="flex flex-col gap-3">
                                 <label className={Estilizacoes.segundo_titulo_principal}>Informações médicas</label>
                                 <h1 className={Estilizacoes.titulo_segundario}>Este aluno vai fazer acompanhamento médico no pilates?</h1>
-                                    <div>
-                                        <input type="radio" id="nao-info-medicas" name="info-medicas" required
-                                        onClick={() => permitirInputs(false)}
-                                        className="scale-150 accent-[var(--destaque)]"
-                                        />
-                                        <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
-                                    </div>
-                                    
-                                    <div>
-                                        <input type="radio" id="sim-info-medicas" name="info-medicas" required
-                                        className="scale-150 accent-[var(--destaque)]" 
-                                        onClick={() => permitirInputs(true)}
-                                        />
-                                        <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
-                                    </div>
+                                            <div>
+                                                <input type="radio" id="nao-info-medicas" name="info-medicas" required
+                                                onClick={() => permitirInputs(false)}
+                                                className="scale-150 accent-[var(--destaque)]"
+                                                />
+                                                <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
+                                            </div>
+                                            
+                                            <div>
+                                                <input type="radio" id="sim-info-medicas" name="info-medicas" required
+                                                className="scale-150 accent-[var(--destaque)]" 
+                                                onClick={() => permitirInputs(true)}
+                                                />
+                                                <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
+                                            </div>
                             </div>
 
                             {permissao_medica && (
@@ -427,7 +510,7 @@ function Cadastro_Aluno(){
                                             <label htmlFor="medicamentos-boxarea"
                                             className="text-[1.3rem] font-semibold text-[var(--foreground)]"
                                             >
-                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                            
+                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                            
                                             </label>
                                             <textarea 
                                             name="medicamentos" 
@@ -438,12 +521,17 @@ function Cadastro_Aluno(){
                                         </div>
                                     </div>
                                 </div>
-                            )}     
+                            )}    
                         </section>
 
                         <section 
                         className="mt-10">
-                            <Botao texto="Cadastrar" type="submit"/>
+                            <div className="inline-block"> 
+                                <Botao 
+                                    texto={isLoading ? "Cadastrando..." : "Cadastrar Aluno"} 
+                                    type="submit"
+                                />
+                            </div>
                         </section>
 
                     </form>
