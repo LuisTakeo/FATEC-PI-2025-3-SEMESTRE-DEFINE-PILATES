@@ -89,7 +89,6 @@ console.log("ALUNOS",alunos)
           </div>
           ) : (
           aulasFiltradas.map(aula => (
-            
               <div
                 key={aula.id}
                 className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
