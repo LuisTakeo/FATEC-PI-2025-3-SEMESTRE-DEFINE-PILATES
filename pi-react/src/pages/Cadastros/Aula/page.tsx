@@ -19,6 +19,7 @@ export default function Cadastro_Aula(){
     const [unidade, setUnidade] = useState<Unidade | any>()
     const [instrutor, setInstrutor] = useState("")
 
+
     useEffect(() => {
         async function carregar() {
             const instrutores = await InstrutorUnidade();
@@ -37,12 +38,9 @@ export default function Cadastro_Aula(){
   
     return(
         <main className="w-full h-full flex flex-col px-[15%] py-[5%]">
-            <header className="w-full h-full flex gap-5 flex-col md:flex-row">
+            <header className="w-full h-full flex gap-5 flex-col mb-8 md:flex-row">
                 <div className={`${Estilizacoes.titulo_principal} w-full`}>
                     <h1>Cadastrar aula</h1>
-                </div>
-                <div className="w-full">
-                    <Botao texto="Voltar a página anterior" type="button" onClick={() => navigate(-1)}/>
                 </div>
             </header>
             <form>
@@ -103,7 +101,9 @@ export default function Cadastro_Aula(){
                                     const value = e.target.value
                                     if (value) {
                                         const [y, m, d] = value.split("-").map(Number)
-                                        const novaData = `${d}-${m}-${y}`
+                                        const diaFormatado = d.toString().padStart(2, '0')
+                                        const mesFormatado = m.toString().padStart(2, '0')
+                                        const novaData = `${diaFormatado}-${mesFormatado}-${y}`
                                         setData(novaData)
                                         console.log(novaData)
                                     } else {
