@@ -21,7 +21,7 @@ class StudentListDTO
         $student = $user->student;
         
         return new self(
-            id: $user->id_users,
+            id: $student->Id_students,
             fullname: $user->fullname ?? '',
             phone: $user->nameuser,
             typeuser: $user->typeuser,
