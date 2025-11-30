@@ -4,30 +4,54 @@ import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
 import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
 import presencaInstrutor from "../../services/funcionarios/presencaInstrutor";
-import { Split } from "lucide-react";
+import { fetchAulaInstrutor } from "../../services/aula/fetchAulaInstrutor";
+import type { AulaInstrutor, Aula_Nome } from "./../../types/AulaInstrutor"
 
 export default function BlocoCalendario() {
 
   const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
   const [aulas, setAulas] = useState<Aula[]>([]);
   const [cargo, setCargo] = useState(null)
+  const [id_login, SetId_login] = useState(Number)
+  const [alunos, setAlunos] = useState<AulaInstrutor | null>(null);
 
 
   useEffect(() => {
     async function load() {
-      const {aulas, cargo} = await separadorRequisicoes();
+      const {aulas, cargo, id} = await separadorRequisicoes();
       setAulas(aulas);
       setCargo(cargo)
+      SetId_login(id)
     }
 
     load();
   }, []);
 
-  console.log("Aulas", aulas)
-  console.log("Cargo", cargo)
+  // console.log("Aulas", aulas)
+  // console.log("Cargo", cargo)
+  
+useEffect(() => {
+  async function fetch() {
+    const resposta = await fetchAulaInstrutor(id_login);
 
-  // console.log(dataInicio)
+    // resposta.data.forEach(aula => {
+    //   console.log("ID:", aula.id_aula);
+    //   console.log("Alunos:", aula.alunos.map(a => a.nome));
+    // });
 
+    setAlunos(resposta);
+  }
+
+  fetch();
+}, []);
+
+console.log("ALUNOS",alunos)
+
+
+
+
+
+ 
   const aulasFiltradas = aulas
   .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())        
   .filter((aula) => {
@@ -40,6 +64,10 @@ export default function BlocoCalendario() {
   async function confirmarPresencaInstructor(id) {  
     const response = await presencaInstrutor(id)
   }
+
+  console.log("AULAS FILTRADAS",aulasFiltradas)
+
+  
 
   return(
    
@@ -61,12 +89,14 @@ export default function BlocoCalendario() {
           </div>
           ) : (
           aulasFiltradas.map(aula => (
+            
               <div
                 key={aula.id}
                 className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
                 >
                 <div className="w-full flex flex-col gap-2 md:gap-3">
                     <p>{aula.data.replace('-','/').replace('-','/')}</p>
+                    <p>{aula.horario}</p>
                     <p>{aula.unidade.id === 1
                     ? "Unidade: São Miguel Paulista"
                     : aula.unidade.id === 2
@@ -74,6 +104,14 @@ export default function BlocoCalendario() {
                     : aula.unidade.id === 3
                     ? "Unidade: Vila Jacuí"
                     : ""}</p>
+
+                    {alunos?.data
+                      .filter(a => a.id_aula == aula.id)  
+                      .flatMap(a => a.alunos ?? [])        
+                      .map(aluno => (
+                        <h1 key={aluno.id_student}>{aluno.nome}</h1>
+                      ))
+                    } 
                     
                     {cargo !== "Instructor" && (<p>Instrutor: {aula.instructor.nome}</p>)}
                 </div>

@@ -2,7 +2,6 @@
 import { API_BASE_URL } from "../../config/api";
 import type { Aula } from "../../types/Aula";
 
-
 export async function fetchAulasFuncionario(): Promise<Aula[]> {
   
   try {
