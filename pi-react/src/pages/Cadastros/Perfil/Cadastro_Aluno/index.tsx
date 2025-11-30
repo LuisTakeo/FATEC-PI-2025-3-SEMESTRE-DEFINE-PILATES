@@ -1,17 +1,111 @@
 import Options_categprofis from "./Options_categprofis"
 import Estilizacoes from "../../../../uteis/Estilizacoes";
-import Input_Arquivo from "../../../../components/Input/Input_Arquivo";
 import Botao from "../../../../components/Botao/Botao"
 import Input from "../../../../components/Input/Input"
 import inputCPF from "../../../../services/cadastro/inputCPF"
 import React, { useState } from "react";
 import { cadastrar_aluno } from "../../../../services/aluno/cadastroservice";
-import type {Aluno} from "../../../../types/Aluno"
+import type {Aluno} from "../../../../types/Aluno" 
 import type {Endereco as EnderecoType} from "../../../../types/Aluno"
 import type {Contato} from "../../../../types/Aluno"
 import ContatoComplem from "../../../../components/Section/ContatoComplem"
 import Endereco from "../../../../components/Section/Endereco";
 import { useNavigate } from "react-router-dom";
+import { comprimirImagem } from "../../../../services/cadastro/comprimirImagem" 
+
+// =========================================================================
+// 🧩 COMPONENTE INPUT_ARQUIVO (COM BASE64 E ESTILO CORRIGIDOS)
+// =========================================================================
+
+// A interface agora aceita string (Base64)
+interface InputArquivoProps {
+    id: string;
+    titulo?: string;
+    label?: string;
+    texto_input?: string;
+    onArquivoComprimido?: (arquivo: string) => void 
+}
+
+function Input_Arquivo({
+    id,
+    titulo = "",
+    label = "",
+    texto_input = "", 
+    onArquivoComprimido,
+}: InputArquivoProps){
+    
+    // O estado armazena a STRING (Base64)
+    const [arquivoSelecionado, setArquivoSelecionado] = useState<string | null>(null)
+    const [fileName, setFileName] = useState<string | null>(null); // Para exibir o nome
+
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]){
+            
+            const arquivoOriginal = e.target.files[0];
+            
+            setFileName(arquivoOriginal.name); // Armazena o nome original
+            
+            // Assumindo que comprimirImagem retorna uma STRING Base64
+            const arquivoComprimido: string = await comprimirImagem(arquivoOriginal) as string;
+            
+            setArquivoSelecionado(arquivoComprimido)
+            onArquivoComprimido?.(arquivoComprimido)
+        } else {
+            setFileName(null);
+            setArquivoSelecionado(null);
+        }
+    }
+    
+    return( 	
+        <div className="flex flex-col gap-3 w-full">
+            <div>
+                <h1 className="text-[1.8rem] font-bold text-[var(--foreground)]">{titulo}</h1>
+            </div>
+            
+            <label htmlFor={id} className="text-[1.3rem] font-semibold text-[var(--foreground)]">
+                {label}
+            </label>
+            
+            <div className="flex flex-row gap-5 items-center">
+                <input
+                    type="file"
+                    id={id}
+                    className="hidden" 
+                    onChange={handleChange}
+                    accept="image/*,.pdf" 
+                />
+                
+                {/* 🎨 ESTILO PADRONIZADO PARA O BOTÃO PRINCIPAL */}
+                <label 
+                    htmlFor={id} 
+                    className="
+                        px-6 py-3 
+                        rounded-[5px] 
+                        text-[1.3rem] font-bold text-white cursor-pointer 
+                        bg-[var(--destaque)] 
+                        hover:bg-[var(--azul-segundario)] 
+                        transition duration-300
+                    "
+                >
+                    {texto_input}
+                </label>
+                {/* FIM DO ESTILO PADRONIZADO */}
+
+                {/* MENSAGEM DE SUCESSO CORRIGIDA */}
+                {arquivoSelecionado && fileName && (
+                    <p className="text-[1.2rem] font-semibold text-green-600">
+                        Arquivo <span className="font-bold">{fileName}</span> selecionado com sucesso
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// =========================================================================
+// 🔚 FIM DO INPUT_ARQUIVO
+// =========================================================================
+
 
 interface EnderecoState {
     id: number;
@@ -24,7 +118,6 @@ interface EnderecoState {
 }
 
 function converterInputParaDDMMYYYY(dataInput: string): string {
-    // dataInput no formato "2025-10-27" (do input type="date")
     const [ano, mes, dia] = dataInput.split('-');
     return `${dia}-${mes}-${ano}`;
 }
@@ -43,7 +136,6 @@ function Cadastro_Aluno(){
     const [passwordError, setPasswordError] = useState(false);
     const [isLoading, setIsLoading] = useState(false); 
 
-    // Endereços como array
     const [enderecos, setEnderecos] = useState<EnderecoState[]>([
         {
             id: 1,
@@ -67,9 +159,9 @@ function Cadastro_Aluno(){
     const [outro_DDD, setOutroDDD] = useState("")
     const [ativo, setAtivo] = useState("")
 
-    const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: File}>({})
+    // 🔴 CORREÇÃO CRÍTICA: O estado deve aceitar STRING (Base64)
+    const [arquivoComprimido, setArquivoComprimido] = useState<{[key: string]: string}>({}) 
 
-    // Função para buscar endereço pelo CEP usando ViaCEP
     const fetchAddressByCep = async (cep: string) => {
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -82,9 +174,6 @@ function Cadastro_Aluno(){
                 return {
                     rua: data.logradouro,
                     bairro: data.bairro,
-                    // Se precisar salvar cidade/estado, use:
-                    // cidade: data.localidade,
-                    // estado: data.uf,
                 };
             }
         } catch (error) {
@@ -94,7 +183,6 @@ function Cadastro_Aluno(){
     };
 
 
-    // Adicionar novo endereço
     const adicionarEndereco = () => {
         const novoId = Math.max(...enderecos.map(e => e.id), 0) + 1;
         setEnderecos([...enderecos, {
@@ -108,22 +196,18 @@ function Cadastro_Aluno(){
         }]);
     };
 
-    // Remover endereço
     const removerEndereco = (id: number) => {
         if (enderecos.length > 1) {
             setEnderecos(enderecos.filter(e => e.id !== id));
         }
     };
 
-    // Atualizar endereço específico (AGORA ASSÍNCRONO PARA A BUSCA DE CEP)
     const atualizarEndereco = async (id: number, campo: keyof EnderecoState, valor: any) => {
         
-        // 1. Atualiza o valor do campo (CEP, Rua, Número, etc.)
         let novoEnderecos = enderecos.map(e => 
             e.id === id ? { ...e, [campo]: valor } : e
         );
         
-        // 2. Lógica de busca automática de CEP
         if (campo === 'cep') {
             const cepDigits = String(valor).replace(/\D/g, '');
 
@@ -131,23 +215,19 @@ function Cadastro_Aluno(){
                 const addressData = await fetchAddressByCep(cepDigits);
 
                 if (addressData) {
-                    // Atualiza a rua e o bairro com base na resposta da API
                     novoEnderecos = novoEnderecos.map(e => 
                         e.id === id ? { 
                             ...e, 
                             rua: addressData.rua || '', 
                             bairro: addressData.bairro || '',
-                            // Se EnderecoState tivesse cidade/estado, eles seriam atualizados aqui
                         } : e
                     );
                 } else {
-                    // Limpa rua e bairro se o CEP não for encontrado
                     novoEnderecos = novoEnderecos.map(e => 
                         e.id === id ? { ...e, rua: '', bairro: '' } : e
                     );
                 }
             } else {
-                 // Limpa campos se o CEP for apagado ou incompleto
                  novoEnderecos = novoEnderecos.map(e => 
                     e.id === id ? { ...e, rua: '', bairro: '' } : e
                 );
@@ -176,7 +256,6 @@ function Cadastro_Aluno(){
         }
 
 
-        // Criar array de contatos apenas se houver alguma opção selecionada (não "Nenhum")
         const contatos: Contato[] = [];
         
         if (ativo !== "") {
@@ -194,12 +273,13 @@ function Cadastro_Aluno(){
             numero: end.numero,
             complemente: end.complemento,
             bairro: end.bairro,
-            cidade: "São Paulo", // Assumindo valor fixo ou preenchido via CEP se o type permitisse
-            estado: "SP",       // Assumindo valor fixo ou preenchido via CEP se o type permitisse
+            cidade: "São Paulo", 
+            estado: "SP",       
             cep: end.cep,
             principal: end.isPrincipal,
         }));
         
+        // Se a tipagem de Aluno foi corrigida para string, este objeto estará correto
         const aluno: Aluno = {
                 name: nome,
                 phone: ddd + telefone,
@@ -207,8 +287,8 @@ function Cadastro_Aluno(){
                 cpf: cpf,
                 profession: categoria,
                 birth_date: converterInputParaDDMMYYYY(data),
-                fotos: arquivoComprimido,
-                contatos: contatos, // Array vazio se ativo === ""
+                fotos: arquivoComprimido, // Contém Base64 (string)
+                contatos: contatos, 
                 enderecos: enderecosFormatados
         }
 
@@ -245,7 +325,7 @@ function Cadastro_Aluno(){
                     </div>
                 </header>
                     <form onSubmit={(e) => submitAluno(e)}>
-                        <section id="info-pessoais-section" className="flex justify-start items-start flex-col gap-5 w-full  ">
+                        <section id="info-pessoais-section" className="flex justify-start items-start flex-col gap-5 w-full  ">
                             <div>
                                 <h1 className={`${Estilizacoes.segundo_titulo_principal} text-[var(--destaque)]`}>Informações pessoais</h1>
                             </div>
@@ -259,24 +339,23 @@ function Cadastro_Aluno(){
                                     type = "text"
                                     pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite o nome"
-                                    required // Adicionado
+                                    required
                                 />
                                 
                             </div>
 
-                            {/* INÍCIO DO AJUSTE DE DDD E TELEFONE */}
-                            <div id="campo-numero" className="flex justify-start items-start flex-row w-full  gap-4">
+                            <div id="campo-numero" className="flex justify-start items-start flex-row w-full gap-8">
                                 <div className="w-1/5">
                                     <Input
                                         id="ddd"
                                         label="DDD"
                                         value={ddd}
-                                        onChange={(e) => setDDD(e.target.value.replace(/\D/g, ''))} // Limpa caracteres não numéricos
-                                        type = "tel" // Alterado para tel, mas a validação de numérico é feita no onChange
+                                        onChange={(e) => setDDD(e.target.value.replace(/\D/g, ''))} 
+                                        type = "tel" 
                                         pattern="[0-9]+"
-                                        placeholder = "Ex: 11" // AJUSTADO O PLACEHOLDER
-                                        required // Adicionado
-                                        maxLength={2} // AJUSTADO O MAXLENGTH PARA 2
+                                        placeholder = "Ex: 11" 
+                                        required 
+                                        maxLength={2} 
                                     />
                                 </div>
 
@@ -285,17 +364,16 @@ function Cadastro_Aluno(){
                                         id="telefone"
                                         label="Telefone"
                                         value={telefone}
-                                        onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))} // Limpa caracteres não numéricos
-                                        type = "tel" // Alterado para tel, mas a validação de numérico é feita no onChange
+                                        onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))} 
+                                        type = "tel" 
                                         pattern="[0-9]+"
-                                        placeholder = "999999999" // AJUSTADO O PLACEHOLDER
-                                        required // Adicionado
-                                        maxLength={9} // AJUSTADO O MAXLENGTH PARA 9
+                                        placeholder = "999999999" 
+                                        required 
+                                        maxLength={9} 
                                     />
                                 </div>
 
                             </div>
-                            {/* FIM DO AJUSTE DE DDD E TELEFONE */}
 
                             <div className="w-full">
                                 <Input
@@ -307,7 +385,7 @@ function Cadastro_Aluno(){
                                     type = "password"
                                     pattern="[a-zA-Z0-9/]+"
                                     placeholder = "Digite a senha"
-                                    required // Adicionado
+                                    required 
                                 />
                             </div>
                             <div className="w-full">
@@ -328,7 +406,7 @@ function Cadastro_Aluno(){
                                     placeholder = "Confirme a senha"
                                     error={passwordError && confirmarPassword !== ""}
                                     errorMessage="As senhas não coincidem"
-                                    required // Adicionado
+                                    required 
                                 />
                             </div>
 
@@ -357,8 +435,7 @@ function Cadastro_Aluno(){
                                     type = "text"
                                     pattern="[.-0-9]+"
                                     placeholder = "Digite o CPF"
-                                    required // Adicionado
-                                    // maxLength={15}
+                                    required 
                                 />
                             </div>
 
@@ -370,7 +447,7 @@ function Cadastro_Aluno(){
                                     onChange={(e) => setData(e.target.value)}
                                     type = "date"
                                     pattern="[0-9]+"
-                                    required // Adicionado
+                                    required 
                                     
                                     maxLength={8}
                                 />
@@ -385,11 +462,11 @@ function Cadastro_Aluno(){
                             titulo="Foto da Postura"
                             label="Selecione uma imagem dos seus arquivos"
                             texto_input="Clique aqui para selecionar"
-                            onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["ft-postura"]: arquivoComprimido }))}
+                            // Passando a string Base64 para o estado
+                            onArquivoComprimido={(comprimido) => setArquivoComprimido(prev => ({...prev, ["ft-postura"]: comprimido }))}
                             />
                         </div>
 
-                        {/* ✅ SEÇÃO DE ENDEREÇOS REFATORADA */}
                         <div id="endereco-complementar" className="w-full my-11 flex flex-col gap-6">
                             
                             <div className="flex flex-col gap-6">
@@ -398,7 +475,6 @@ function Cadastro_Aluno(){
                                         key={endereco.id}
                                         titulo={index === 0 ? "Endereço Principal" : `Endereço ${index + 1}`}
                                         cep={endereco.cep}
-                                        // Passando a função atualizarEndereco para o componente filho
                                         setCep={(valor) => atualizarEndereco(endereco.id, 'cep', typeof valor === 'function' ? valor(endereco.cep) : valor)}
                                         rua={endereco.rua}
                                         setRua={(valor) => atualizarEndereco(endereco.id, 'rua', typeof valor === 'function' ? valor(endereco.rua) : valor)}
@@ -438,21 +514,21 @@ function Cadastro_Aluno(){
                             <div id="option-info-medica" className="flex flex-col gap-3">
                                 <label className={Estilizacoes.segundo_titulo_principal}>Informações médicas</label>
                                 <h1 className={Estilizacoes.titulo_segundario}>Este aluno vai fazer acompanhamento médico no pilates?</h1>
-                                            <div>
-                                                <input type="radio" id="nao-info-medicas" name="info-medicas" required
-                                                onClick={() => permitirInputs(false)}
-                                                className="scale-150 accent-[var(--destaque)]"
-                                                />
-                                                <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
-                                            </div>
-                                            
-                                            <div>
-                                                <input type="radio" id="sim-info-medicas" name="info-medicas" required
-                                                className="scale-150 accent-[var(--destaque)]" 
-                                                onClick={() => permitirInputs(true)}
-                                                />
-                                                <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
-                                            </div>
+                                                <div>
+                                                    <input type="radio" id="nao-info-medicas" name="info-medicas" required
+                                                    onClick={() => permitirInputs(false)}
+                                                    className="scale-150 accent-[var(--destaque)]"
+                                                    />
+                                                    <label htmlFor="nao-info-medicas" className="text-[1.2rem] pl-5">Não</label>
+                                                </div>
+                                                
+                                                <div>
+                                                    <input type="radio" id="sim-info-medicas" name="info-medicas" required
+                                                    className="scale-150 accent-[var(--destaque)]" 
+                                                    onClick={() => permitirInputs(true)}
+                                                    />
+                                                    <label htmlFor="sim-info-medicas" className="text-[1.2rem] pl-5">Sim, ele(a) vai fazer acompanhamento médico</label>
+                                                </div>
                             </div>
 
                             {permissao_medica && (
@@ -463,7 +539,7 @@ function Cadastro_Aluno(){
                                         titulo="Histórico Médico"
                                         label="Selecione uma imagem dos seus arquivos"
                                         texto_input="Clique aqui para selecionar"
-                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["histico-medico"]: arquivoComprimido }))}
+                                        onArquivoComprimido={(comprimido) => setArquivoComprimido(prev => ({...prev, ["histico-medico"]: comprimido }))}
 
                                         />
                                     </div>
@@ -474,7 +550,7 @@ function Cadastro_Aluno(){
                                         titulo="Diagnóstico"
                                         label="Selecione uma imagem dos seus arquivos"
                                         texto_input="Clique aqui para selecionar"
-                                        onArquivoComprimido={(arquivoComprimido) => setArquivoComprimido(prev => ({...prev, ["diagnostico"]: arquivoComprimido }))}
+                                        onArquivoComprimido={(comprimido) => setArquivoComprimido(prev => ({...prev, ["diagnostico"]: comprimido }))}
 
                                         />
                                     </div>
@@ -510,7 +586,7 @@ function Cadastro_Aluno(){
                                             <label htmlFor="medicamentos-boxarea"
                                             className="text-[1.3rem] font-semibold text-[var(--foreground)]"
                                             >
-                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                            
+                                                Escreva abaixo o tratamento proposto que o(a) aluno(a) recebeu                                         
                                             </label>
                                             <textarea 
                                             name="medicamentos" 
@@ -521,7 +597,7 @@ function Cadastro_Aluno(){
                                         </div>
                                     </div>
                                 </div>
-                            )}    
+                            )}    
                         </section>
 
                         <section 
