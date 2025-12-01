@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Adapters\Database\AdminReceptionist\AdminReceptionistMySQLAdapter;
 use App\Adapters\Database\Aulas\AulasMySQLAdapter;
+use App\Adapters\Database\Instructor\InstructorPostgreSQLAdapter;
 use App\Adapters\Database\StudentMongoDBAdapter;
 use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
 use App\Adapters\Database\StudentMySQLAdapter;
+use App\Adapters\Database\StudentPostgreSQLAdapter;
 use App\Application\Ports\AdminReceptionist\AdminReceptionistServiceContract;
 use App\Application\Ports\Auth\AuthServiceContract;
 use App\Application\Ports\Aulas\AulasRepositoryPort;
@@ -43,8 +45,16 @@ class HexagonalArchitectureProvider extends ServiceProvider
     public function register(): void
     {
         // Bind SQL Port to MySQL Adapter
-        $this->app->bind(SQLPort::class, MySQLAdapter::class);
-        $this->app->bind(StudentRepositoryPort::class, StudentMySQLAdapter::class);
+        $db = $_ENV['DB_CONNECTION'] ?? 'mysql';
+        if ($db == 'mysql') {
+            $this->app->bind(SQLPort::class, MySQLAdapter::class);
+            $this->app->bind(StudentRepositoryPort::class, StudentMySQLAdapter::class);
+        }
+        else if ($db == 'pgsql') {
+            // Implement PostgreSQL Adapter binding here if needed
+            // $this->app->bind(SQLPort::class, PostgresAdapter::class);
+            $this->app->bind(StudentRepositoryPort::class, StudentPostgreSQLAdapter::class);
+        }
         $this->app->bind(StudentNoSQLPort::class, StudentMongoDBAdapter::class);
 
         // Bind NoSQL Port to MongoDB Adapter when mongodb binding is available,
@@ -72,11 +82,18 @@ class HexagonalArchitectureProvider extends ServiceProvider
         InstructorServiceContract::class,
         InstructorService::class
         );
-        $this->app->bind(
-            InstructorRepositoryPort::class,
-            InstructorMySQLAdapter::class
-        );
-
+        if ($db == 'mysql') {
+            $this->app->bind(
+                InstructorRepositoryPort::class,
+                InstructorMySQLAdapter::class
+            );
+        }
+        else if ($db == 'pgsql') {
+            // Implement PostgreSQL Adapter binding here if needed
+            $this->app->bind(InstructorRepositoryPort::class, 
+                InstructorPostgreSQLAdapter::class
+            );
+        }
         //Admin and Receptionist ⬇
         $this->app->bind(
             AdminReceptionistServiceContract::class,
