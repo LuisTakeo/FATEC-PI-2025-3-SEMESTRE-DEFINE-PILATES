@@ -2,8 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../index.css";
 "use client";
 import Botao from "../Botao/Botao";
-import React, { useEffect, useState } from 'react';
-import { logout } from "../../services/auth/logout";
+import React, { useEffect } from 'react';
 
 interface NavLink {
     name: string;
@@ -60,8 +59,7 @@ const getProfileHomePath = (type: string) => {
 function Header() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { isLoggedIn, userType } = getAuthStatus();
-    const [isLoggingOut, setIsLoggingOut] = useState(false); 
+    const { isLoggedIn, userType } = getAuthStatus(); 
 
     useEffect(() => {
         if (location.state && location.state.loginSuccess) {
@@ -75,35 +73,24 @@ function Header() {
     const shouldShowLogout = isLoggedIn && !shouldHideCompletely; 
     
     // Função de Logout Refinada
-    const handleLogout = async () => {
-        if (isLoggingOut) return; // Previne múltiplas chamadas
+    const handleLogout = () => {
+        if (typeof window !== "undefined") {
+            // 1. Limpa o localStorage
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userType");
+            localStorage.removeItem("Define-Pilates-AuthToken");
+            localStorage.removeItem("Define-Pilates-UserInfo");
+        }
         
-        setIsLoggingOut(true);
-        
-        try {
-            // 1. Chama o endpoint de logout no backend
-            await logout();
-            
-            if (typeof window !== "undefined") {
-                // 2. Limpa o localStorage
-                localStorage.removeItem("isLoggedIn");
-                localStorage.removeItem("userType");
-                localStorage.removeItem("Define-Pilates-UserInfo");
-            }
-            
-            // 3. Navega para a Home (Garante que o path esteja correto)
-            navigate("/", { replace: true }); 
+        // 2. Navega para a Home
+        navigate("/", { replace: true }); 
 
-            // 4. Força o recarregamento APENAS se o usuário estiver na Home (/)
-            // Isso força a renderização completa do componente PaginaInicio no estado deslogado.
-            const currentPathNormalized = location.pathname.toLowerCase().replace(/\/$/, "");
-            const currentPathIsHome = currentPathNormalized === "/";
-            
-            if (currentPathIsHome && typeof window !== "undefined") {
-                window.location.reload(); 
-            }
-        } finally {
-            setIsLoggingOut(false);
+        // 3. Força o recarregamento APENAS se o usuário estiver na Home (/)
+        const currentPathNormalized = location.pathname.toLowerCase().replace(/\/$/, "");
+        const currentPathIsHome = currentPathNormalized === "/";
+        
+        if (currentPathIsHome && typeof window !== "undefined") {
+            window.location.reload(); 
         }
     };
     
@@ -111,14 +98,7 @@ function Header() {
     if (shouldHideCompletely) { 
         buttonOrPlaceholder = (<div className="hidden w-full h-full">&nbsp;</div>); 
     } else if (shouldShowLogout) { 
-        buttonOrPlaceholder = (
-            <Botao 
-                texto={isLoggingOut ? "Saindo..." : "Sair da conta"} 
-                onClick={handleLogout} 
-                style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" 
-                disabled={isLoggingOut}
-            />
-        ); 
+        buttonOrPlaceholder = (<Botao texto="Sair da conta" onClick={handleLogout} style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" />); 
     } else {
         buttonOrPlaceholder = (<Botao texto="Acessar conta" onClick={() => navigate("/login/aluno")} />);
     }
@@ -161,9 +141,22 @@ function Header() {
 
     return(
         <header className={`text-black-600 body-font bg-[var(--background] py-6`}> 
-            <div className="container mx-auto flex items-center justify-between flex-wrap flex-col md:flex-row">
-
-                <nav className="flex flex-nowrap overflow-x-auto lg:w-2/5 items-center text-base">
+            {/* CONTAINER PRINCIPAL: flex-col (mobile) | lg:flex-row (desktop, alinhado) */}
+            <div className="container mx-auto flex flex-col lg:flex-row items-center justify-start lg:justify-between">
+                
+                {/* 1. LOGO: order-1 (topo) e centralizado em mobile. lg:w-1/5. */}
+                <span 
+                    className="flex order-1 lg:order-none lg:w-1/5 items-center justify-center w-full mb-4 cursor-default" 
+                >
+                    <span className="text-[2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
+                        Defıne Pilates
+                        <span className="font-extrabold text-[3rem]">.</span>
+                    </span>
+                </span>
+                
+                {/* 2. LINKS DE NAVEGAÇÃO: order-2 (meio) em mobile. lg:w-2/5. */}
+                <nav className="flex flex-nowrap overflow-x-auto lg:w-2/5 items-center text-base order-2 lg:order-first w-full justify-center lg:justify-start">
+                    {/* Adicionado justify-center: Centraliza os links no mobile, mantendo a rolagem. */}
                     {activeLinks.map((link) => (
                         link.path.startsWith('http') ? (
                             <a 
@@ -187,19 +180,10 @@ function Header() {
                     ))}
                 </nav>
 
-                {/* LOGO (DESABILITADO) */}
-                <span 
-                    className=" flex order-first lg:order-none lg:w-1/5 lg:items-center lg:justify-center mb-4 md:mb-0 cursor-default" 
-                >
-                    <span className="text-[2rem] kaisei-tokumin-regular font-bold text-[var(--destaque)] tracking-[-0.1px] ">
-                        Defıne Pilates
-                        <span className="font-extrabold text-[3rem]">.</span>
-                    </span>
-                </span>
-                
-                <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
-                    
-                    <div className="w-[200px] my-4"> 
+                {/* 3. BOTÃO (Sair/Acessar): order-3 (baixo) e centralizado em mobile. lg:w-2/5. */}
+                <div className="order-3 lg:order-none lg:w-2/5 flex justify-center lg:justify-end mt-4 lg:mt-0">
+                    {/* O justify-center é a chave para centralizar o botão em mobile. */}
+                    <div className="w-[200px]"> 
                         {buttonOrPlaceholder}
                     </div>
 
