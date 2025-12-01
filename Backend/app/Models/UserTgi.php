@@ -57,7 +57,7 @@ class UserTgi extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(
             Student::class, 
-            'Id_users', 
+            'id_users', 
             'id_users'); // ✅ Filtro por tipo
     }
 
@@ -65,13 +65,13 @@ class UserTgi extends Authenticatable implements JWTSubject
     public function instructor(): HasOne
     {
         return $this->hasOne(
-            Instructor::class, 'Id_users', 'id_users');
+            Instructor::class, 'id_users', 'id_users');
     }
 
     // ✅ UserTgi pode ter UM Collaborator (se typeuser = 'collaborator')
     public function collaborator(): HasOne
     {
-        return $this->hasOne(Collaborator::class, 'Id_users', 'id_users');
+        return $this->hasOne(Collaborator::class, 'id_users', 'id_users');
     }
 
     // ✅ Método dinâmico para buscar o relacionamento correto

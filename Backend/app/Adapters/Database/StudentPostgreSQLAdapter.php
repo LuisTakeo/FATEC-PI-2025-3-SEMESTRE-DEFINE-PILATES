@@ -126,7 +126,7 @@ class StudentPostgreSQLAdapter implements StudentRepositoryPort
         try {
             $students = UserTgi::where('typeuser', 'Student')
                 ->select(['id_users', 'fullname', 'nameuser', 'typeuser', 'birthdate'])
-                ->with('student:Id_students,Id_users,cpf,Id_classprofessions')
+                ->with('student:Id_students,id_users,cpf,Id_classprofessions')
                 ->get();
             
             return [
