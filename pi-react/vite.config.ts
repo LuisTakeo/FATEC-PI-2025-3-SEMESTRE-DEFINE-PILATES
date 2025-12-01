@@ -17,6 +17,7 @@ export default defineConfig({
     // ✅ CORREÇÃO PRINCIPAL: Permitir qualquer host do Ngrok
     allowedHosts: [
       'chronogrammatic-unamended-janay.ngrok-free.dev',
+      'define-pilates-front-dev.onrender.com',
       'localhost'
     ],
   },
