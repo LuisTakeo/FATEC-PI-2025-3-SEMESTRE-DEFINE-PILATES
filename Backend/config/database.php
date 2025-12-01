@@ -114,11 +114,17 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGO_DSN', 'mongodb://mongodb:27017/'),
-            'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
+            'dsn' => env('MONGO_DSN'),
+            'host' => env('MONGODB_HOST', 'mongodb'),
+            'port' => env('MONGODB_PORT', 27017),
+            'database' => env('MONGODB_DATABASE', 'Define-Pilates-Dev'),
+            'username' => env('MONGODB_USERNAME'),
+            'password' => env('MONGODB_PASSWORD'),
             'options' => [
-                'database' => env('MONGODB_DATABASE', 'define_pilates_mongo'),
+                'database' => env('MONGODB_DATABASE', 'Define-Pilates-Dev'),
                 'appName' => env('APP_NAME', 'Laravel'),
+                'retryWrites' => true,
+                'w' => 'majority',
             ],
         ],
 
