@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../index.css";
 "use client";
 import Botao from "../Botao/Botao";
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface NavLink {
     name: string;

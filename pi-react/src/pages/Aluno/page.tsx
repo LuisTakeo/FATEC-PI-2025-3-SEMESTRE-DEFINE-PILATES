@@ -4,12 +4,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import Mapa from '../../components/Mapa/Mapa'; 
 import Botao from '../../components/Botao/Botao';
-import Estilizacoes from '../../uteis/Estilizacoes';
+// import Estilizacoes from '../../uteis/Estilizacoes';
 import ProximaAula from './ProximaAula';
 import { dadosLogin } from "../../services/dadoslogin"
 
-const COR_DESTAQUE_PRINCIPAL = 'text-[var(--destaque)]';
-const ESTILO_TITULO_MODAL = `${COR_DESTAQUE_PRINCIPAL} text-lg font-bold mb-4`;
+// const COR_DESTAQUE_PRINCIPAL = 'text-[var(--destaque)]';
+// const ESTILO_TITULO_MODAL = `${COR_DESTAQUE_PRINCIPAL} text-lg font-bold mb-4`;
 
 // =================================================================
 // FUNÇÕES AUXILIARES 

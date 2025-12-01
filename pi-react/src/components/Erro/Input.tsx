@@ -40,6 +40,7 @@ export default function Input({
     const ref = inputRef || defaultRef;
     const inputType = mostrarSenhaToggle ? (mostrarSenha ? "text" : "password") : type;
 
+    console.log(size);
     return (
         <div className="flex flex-col gap-2 relative">
             <label htmlFor={id} className="text-sm font-inter">{label}</label>

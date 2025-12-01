@@ -10,7 +10,7 @@ export default function BlocoCalendario() {
   const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
   const [aulas, setAulas] = useState<Aula[]>([]);
   const [cargo, setCargo] = useState(null)
-  const [id_login, SetId_login] = useState(Number)
+  // const [id_login, SetId_login] = useState(Number)
 
 
   useEffect(() => {
@@ -18,9 +18,10 @@ export default function BlocoCalendario() {
       const resultado = await separadorRequisicoes();
       if (resultado) {
         const {aulas, cargo, id} = resultado;
+        console.log(id)
         setAulas(aulas);
         setCargo(cargo);
-        SetId_login(id);
+        // SetId_login(id);
       }
     }
 
@@ -29,6 +30,7 @@ export default function BlocoCalendario() {
 
   console.log("Aulas carregadas:", aulas)
   console.log("Cargo:", cargo)
+  
 
 
 
@@ -45,7 +47,7 @@ export default function BlocoCalendario() {
   })
 
   async function confirmarPresencaInstructor(id) {  
-    const response = await presencaInstrutor(id)
+    await presencaInstrutor(id)
   }
 
   console.log("AULAS FILTRADAS",aulasFiltradas)

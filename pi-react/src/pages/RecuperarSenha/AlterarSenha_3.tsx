@@ -38,7 +38,7 @@ export default function AlterarSenha() {
         const temMaiuscula = /[A-Z]/.test(s);
         const temEspecial = /[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~`]/.test(s);
         
-        let erros = [];
+        let erros: string[] = [];
 
         if (!temMinuscula) { erros.push("minúscula"); }
         if (!temMaiuscula) { erros.push("maiúscula"); }

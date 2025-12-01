@@ -151,6 +151,7 @@ function Cadastro_Aluno(){
     const [permissao_medica, setPermissao_medica] = useState(false);
     const [medicamento, setMedicamento] = useState("")
     const [tratProposto, setTratProposto] = useState("")
+    console.log(tratProposto)
     const [categoria, setCategoria] = useState("")
     
     const [observacoes, setObservacoes] = useState("")
@@ -182,6 +183,7 @@ function Cadastro_Aluno(){
         }
     };
 
+    console.log(medicamento);
 
     const adicionarEndereco = () => {
         const novoId = Math.max(...enderecos.map(e => e.id), 0) + 1;

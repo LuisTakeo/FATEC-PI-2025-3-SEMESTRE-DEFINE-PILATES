@@ -1,7 +1,7 @@
 "use client";
 import BlocoHome from "./../../../components/BlocoHome/BlocoHome"
 import Estilizacoes from "../../../uteis/Estilizacoes";
-import { useState } from "react";
+// import { useState } from "react";
 
 interface Item {
     texto: string;

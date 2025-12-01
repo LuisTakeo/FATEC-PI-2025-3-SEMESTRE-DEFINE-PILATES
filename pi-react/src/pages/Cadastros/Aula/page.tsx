@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import Botao from "./../../../components/Botao/Botao"
+// import Botao from "./../../../components/Botao/Botao"
 import Input from "./../../../components/Input/Input"
 import Estilizacoes from "../../../uteis/Estilizacoes";
 import { useState } from "react";
 import AulasDisponiveis from "./AulasDisponiveis";
-import { API_BASE_URL } from "../../../config/api"
-import type { Instrutor, Unidade } from "../../../types/InstrutorUnidade"
+import type { 
+    // Instrutor, 
+    Unidade } from "../../../types/InstrutorUnidade"
 import { useEffect } from "react";
 
 import { InstrutorUnidade } from "./../../../services/funcionarios/InstrutorUnidade"
@@ -14,7 +15,7 @@ import { fetchStudios } from "./../../../services/aula/fetchStudios"
 export default function Cadastro_Aula(){
 
   const navigate = useNavigate();
-
+    console.log(navigate)
     const [instrutorOptions, setInstrutorOptions] = useState<{value: string, label: string}[]>([]);
     const [unidadeOptions, setUnidadeOptions] = useState<{value: string, label: string}[]>([]);
     const [data, setData] = useState("")

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { FetchAulasPendentes } from "../../../services/aluno/fetchAulasPendentes"
-import { CadastrarAlunoAula , type CadastroAulaResponse} from "../../../services/aluno/cadastrarAlunoAula";
+import { 
+    CadastrarAlunoAula , 
+    // type CadastroAulaResponse
+    } from "../../../services/aluno/cadastrarAlunoAula";
 import type { aulasPendentesType } from "../../../types/aulasPendentesType";
 import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 
 export default function AulasPendentes(){
     const [aulaPendente, setAulaPendente] = useState<aulasPendentesType[]>([])
-
+    // console.log(CadastroAulaResponse)
     useEffect(() => {
       async function load() {
         const aulas = await FetchAulasPendentes();

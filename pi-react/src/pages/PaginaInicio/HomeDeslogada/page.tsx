@@ -2,7 +2,9 @@ import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 import { AiOutlineHeart } from "react-icons/ai";
 import Mapa from "./../../../components/Mapa/Mapa"
-import { API_BASE_URL, API_URL } from "../../../config/api";
+import { API_BASE_URL, 
+    // API_URL 
+} from "../../../config/api";
 
 
 function PaginaInicio(){
