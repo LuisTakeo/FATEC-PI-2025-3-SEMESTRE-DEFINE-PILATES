@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Adapters\Database\AdminReceptionist\AdminReceptionistMySQLAdapter;
+use App\Adapters\Database\AdminReceptionist\AdminReceptionistPostgreSQLAdapter;
 use App\Adapters\Database\Aulas\AulasMySQLAdapter;
+use App\Adapters\Database\Aulas\AulasPostgreSQLAdapter;
 use App\Adapters\Database\Instructor\InstructorPostgreSQLAdapter;
 use App\Adapters\Database\StudentMongoDBAdapter;
 use App\Adapters\Database\Instructor\InstructorMySQLAdapter;
@@ -99,18 +101,35 @@ class HexagonalArchitectureProvider extends ServiceProvider
             AdminReceptionistServiceContract::class,
             AdminReceptionistService::class
         );
-        $this->app->bind(
-            AdminReceptionistRepositoryPort::class,
-            AdminReceptionistMySQLAdapter::class
-        );
+        if ($db == 'mysql') {
+            $this->app->bind(
+                AdminReceptionistRepositoryPort::class,
+                AdminReceptionistMySQLAdapter::class
+            );
+        }
+        else if ($db == 'pgsql') {
+            // Implement PostgreSQL Adapter binding here if needed
+            $this->app->bind(AdminReceptionistRepositoryPort::class, 
+                AdminReceptionistPostgreSQLAdapter::class
+            );
+        }
 
         $this->app->bind(
             AulasServiceContract::class, 
             AulasService::class);
-        $this->app->bind(
-            AulasRepositoryPort::class,
-            AulasMySQLAdapter::class
-        );
+        
+        if ($db == 'mysql') {
+                $this->app->bind(
+                AulasRepositoryPort::class,
+                AulasMySQLAdapter::class
+            );
+        }
+        else if ($db == 'pgsql') {
+            // Implement PostgreSQL Adapter binding here if needed
+            $this->app->bind(AulasRepositoryPort::class, 
+                AulasPostgreSQLAdapter::class
+            );
+        }
 
         // Auth Service
         $this->app->bind(
