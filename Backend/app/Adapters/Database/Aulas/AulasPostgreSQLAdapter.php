@@ -314,7 +314,7 @@ class AulasPostgreSQLAdapter implements AulasRepositoryPort
     {
         $tomorrow = Carbon::tomorrow()->format('Y-m-d');
 
-        $query = ScheduleStudio::query()
+        $aulas = ScheduleStudio::query()
             ->with(['studio', 'instructor.user', 'typeClass'])
             ->withCount(['studentSchedules' => function($q) {
                 // Conta apenas inscrições não canceladas
@@ -326,11 +326,13 @@ class AulasPostgreSQLAdapter implements AulasRepositoryPort
                 $q->where('Id_students', $id_student)
                   ->where('status', '!=', 'cancelled');
             })
-            ->having('student_schedules_count', '<', 3) // Apenas aulas com vagas
             ->orderBy('scheduledate', 'asc')
-            ->orderBy('scheduletime', 'asc');
-
-        $aulas = $query->get();
+            ->orderBy('scheduletime', 'asc')
+            ->get()
+            ->filter(function($aula) {
+                // Filtra apenas aulas com vagas disponíveis (menos de 3 alunos)
+                return $aula->student_schedules_count < 3;
+            });
 
         if ($aulas->isEmpty()) {
             return [];
