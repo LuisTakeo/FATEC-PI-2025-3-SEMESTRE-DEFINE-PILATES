@@ -69,14 +69,14 @@ class StudentPostgreSQLAdapter implements StudentRepositoryPort
                     'birthdate' => $studentDTO->birthDate->format('Y-m-d') // Formato para banco
                 ]);
                 
-                Log::info('UserTgi created', ['id' => $userTgi->Id_users]);
+                Log::info('UserTgi created', ['id' => $userTgi->id_users]);
                 
                 // ✅ 3. Criar Student
                 $student = Student::create([
                     'namestudent' => $studentDTO->name,
                     'cpf' => $studentDTO->cpf,
                     'Id_classprofessions' => $professionClassId,
-                    'Id_users' => $userTgi->id_users,
+                    'id_users' => $userTgi->id_users,
                 ]);
                 
                 Log::info('Student created', [
@@ -87,7 +87,7 @@ class StudentPostgreSQLAdapter implements StudentRepositoryPort
                 return [
                     'status' => true, 
                     'id' => $student->Id_students,
-                    'id_user' => $userTgi->Id_users
+                    'id_user' => $userTgi->id_users
                 ];  
             });
             
