@@ -28,7 +28,7 @@ export async function login_funcionario(login: string , password: string, acesso
         )
 
         const data = await response.json()
-        const user = data.data.user; // Objeto user contém o 'type' (Ex: "Instructor")
+        const user = data?.data?.user; // Objeto user contém o 'type' (Ex: "Instructor")
 
         if (typeof window !== "undefined") {
             // Salva o token e informações do usuário
