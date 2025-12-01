@@ -298,7 +298,7 @@ function Cadastro_Aluno(){
         {
             alert("Aluno cadastrado com sucesso!");
             setIsLoading(false); 
-            navigate("/login/aluno");
+            navigate("/admin/home");
         }
         else {
             alert("Erro ao cadastrar aluno. Por favor, tente novamente.");
