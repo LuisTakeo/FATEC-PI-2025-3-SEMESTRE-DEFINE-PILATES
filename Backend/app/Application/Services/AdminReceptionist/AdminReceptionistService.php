@@ -111,19 +111,28 @@ class AdminReceptionistService implements AdminReceptionistServiceContract
                 'message' => 'Login realizado com sucesso',
                 'data' => [
                     'user' => [
-                        'id' => $userData->id_users,
+                        'id' => $collaborator->Id_collaborators,
                         'nameuser' => $userData->nameuser,
                         'fullname' => $userData->fullname,
                         'type' => $userData->typeuser,
                         'status' => $userData->statususer,
                     ],
                     'collaborator' => [
-                        'id' => $collaborator->Id_collaborators,
                         'role' => $collaborator->typecollaborator,
                     ],
                     'token' => $token, // ✅ Token JWT-like
                     'token_type' => 'Bearer'
                 ]
             ];
+    }
+
+    public function getAllAdminReceptionists(): array
+    {
+        try {
+            return $this->repository->getAllAdminReceptionists();
+        } catch (Exception $e) {
+            Log::error('Error fetching admin/receptionists: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

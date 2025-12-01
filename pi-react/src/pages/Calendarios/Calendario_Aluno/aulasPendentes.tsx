@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { FetchAulasPendentes } from "../../../services/aluno/fetchAulasPendentes"
-import { CadastrarAlunoAula } from "../../../services/aluno/cadastrarAlunoAula";
+import { 
+    CadastrarAlunoAula , 
+    // type CadastroAulaResponse
+    } from "../../../services/aluno/cadastrarAlunoAula";
 import type { aulasPendentesType } from "../../../types/aulasPendentesType";
 import Estilizacoes from "../../../uteis/Estilizacoes";
 import Botao from "../../../components/Botao/Botao"
 
 export default function AulasPendentes(){
-  const [aulaPendente, setAulaPendente] = useState<aulasPendentesType[]>([])
-
+    const [aulaPendente, setAulaPendente] = useState<aulasPendentesType[]>([])
+    // console.log(CadastroAulaResponse)
     useEffect(() => {
       async function load() {
         const aulas = await FetchAulasPendentes();
@@ -19,19 +22,29 @@ export default function AulasPendentes(){
 
     console.log(aulaPendente)
 
-    async function reposicaoAula(aula_id){
+    async function reposicaoAula(aula_id: number){
 
         try{
             const mensagem = await CadastrarAlunoAula(aula_id );
-            alert(mensagem)     
+            console.log("Retornou:", mensagem?.message)
+            
+            if (mensagem?.message === "Aluno já está cadastrado nesta aula"){
+                alert("Você já esta cadastrado nesta aula")
+            }else if(mensagem?.message === "Aluno cadastrado na aula com sucesso"){
+                alert("Cadastro neste aula finalizadocom sucesso, veja mais informações sobre esta aula no seu caléndario")
+            }
+
+
         }catch(err){
             console.error("Erro ao cadastrar aluno em aula")
         }
 
+        window.location.reload();
+
     }
 
     return(
-        <section className="flex flex-col px-[15%]">
+        <section className="flex flex-col px-[15%] gap-10">
             <h1 className={Estilizacoes.titulo_principal}>Cadastre-se em alguma aula disponível abaixo</h1>
             <h1 className={Estilizacoes.titulo_principal}>Atualmente voce tem {aulaPendente.length} aulas pendentes</h1>
 
@@ -50,23 +63,17 @@ export default function AulasPendentes(){
                         key={aula.id}
                         className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-col items-center justify-between px-[30px] py-[30px] gap-5 border-l-[10px] border-l-[var(--destaque)] md:flex-row md:min-h-[130px]"
                     >
-                        <div className="flex flex-col">
-                        <p>{aula.data.replace('-','/').replace('-','/')}</p>
-                        <p>{aula.unidade.id === 1
-                        ? "Unidade: São Miguel Paulista"
-                        : aula.unidade.id === 2
-                        ? "Unidade: Itaquera"
-                        : aula.unidade.id === 3
-                        ? "Unidade: Vila Jacuí"
-                        : ""}</p>
-                        <p>Instrutor: {aula.instructor.nome}</p>
+                        <div className="flex flex-col text-[1.5rem] gap-3">
+                            <h1><span className="font-semibold">Data da Aula:</span> {aula.data.replace("-", "/").replace("-", "/")}</h1>
+                            <h1><span className="font-semibold">Unidade:</span> {aula.unidade.name}</h1>
+                            <h1><span className="font-semibold">Instrutor:</span> {aula.instructor.nome}</h1>
                         </div>
 
-                        <div>
-                            <h1>
+                        <div className="flex flex-col md:w-[50%] w-full h-full gap-5 items-start md:items-end">
+                            <h1 className="text-[1.4rem]">
                                 {aula.vagas_disponiveis} vagas disponíveis!
                             </h1>       
-                            <Botao texto="Cadastrar-me" type="button" onClick={() => reposicaoAula(aula.id)}></Botao>
+                            <Botao texto="Cadastrar-me" type="submit" onClick={() => reposicaoAula(aula.id)}></Botao>
                         </div>
                         
 

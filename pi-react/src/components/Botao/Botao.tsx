@@ -13,9 +13,9 @@ interface BotaoProps {
 export default function Botao({texto, link, onClick, type, style}: BotaoProps){
     
 
-    const estilo = `w-full flex justify-center items-center bg-[var(--azul-segundario)] p-5 m-0 ` +
+    const estilo = `w-full flex justify-center items-center  p-5 m-0 ` +
     `text-white hover:!text-white text-[1.5rem] md:text-[1.3rem] font-semibold text-center tracking-[1px] rounded-md whitespace-nowrap h-[50px] cursor-pointer ` +
-    `transition-all duration-200 hover:!bg-[var(--destaque)] ${style ?? ""}`
+    `transition-all duration-200 ${style ? style : "bg-[var(--azul-segundario)] hover:!bg-[var(--destaque)] "}`
 
     if (!link){
     return(  

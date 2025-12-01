@@ -10,17 +10,22 @@ export interface CadastroAulaResponse {
     };
 }
 
-export async function CadastrarAlunoAula(aula_id: number): Promise<CadastroAulaResponse | false> {
+export async function CadastrarAlunoAula(aula_id: number): Promise<CadastroAulaResponse | null> {
 
     const acesso = await dadosLogin(); 
-
-   
-    if (!acesso || !acesso.id) {
+    
+    if (!acesso || !acesso.user) {
         console.error("Cadastro falhou: Dados de login do aluno não encontrados ou inválidos.");
-        return false;
+        return null
     }
     
-    const id_aluno = acesso.id; 
+    const id_aluno = acesso.user.id
+    console.log(id_aluno)
+
+    if (!id_aluno) {
+        console.error("Cadastro falhou: ID do aluno não encontrado.");
+        return null
+    }
 
     try {
         const response = await fetch(`${API_BASE_URL}/students/aulas/${aula_id}/enroll`,
@@ -28,28 +33,20 @@ export async function CadastrarAlunoAula(aula_id: number): Promise<CadastroAulaR
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "ngrok-skip-browser-warning": "true",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify({
-                    "id_student": id_aluno 
+                    id_student: id_aluno 
                 })
             }
         );
         
-        const data = await response.json();
-        
-
-        if (response.status === 201) {
-          
-            return data as CadastroAulaResponse; 
-            
-        } else {
-            console.error(`Falha ao cadastrar aula (Status: ${response.status}). Mensagem:`, data.message);
-            return false;
-        }
+        const data: CadastroAulaResponse = await response.json();
+        return data
 
     } catch (error) {
         console.error("Erro de rede/processamento no cadastro de aula:", error);
-        return false;
+        return null
     }
 }

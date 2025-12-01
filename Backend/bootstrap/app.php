@@ -32,6 +32,49 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Garante que erros de autenticação JWT retornem JSON
+        $exceptions->render(function (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token expirado',
+                    'error' => 'Token expired'
+                ], 401);
+            }
+        });
+
+        $exceptions->render(function (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token inválido',
+                    'error' => 'Token invalid'
+                ], 401);
+            }
+        });
+
+        $exceptions->render(function (\Tymon\JWTAuth\Exceptions\JWTException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Erro de autenticação',
+                    'error' => 'Token not provided or invalid'
+                ], 401);
+            }
+        });
+
+        // Captura erros de autenticação genéricos
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Não autenticado',
+                    'error' => 'Unauthenticated'
+                ], 401);
+            }
+        });
+
+        // Mantém o handler de validação existente
         $exceptions->render(function (App\Adapters\Http\Exceptions\ValidationException $e) {
             return $e->render();
         });

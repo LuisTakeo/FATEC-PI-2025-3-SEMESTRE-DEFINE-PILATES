@@ -407,18 +407,30 @@ class AulasMySQLAdapter implements AulasRepositoryPort
     public function updateStudentAulaStatus(int $id_student, int $id_aula, string $status): bool
     {
         try {
-            // Atualiza diretamente com as chaves compostas
+            // Verifica se a inscrição existe
+            $enrollment = StudentSchedule::where('Id_students', $id_student)
+                ->where('Id_schedule_studios', $id_aula)
+                ->first();
+
+            if (!$enrollment) {
+                throw new Exception('Inscrição não encontrada');
+            }
+
+            $oldStatus = $enrollment->status;
+
+            // Atualiza o status usando query builder com WHERE explícito
             $updated = StudentSchedule::where('Id_students', $id_student)
                 ->where('Id_schedule_studios', $id_aula)
                 ->update(['status' => $status]);
 
-            if ($updated === 0) {
-                throw new Exception('Inscrição não encontrada');
+            if ($updated === 0 && $oldStatus !== $status) {
+                throw new Exception('Falha ao atualizar status da inscrição');
             }
 
             Log::info('Status da inscrição atualizado', [
                 'id_student' => $id_student,
                 'id_aula' => $id_aula,
+                'old_status' => $oldStatus,
                 'new_status' => $status
             ]);
 
@@ -447,5 +459,51 @@ class AulasMySQLAdapter implements AulasRepositoryPort
             'scheduledate' => $aula->scheduledate,
             'scheduletime' => $aula->scheduletime
         ];
+    }
+
+    public function getInstructorClassesWithStudents(int $instructorId): array
+    {
+        try {
+            $classes = ScheduleStudio::where('Id_instructors', $instructorId)
+                ->with([
+                    'typeClass:Id_type_classes,typeclass',
+                    'studio:Id_studios,studioname',
+                    'studentSchedules' => function ($query) {
+                        $query->whereIn('status', ['confirmed', 'pending', 'absent', 'completed'])
+                            ->with('student.userTgi:id_users,fullname');
+                    }
+                ])
+                ->orderBy('scheduledate', 'asc')
+                ->orderBy('scheduletime', 'asc')
+                ->get();
+
+            return $classes->map(function ($class) {
+                
+                $dataAgenda = DateTime::createFromFormat('Y-m-d', $class->scheduledate);
+                $dataFormatada = $dataAgenda->format('d-m-Y');
+                return [
+                    'id_aula' => $class->Id_schedule_studios,
+                    'tipo_aula' => $class->typeClass->typeclass ?? 'N/A',
+                    'studio' => $class->studio->studioname ?? 'N/A',
+                    'data' => $dataFormatada,
+                    'horario' => $class->scheduletime,
+                    'observacao' => $class->observation,
+                    'alunos' => $class->studentSchedules->map(function ($studentSchedule) {
+                        return [
+                            'id_student' => $studentSchedule->Id_students,
+                            'nome' => $studentSchedule->student->userTgi->fullname ?? 'Nome não disponível',
+                            'status' => $studentSchedule->status
+                        ];
+                    })->toArray()
+                ];
+            })->toArray();
+
+        } catch (Exception $e) {
+            Log::error('Failed to get instructor classes with students', [
+                'instructor_id' => $instructorId,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
     }
 }

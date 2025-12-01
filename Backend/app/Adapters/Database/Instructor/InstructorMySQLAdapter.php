@@ -7,6 +7,11 @@ use App\Application\Ports\Instructor\InstructorRepositoryPort;
 use App\Models\Collaborator;
 use App\Models\Instructor;
 use App\Models\UserTgi;
+use App\Models\ScheduleStudio;
+use App\Models\StudentSchedule;
+use Carbon\Carbon;
+use Date;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -93,7 +98,7 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
     {
         try {
             $instructors = Instructor::with('user')
-                ->select('Id_instructors', 'Id_users')
+                ->select('Id_instructors', 'Id_users', 'cref', 'crefito', 'hiring', 'classification')
                 ->get();
 
             if ($instructors->isEmpty()) {
@@ -101,9 +106,23 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
             }
 
             return $instructors->map(function ($instructor) {
+                $birthdate = $instructor->user->birthdate 
+                    ? Carbon::parse($instructor->user->birthdate)->format('d-m-Y')
+                    : null;
+                
+                $hiring = $instructor->hiring 
+                    ? DateTime::createFromFormat('Y-m-d', $instructor->hiring)->format('d-m-Y')
+                    : null;
+                
                 return [
                     'id' => $instructor->Id_instructors,
-                    'nome' => $instructor->user->fullname
+                    'nome' => $instructor->user->fullname,
+                    'phone' => $instructor->user->nameuser,
+                    'birthdate' => $birthdate,
+                    'cref' => $instructor->cref,
+                    'crefito' => $instructor->crefito,
+                    'hiring' => $hiring,
+                    'classification' => $instructor->classification,
                 ];
             })->toArray();
 
@@ -113,6 +132,13 @@ class InstructorMySQLAdapter implements InstructorRepositoryPort
             ]);
             throw $e;
         }
+    }
+
+    public function verifyInstructorOwnsClass(int $instructorId, int $classId): bool
+    {
+        return ScheduleStudio::where('Id_schedule_studios', $classId)
+            ->where('Id_instructors', $instructorId)
+            ->exists();
     }
     
 }

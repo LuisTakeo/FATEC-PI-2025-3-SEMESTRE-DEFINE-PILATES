@@ -15,22 +15,40 @@ class AdminReceptionistControllerAdapter extends BaseController
 
     #[OA\Get(
         path: "/api/admin_receptionist",
-        operationId: "getAdminReceptionist",
+        operationId: "getAllAdminReceptionists",
         tags: ["AdminReceptionist"],
-        summary: "Test endpoint"
+        summary: "Lista todos os administradores e recepcionistas"
     )]
     #[OA\Response(
         response: 200,
-        description: "Success response",
+        description: "Lista de colaboradores",
         content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: "message", type: "string", example: "test")
-            ]
+            type: "array",
+            items: new OA\Items(
+                properties: [
+                    new OA\Property(property: "id", type: "integer", example: 1),
+                    new OA\Property(property: "nome", type: "string", example: "João Silva"),
+                    new OA\Property(property: "phone", type: "string", example: "11999999999"),
+                    new OA\Property(property: "birthday", type: "string", example: "15-03-1990"),
+                    new OA\Property(property: "fulladdress", type: "string", example: "Rua ABC, 123"),
+                    new OA\Property(property: "hiring", type: "string", example: "01-01-2020"),
+                    new OA\Property(property: "classification", type: "string", example: "SENIOR"),
+                    new OA\Property(property: "type", type: "string", example: "Administrator")
+                ]
+            )
         )
     )]
     public function index(Request $request)
     {
-        return response()->json(["message" => "test"]);
+        try {
+            $collaborators = $this->adminReceptionistService->getAllAdminReceptionists();
+            return response()->json($collaborators, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro ao buscar colaboradores',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     #[OA\Post(

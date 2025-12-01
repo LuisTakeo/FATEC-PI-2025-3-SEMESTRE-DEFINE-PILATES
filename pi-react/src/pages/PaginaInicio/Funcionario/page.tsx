@@ -1,7 +1,7 @@
 "use client";
 import BlocoHome from "./../../../components/BlocoHome/BlocoHome"
 import Estilizacoes from "../../../uteis/Estilizacoes";
-import { useState } from "react";
+// import { useState } from "react";
 
 interface Item {
     texto: string;
@@ -24,7 +24,7 @@ export default function HomeFuncionario(){
                 return [
                     { texto: "Cadastros", link: "/admin/Home", subtexto: "Cadastro e gestão de usuários." },
                     { texto: "Pesquisa geral", link: "/admin/pesquisa-usuarios", subtexto: "Pesquise por clientes e funcionários." },
-                    { texto: "Consultar agendas", link: "/home/funcionario", subtexto: "Consulte todas as agendas de aulas." },
+                    { texto: "Marcar aulas para aluno", link: "/admin/cadastro-aluno-aula", subtexto: "Vincule um aluno a uma aula disponível." },
                     { texto: "Marcar aula", link: "/cadastro/aula", subtexto: "Agende aulas para aluno(a) e instrutor(a) específico(a)." },
                 ];
             case "receptionist":

@@ -1,6 +1,6 @@
 // /components/Erro/InputTelefone.tsx
 
-import React from 'react';
+// import React from 'react';
 // Importa o tipo InputProps para que possamos herdar as propriedades do Input
 import Input, { type InputProps } from './Input'; 
 import useInputTelefone from './useInputTelefone'; 

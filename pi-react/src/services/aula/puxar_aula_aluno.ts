@@ -8,7 +8,11 @@ export async function fetchAulasAluno(alunoId: string): Promise<Aula[]> {
 
   try {
 
-    const response = await fetch(`${ API_BASE_URL }/students/${alunoId}/aulas`);
+    const response = await fetch(`${ API_BASE_URL }/students/${alunoId}/aulas`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+      }
+    });
     const data = await response.json();
     
     const aulas: Aula[] = data.data;

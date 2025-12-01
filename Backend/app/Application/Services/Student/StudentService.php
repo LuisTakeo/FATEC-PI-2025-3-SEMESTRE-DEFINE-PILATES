@@ -138,14 +138,13 @@ class StudentService implements StudentServiceContract
                 'message' => 'Login realizado com sucesso',
                 'data' => [
                     'user' => [
-                        'id' => $userData->id_users,
+                        'id' => $student->Id_students,
                         'nameuser' => $userData->nameuser,
                         'fullname' => $userData->fullname,
                         'type' => $userData->typeuser,
                         'status' => $userData->statususer,
                     ],
                     'student' => [
-                        'id' => $student->Id_students,
                         'cpf' => $student->cpf,
                     ],
                     'token' => $token, // ✅ Token JWT-like

@@ -4,7 +4,7 @@ import Botao from "./../../../components/Botao/Botao"
 import { dadosLogin } from "../../../services/dadoslogin"
 
 
-export default function Calendario_Aluno() {
+export default function Calendario_Funcionario() {
 
   const [cargo, setCargo] = useState("")
 

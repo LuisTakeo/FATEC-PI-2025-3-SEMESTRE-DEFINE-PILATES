@@ -10,36 +10,50 @@ export default function BlocoCalendario() {
   const [dataInicio, setDataInicio] = useState<Date | null>(new Date());
   const [aulas, setAulas] = useState<Aula[]>([]);
   const [cargo, setCargo] = useState(null)
+  // const [id_login, SetId_login] = useState(Number)
 
 
   useEffect(() => {
     async function load() {
-      const {aulas, cargo} = await separadorRequisicoes();
-      setAulas(aulas);
-      setCargo(cargo)
+      const resultado = await separadorRequisicoes();
+      if (resultado) {
+        const {aulas, cargo, id} = resultado;
+        console.log(id)
+        setAulas(aulas);
+        setCargo(cargo);
+        // SetId_login(id);
+      }
     }
 
     load();
   }, []);
 
-  console.log("Aulas", aulas)
-  console.log("Cargo", cargo)
+  console.log("Aulas carregadas:", aulas)
+  console.log("Cargo:", cargo)
+  
 
-  console.log(dataInicio)
 
+
+
+
+ 
   const aulasFiltradas = aulas
   .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())        
   .filter((aula) => {
         if (!dataInicio) return true
-        const data = dataInicio?.getDate() + "-" + dataInicio?.getMonth() + "-" + dataInicio?.getFullYear()
-        return aula.data >= data  
+        const [dia, mes, ano] = aula.data.split("-").map(d => parseInt(d))
+        const data_aula = new Date(ano, mes - 1, dia)
+        return data_aula >= dataInicio
   })
 
   async function confirmarPresencaInstructor(id) {  
-    const response = await presencaInstrutor(id)
+    await presencaInstrutor(id)
   }
 
- 
+  console.log("AULAS FILTRADAS",aulasFiltradas)
+
+  
+
   return(
    
     
@@ -66,6 +80,7 @@ export default function BlocoCalendario() {
                 >
                 <div className="w-full flex flex-col gap-2 md:gap-3">
                     <p>{aula.data.replace('-','/').replace('-','/')}</p>
+                    <p>{aula.horario}</p>
                     <p>{aula.unidade.id === 1
                     ? "Unidade: São Miguel Paulista"
                     : aula.unidade.id === 2
@@ -73,6 +88,15 @@ export default function BlocoCalendario() {
                     : aula.unidade.id === 3
                     ? "Unidade: Vila Jacuí"
                     : ""}</p>
+
+                    {(cargo === "Instructor" || cargo === "Administrator" || cargo === "Receptionist") && aula.alunos && aula.alunos.length > 0 && (
+                      <div className="mt-2">
+                        <p className="font-semibold">Alunos matriculados:</p>
+                        {aula.alunos.map((aluno: any) => (
+                          <p key={aluno.id_student} className="text-sm ml-2">• {aluno.nome}</p>
+                        ))}
+                      </div>
+                    )}
                     
                     {cargo !== "Instructor" && (<p>Instrutor: {aula.instructor.nome}</p>)}
                 </div>

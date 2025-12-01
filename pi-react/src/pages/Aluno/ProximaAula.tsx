@@ -1,156 +1,190 @@
-import { useState, useEffect, useCallback } from 'react';
-import { fetchProximaAula, type ProximaAulaApi } from '../../services/aula/proxima_aula';
-import Botao from '../../components/Botao/Botao';
-import Estilizacoes from '../../uteis/Estilizacoes';
-import { confirmarAula , desmarcarAula} from "./../../services/aula/confirmCancelAula"
+// ARQUIVO: ProximaAula.tsx
 
+import { useEffect, useState } from "react";
+import { fetchProximaAula } from "./../../services/aula/fetchProximaAula" 
+import type {ProximaAulaApi } from "./../../types/ProximaAula"
+import Botao from "../../components/Botao/Botao";
+import { confirmCancelAula} from "./../../services/aula/confirmCancelAula"
+import Estilizacoes from "../../uteis/Estilizacoes";
 
-interface Feedback {
-    message: string;
-    type: 'success' | 'error';
+interface ProximaAulaProps{
+    aluno_id?: number 
+    // 1. Nova Propriedade de Callback
+    onDataLoaded: () => void; 
 }
 
-interface ModalProps {
-    isVisible: boolean;
-    title: string;
-    message: string;
-    onConfirm: () => void;
-    onCancel: () => void;
-    confirmText: string;
-}
+export default function ProximaAula({aluno_id, onDataLoaded}: ProximaAulaProps){
+    console.log("id_proxima_aula", aluno_id)
 
-const formatarDataExibicao = (data: string, horario: string) => `${data} às ${horario}`;
+    const [aulas, setAulas] = useState<ProximaAulaApi[]>([])
+    const [mensagemProxAula, setMensagemProxAula] = useState("")
+    const [msgConfirmCancelAula, setMsgConfirmCancelAula] = useState("")
 
-const SimpleModal = ({ isVisible, title, message, onConfirm, onCancel, confirmText }: ModalProps) => {
-    if (!isVisible) return null;
+    useEffect(() => {
 
-    const isConfirmModal = title.includes("Confirmar");
-    const confirmHoverStyle = isConfirmModal
-        ? "hover:bg-[var(--azul-segundario)]"
-        : "hover:bg-red-600";
-    
-    const confirmBaseStyle = "bg-[var(--destaque)]";
+        if (aluno_id === undefined || aluno_id === null) {
+            console.error("Id Vazio")
+            // Mesmo se o ID estiver vazio, devemos liberar o componente pai do carregamento
+            onDataLoaded();
+            return
+        }
+        
+        async function load() {
+            try {
+                const aula = await fetchProximaAula({alunoId: aluno_id!});
+                setAulas(aula?.data ? [aula.data] : [])
+                setMensagemProxAula(aula?.message ? aula.message : "")
+            } catch (error) {
+                console.error("Erro ao carregar próxima aula:", error);
+            } finally {
+                // 2. Chama o callback após a requisição, independentemente do resultado
+                onDataLoaded(); 
+            }
+        }
+    
+        load();
+    }, [aluno_id, onDataLoaded]); // onDataLoaded adicionado como dependência
 
-    return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
-        >
-            <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm mx-auto">
-                
-                <h3 className="">{title}</h3>
-                
-                <p className="mb-6">{message}</p>
-                <div className="flex justify-end gap-3">
-                    <button
-                        onClick={onCancel}
-                        className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 transition"
-                    >
-                        Cancelar
-                    </button>
-                    
-                    <button
-                        onClick={onConfirm}
-                        className={`px-4 py-2 text-white rounded-md transition ${confirmBaseStyle} ${confirmHoverStyle}`}
-                    >
-                        {confirmText}
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
+    console.log("aula:",aulas)
+    console.log("mensagem:", mensagemProxAula)
+    
+    // ... (restante do código da função statusAula e do return)
 
-interface ProximaAulaProps {
-    user_id?: number | null;
-}
+    async function statusAula(aula_id: number, status: string){
 
+        if (status !== "confirm" && status !== "cancel"){
+            console.log("Status diferente do esperado")
+        } 
 
-export default function ProximaAula({user_id}: ProximaAulaProps) {
-    const [proximaAula, setProximaAula] = useState<ProximaAulaApi | null | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [showCancelModal, setShowCancelModal] = useState(false);
-    const [feedbackMessage, setFeedbackMessage] = useState<Feedback | null>(null);
+        if (status === "cancel"){
+            const resposta_cancelar = window.confirm("Tem certeza que deseja cancelar sua presença nesta aula? Clique em Ok para continuar ou em Cancelar para cancelar essa solicitação")
 
-    const displayFeedback = useCallback((message: string, type: 'success' | 'error') => {
-        setFeedbackMessage({ message, type });
-        setTimeout(() => setFeedbackMessage(null), 4000);
-    }, []);
+            if (!resposta_cancelar) {
+                console.log("Cancelamento de presença cancelado");
+                return
+            }
+        }
+        
+
+        //requisição
+        const resultado = await confirmCancelAula(aula_id, aluno_id!, status)
+
+        if (!resultado) {
+            console.log("Erro: Resposta vazia de confirmCancelAula")
+            return
+        }
+
+        console.log(resultado.data.action)
+
+        if(resultado.status === "error"){
+            setMsgConfirmCancelAula("Você já confirmou ou cancelou sua presença nesta aula")
+        }
+        else if (resultado.data.action === "confirm"){
+            setMsgConfirmCancelAula(`Você confirmou sua presença nesta aula com sucesso.`)
+        }else if (resultado.data.action === "cancel"){
+            setMsgConfirmCancelAula(`Você cancelou sua presença nesta aula com sucesso.`)
+        }
+
+    }
 
 
+    return(
+        <>
+        <section className="flex flex-col gap-10">
+            {aulas.length === 0 ? (
+                <section>
+                    <div className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex flex-row md:flex-row items-center justify-between px-[30px] py-[30px] 
+                        gap-5 border-l-[10px] border-l-[var(--destaque)] md:min-h-[130px]">
 
-    const confirmClass = useCallback(async () => {
-        if (!proximaAula) return;
+                        <div className="flex flex-col aling-center items-center gap-3 items-start">
+                                <div>
+                                <h1 className={Estilizacoes.titulo_principal}>Próxima Aula</h1>
+                            </div>
+                            <div className="flex flex-row gap-3 aling-center items-center">
+                                <div>
+                                    <h1 className="text-[1.6rem]">{mensagemProxAula}</h1>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2ec27e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-frown-icon lucide-frown"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                                </div>
+                            </div>         
+                        </div>
+                        </div>
+                </section>
+                ) : (
+                <section className="flex flex-col w-full h-full">
+                    {aulas.map((aula) => (
+                        <div key={aula.id}
+                        className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex items-start flex-col items-center justify-between px-[30px] py-[30px] 
+                        gap-5 border-l-[10px] border-l-[var(--destaque)] md:min-h-[130px]">
+                            <h1 className={Estilizacoes.titulo_principal}>Próxima Aula</h1>
+                            <div className="flex flex-col gap-5 text-[1.4rem]">
+                                <div className="flex flex-row aling-center items-center gap-3">
 
-        try {
-            await confirmarAula(proximaAula.id, user_id); 
-            setProximaAula(prev => prev ? { ...prev, status: 'CONFIRMADA' } : null);
-            displayFeedback("Sua aula foi confirmada! ✅", 'success');
-        } catch (error) {
-            console.error(error);
-            displayFeedback("Erro ao confirmar a aula. ❌", 'error');
-        } finally {
-            setShowConfirmModal(false);
-        }
-    }, [proximaAula, displayFeedback]);
+                                    <div> 
+                                        <h1 className="font-semibold text-[1.6rem]">{msgConfirmCancelAula}</h1>
+                                    </div>
+                                    <div className={`${!msgConfirmCancelAula ? "hidden" : ""}`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#26a269" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-smile-icon lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                                    </div>
 
-    const cancelClass = useCallback(async () => {
-        if (!proximaAula) return;
+                                </div>
+                                <div>
+                                    <h1><span className="font-semibold">Data da Aula:</span> {aula.data.replace("-", "/").replace("-", "/")}</h1>
+                                    <h1><span className="font-semibold">Horário:</span> {aula.horario}</h1>
+                                </div>
+                                
+                                <div>
+                                    <h1><span className="font-semibold">Unidade:</span> {aula.unidade.name}</h1>
+                                    <h1><span className="font-semibold">Endereço:</span> {aula.unidade.endereco}</h1>
+                                </div>    
 
-        try {
-            await desmarcarAula(proximaAula.id, user_id); 
-            setProximaAula(null);
-            displayFeedback("Sua aula foi cancelada. ❌", 'error');
-        } catch (error) {
-            console.error(error);
-            displayFeedback("Erro ao cancelar a aula. ❌", 'error');
-        } finally {
-            setShowCancelModal(false);
-        }
-    }, [proximaAula, displayFeedback]);
+                                <h1><span className="font-semibold">Instrutor:</span> {aula.instructor.nome}</h1>
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-10 py-5">
+                                <div>
+                                    <Botao texto="Confirmar Presença" type="button" onClick={() => statusAula(aula.id, "confirm")}/>
+                                </div>
+                                <div>
+                                    <Botao texto="Cancelar Presença" type="button"  style="bg-red-800 hover:bg-red-600" onClick={() => statusAula(aula.id, "cancel")}/>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
 
-    if (loading) return <p>Carregando dados da próxima aula...</p>;
+                    <div>
+                        <h1 className="text-[1.3rem] text-red-800 py-8 w-full h-full">
+                            Caso voce desmarque a aula antes de completar 3 horas para a data da aula, voce terá direito a reposição de aula, 
+                            conforme uma justificativa apropriada. Caso desmarque 3 horas antes da aula, não tem direito a reposição
+                        </h1>
+                    </div>
+                </section>
+                
+            )} 
 
-    return (
-        <div>
-            {feedbackMessage && <div className={`p-4 mb-4 rounded-lg ${feedbackMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{feedbackMessage.message}</div>}
+            <section className="bg-white shadow-2xl rounded-[8px] min-w-full min-h-[230px] flex items-start flex-col md:flex-row items-center justify-between px-[30px] py-[30px] 
+                        gap-5 border-l-[10px] border-l-[var(--destaque)] md:min-h-[130px]">
+                <div className="flex flex-col md:flex-row justify-between items-center w-full h-full">
+                    <div className="flex flex-col gap-5">
+                        <div className="flex md:hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#2ec27e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days-icon lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
 
-            {proximaAula ? (
-                <div>
-                    <h2>{`Sua próxima aula (${proximaAula.tipo})`}</h2>
-                    <p>{`Em ${formatarDataExibicao(proximaAula.data, proximaAula.horario)} (${proximaAula.unidade.name})`}</p>
-                    {proximaAula.status !== 'CONFIRMADA' ? (
-                        <>
-                            <Botao texto="Confirmar" type="button" onClick={() => setShowConfirmModal(true)} />
-                            <Botao texto="Desmarcar" type="button" onClick={() => setShowCancelModal(true)} />
-                        </>
-                    ) : (
-                        <>
-                            <p>Sua aula está confirmada! ✅</p>
-                            <Botao texto="Desmarcar" type="button" onClick={() => setShowCancelModal(true)} />
-                        </>
-                    )}
-                </div>
-            ) : <p>Nenhuma aula futura agendada.</p>}
-
-            <SimpleModal
-                isVisible={showConfirmModal && !!proximaAula}
-                title="Confirmar Aula"
-                message={`Deseja confirmar sua aula em ${proximaAula ? formatarDataExibicao(proximaAula.data, proximaAula.horario) : ''}?`}
-                onConfirm={confirmClass}
-                onCancel={() => setShowConfirmModal(false)}
-                confirmText="Sim, Confirmar"
-            />
-
-            <SimpleModal
-                isVisible={showCancelModal && !!proximaAula}
-                title="Desmarcar Aula"
-                message={`Deseja desmarcar sua aula em ${proximaAula ? formatarDataExibicao(proximaAula.data, proximaAula.horario) : ''}?`}
-                onConfirm={cancelClass}
-                onCancel={() => setShowCancelModal(false)}
-                confirmText="Sim, Desmarcar"
-            />
-        </div>
-    );
+                        </div>
+                        <div>
+                            <h1 className={Estilizacoes.titulo_principal}>Consulte suas aulas e marque pendências</h1>
+                        </div>
+                        <div>
+                            <Botao texto="Acessar Caléndario" link="/calendario/aluno"/>
+                        </div>
+                    </div>
+                    <div className="hidden md:flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#2ec27e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-calendar-days-icon lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                    </div>
+                </div>
+                
+                
+            </section>
+        </section>
+        </> 
+    )
 }
