@@ -46,7 +46,7 @@ class InstructorPostgreSQLAdapter implements InstructorRepositoryPort
                 'classification' => $instructorDTO->classification,
                 'cref' => $instructorDTO->cref,
                 'crefito' => $instructorDTO->crefito,
-                'Id_users' => $userTgi->id_users,
+                'id_users' => $userTgi->id_users,
                 'Id_collaborators' => $collaborator->Id_collaborators,
             ]);
 

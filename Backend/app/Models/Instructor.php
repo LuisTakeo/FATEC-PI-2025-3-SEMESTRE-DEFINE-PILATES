@@ -16,7 +16,7 @@ class Instructor extends Model
 
     protected $fillable = [
         'Id_collaborators',
-        'Id_users',
+        'id_users',
         'cref',
         'crefito',
         'birthday',
@@ -31,7 +31,7 @@ class Instructor extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(UserTgi::class, 'Id_users', 'id_users');
+        return $this->belongsTo(UserTgi::class, 'id_users', 'id_users');
     }
 
     public function studios(): HasMany
