@@ -24,7 +24,8 @@ export async function login_aluno(login: string, password: string): Promise<Auth
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "ngrok-skip-browser-warning": "true"
                 },
                 body: JSON.stringify({
                     login: telefoneLogin,

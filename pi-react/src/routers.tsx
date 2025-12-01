@@ -18,6 +18,7 @@ import Cadastro_Aula from "./pages/Cadastros/Aula/page";
 import HomeAlunoPage from "./pages/Aluno/page";
 import AdminUsuariosPage from "./pages/Admin/paginapesquisa";   
 import AulasPendentes from "./pages/Calendarios/Calendario_Aluno/aulasPendentes"
+import CadastroAlunoAula from "./pages/Admin/CadastroAlunoAula"
 
 function MainRoutes() {
     return (
@@ -72,6 +73,12 @@ function MainRoutes() {
             <Route 
                 path="/admin/pesquisa-usuarios" 
                 element={<AdminUsuariosPage />} 
+            />
+            
+            {/* ROTA: CADASTRAR ALUNO EM AULA */}
+            <Route 
+                path="/admin/cadastro-aluno-aula" 
+                element={<CadastroAlunoAula />} 
             />
             
             {/* Adicione sua PrivateRoute aqui, se for usar */}

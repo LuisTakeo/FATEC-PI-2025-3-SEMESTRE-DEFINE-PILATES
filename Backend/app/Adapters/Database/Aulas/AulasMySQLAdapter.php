@@ -478,11 +478,14 @@ class AulasMySQLAdapter implements AulasRepositoryPort
                 ->get();
 
             return $classes->map(function ($class) {
+                
+                $dataAgenda = DateTime::createFromFormat('Y-m-d', $class->scheduledate);
+                $dataFormatada = $dataAgenda->format('d-m-Y');
                 return [
                     'id_aula' => $class->Id_schedule_studios,
                     'tipo_aula' => $class->typeClass->typeclass ?? 'N/A',
                     'studio' => $class->studio->studioname ?? 'N/A',
-                    'data' => $class->scheduledate,
+                    'data' => $dataFormatada,
                     'horario' => $class->scheduletime,
                     'observacao' => $class->observation,
                     'alunos' => $class->studentSchedules->map(function ($studentSchedule) {

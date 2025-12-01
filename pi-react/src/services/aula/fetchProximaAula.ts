@@ -18,6 +18,7 @@ export async function fetchProximaAula({ alunoId }: { alunoId: number }) {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
             },
             method: "GET"
         });

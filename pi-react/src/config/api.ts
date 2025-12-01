@@ -21,6 +21,7 @@ export const getAuthHeaders = (): HeadersInit => {
   return {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'ngrok-skip-browser-warning': 'true', // Pula aviso do Ngrok
     ...(token && { 'Authorization': `Bearer ${token}` }),
   };
 };

@@ -13,11 +13,17 @@ export interface CadastroAulaResponse {
 export async function CadastrarAlunoAula(aula_id: number): Promise<CadastroAulaResponse | null> {
 
     const acesso = await dadosLogin(); 
+    
+    if (!acesso || !acesso.user) {
+        console.error("Cadastro falhou: Dados de login do aluno não encontrados ou inválidos.");
+        return null
+    }
+    
     const id_aluno = acesso.user.id
     console.log(id_aluno)
 
     if (!id_aluno) {
-        console.error("Cadastro falhou: Dados de login do aluno não encontrados ou inválidos.");
+        console.error("Cadastro falhou: ID do aluno não encontrado.");
         return null
     }
 
@@ -27,6 +33,7 @@ export async function CadastrarAlunoAula(aula_id: number): Promise<CadastroAulaR
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "ngrok-skip-browser-warning": "true",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify({

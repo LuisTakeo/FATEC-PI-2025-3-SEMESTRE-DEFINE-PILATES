@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import FiltrosCalendario from "./FiltrosCalendario"
 import separadorRequisicoes from "../../.../../components/Calendario/separadorRequisicoes";
 import presencaInstrutor from "../../services/funcionarios/presencaInstrutor";
-import { fetchAulaInstrutor } from "../../services/aula/fetchAulaInstrutor";
-import type { AulaInstrutor, Aula_Nome } from "./../../types/AulaInstrutor"
 
 export default function BlocoCalendario() {
 
@@ -13,39 +11,24 @@ export default function BlocoCalendario() {
   const [aulas, setAulas] = useState<Aula[]>([]);
   const [cargo, setCargo] = useState(null)
   const [id_login, SetId_login] = useState(Number)
-  const [alunos, setAlunos] = useState<AulaInstrutor | null>(null);
 
 
   useEffect(() => {
     async function load() {
-      const {aulas, cargo, id} = await separadorRequisicoes();
-      setAulas(aulas);
-      setCargo(cargo)
-      SetId_login(id)
+      const resultado = await separadorRequisicoes();
+      if (resultado) {
+        const {aulas, cargo, id} = resultado;
+        setAulas(aulas);
+        setCargo(cargo);
+        SetId_login(id);
+      }
     }
 
     load();
   }, []);
 
-  // console.log("Aulas", aulas)
-  // console.log("Cargo", cargo)
-  
-useEffect(() => {
-  async function fetch() {
-    const resposta = await fetchAulaInstrutor(id_login);
-
-    // resposta.data.forEach(aula => {
-    //   console.log("ID:", aula.id_aula);
-    //   console.log("Alunos:", aula.alunos.map(a => a.nome));
-    // });
-
-    setAlunos(resposta);
-  }
-
-  fetch();
-}, []);
-
-console.log("ALUNOS",alunos)
+  console.log("Aulas carregadas:", aulas)
+  console.log("Cargo:", cargo)
 
 
 
@@ -104,13 +87,14 @@ console.log("ALUNOS",alunos)
                     ? "Unidade: Vila Jacuí"
                     : ""}</p>
 
-                    {alunos?.data
-                      .filter(a => a.id_aula == aula.id)  
-                      .flatMap(a => a.alunos ?? [])        
-                      .map(aluno => (
-                        <h1 key={aluno.id_student}>{aluno.nome}</h1>
-                      ))
-                    } 
+                    {(cargo === "Instructor" || cargo === "Administrator" || cargo === "Receptionist") && aula.alunos && aula.alunos.length > 0 && (
+                      <div className="mt-2">
+                        <p className="font-semibold">Alunos matriculados:</p>
+                        {aula.alunos.map((aluno: any) => (
+                          <p key={aluno.id_student} className="text-sm ml-2">• {aluno.nome}</p>
+                        ))}
+                      </div>
+                    )}
                     
                     {cargo !== "Instructor" && (<p>Instrutor: {aula.instructor.nome}</p>)}
                 </div>

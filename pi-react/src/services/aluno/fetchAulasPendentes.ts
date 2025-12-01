@@ -13,7 +13,11 @@ export async function FetchAulasPendentes() {
 
     try {
 
-    const response = await fetch(`${API_BASE_URL}/students/${id}/aulas/available`)
+    const response = await fetch(`${API_BASE_URL}/students/${id}/aulas/available`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+      }
+    })
     const data = await response.json();
     const aulas: aulasPendentesType[] = data.data
     return aulas; 

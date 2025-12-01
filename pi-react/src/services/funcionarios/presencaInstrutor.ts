@@ -15,7 +15,8 @@ export default async function presencaInstrutor(id_aula: number) {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "ngrok-skip-browser-warning": "true"
                 },
                 body: JSON.stringify({
                     "id_student": id_aluno

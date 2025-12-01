@@ -66,6 +66,7 @@ const fetchFromEndpoint = async (endpoint: string, type: string): Promise<any[]>
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
             'accept': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
         }
     });
     
@@ -237,16 +238,15 @@ export const fetchAllUsers = async (): Promise<UserResult[]> => {
  * Aplica filtros de tipo de usuário e nome
  */
 export const applyFilters = (situacao: string, nomeFiltro: string, results: UserResult[]): UserResult[] => {
-    return results.filter(item => {
-        const itemTipo = item.typeuser.toLowerCase();
-        const situacaoMatch = situacao === 'todos' || situacao === '' || itemTipo === situacao;
-        const nomeLower = nomeFiltro.toLowerCase();
-        const nomeMatch = nomeFiltro === '' || (item.fullname?.toLowerCase().includes(nomeLower) ?? false);
-        return situacaoMatch && nomeMatch;
-    });
-};
-
-export const applySorting = (results: UserResult[], currentOrder: string): UserResult[] => {
+    return results.filter(item => {
+        const itemTipo = item.typeuser.toLowerCase();
+        // Se situacao está vazia, não retorna nenhum resultado (usuário ainda não selecionou tipo válido)
+        const situacaoMatch = situacao === 'todos' ? true : (situacao !== '' && itemTipo === situacao);
+        const nomeLower = nomeFiltro.toLowerCase();
+        const nomeMatch = nomeFiltro === '' || (item.fullname?.toLowerCase().includes(nomeLower) ?? false);
+        return situacaoMatch && nomeMatch;
+    });
+};export const applySorting = (results: UserResult[], currentOrder: string): UserResult[] => {
     const sorted = [...results].sort((a, b) => {
         const nomeA = a.fullname?.toLowerCase() || '';
         const nomeB = b.fullname?.toLowerCase() || '';

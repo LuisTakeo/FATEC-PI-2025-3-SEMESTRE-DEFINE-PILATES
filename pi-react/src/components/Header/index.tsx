@@ -2,7 +2,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../index.css";
 "use client";
 import Botao from "../Botao/Botao";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { logout } from "../../services/auth/logout";
 
 interface NavLink {
     name: string;
@@ -59,7 +60,8 @@ const getProfileHomePath = (type: string) => {
 function Header() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { isLoggedIn, userType } = getAuthStatus(); 
+    const { isLoggedIn, userType } = getAuthStatus();
+    const [isLoggingOut, setIsLoggingOut] = useState(false); 
 
     useEffect(() => {
         if (location.state && location.state.loginSuccess) {
@@ -73,25 +75,35 @@ function Header() {
     const shouldShowLogout = isLoggedIn && !shouldHideCompletely; 
     
     // Função de Logout Refinada
-    const handleLogout = () => {
-        if (typeof window !== "undefined") {
-            // 1. Limpa o localStorage
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("userType");
-            localStorage.removeItem("Define-Pilates-AuthToken");
-            localStorage.removeItem("Define-Pilates-UserInfo");
-        }
+    const handleLogout = async () => {
+        if (isLoggingOut) return; // Previne múltiplas chamadas
         
-        // 2. Navega para a Home (Garante que o path esteja correto)
-        navigate("/", { replace: true }); 
+        setIsLoggingOut(true);
+        
+        try {
+            // 1. Chama o endpoint de logout no backend
+            await logout();
+            
+            if (typeof window !== "undefined") {
+                // 2. Limpa o localStorage
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userType");
+                localStorage.removeItem("Define-Pilates-UserInfo");
+            }
+            
+            // 3. Navega para a Home (Garante que o path esteja correto)
+            navigate("/", { replace: true }); 
 
-        // 3. Força o recarregamento APENAS se o usuário estiver na Home (/)
-        // Isso força a renderização completa do componente PaginaInicio no estado deslogado.
-        const currentPathNormalized = location.pathname.toLowerCase().replace(/\/$/, "");
-        const currentPathIsHome = currentPathNormalized === "/";
-        
-        if (currentPathIsHome && typeof window !== "undefined") {
-            window.location.reload(); 
+            // 4. Força o recarregamento APENAS se o usuário estiver na Home (/)
+            // Isso força a renderização completa do componente PaginaInicio no estado deslogado.
+            const currentPathNormalized = location.pathname.toLowerCase().replace(/\/$/, "");
+            const currentPathIsHome = currentPathNormalized === "/";
+            
+            if (currentPathIsHome && typeof window !== "undefined") {
+                window.location.reload(); 
+            }
+        } finally {
+            setIsLoggingOut(false);
         }
     };
     
@@ -99,7 +111,14 @@ function Header() {
     if (shouldHideCompletely) { 
         buttonOrPlaceholder = (<div className="hidden w-full h-full">&nbsp;</div>); 
     } else if (shouldShowLogout) { 
-        buttonOrPlaceholder = (<Botao texto="Sair da conta" onClick={handleLogout} style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" />); 
+        buttonOrPlaceholder = (
+            <Botao 
+                texto={isLoggingOut ? "Saindo..." : "Sair da conta"} 
+                onClick={handleLogout} 
+                style="!bg-[var(--azul-segundario)] hover:!bg-red-600 !text-white !p-2" 
+                disabled={isLoggingOut}
+            />
+        ); 
     } else {
         buttonOrPlaceholder = (<Botao texto="Acessar conta" onClick={() => navigate("/login/aluno")} />);
     }

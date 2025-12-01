@@ -16,6 +16,7 @@ export async function confirmCancelAula(aula_id: number, aluno_id: number, statu
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
+                    "ngrok-skip-browser-warning": "true"
                 },
                 body: JSON.stringify({
                     action: status

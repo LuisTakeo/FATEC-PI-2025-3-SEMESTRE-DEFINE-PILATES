@@ -76,28 +76,33 @@ export default function HomeAlunoPage() {
         setIsLoadingProximaAula(false);
     }, []);
 
-    // Efeito para carregar os dados do aluno
-    useEffect(() => {
-        async function load() {
-            try {
-                const aluno = await dadosLogin();
-                const nome_aluno = aluno.user.name
-                setUserInfo(nome_aluno)
+    // Efeito para carregar os dados do aluno
+    useEffect(() => {
+        async function load() {
+            try {
+                const aluno = await dadosLogin();
+                
+                // Verifica se os dados foram retornados com sucesso
+                if (!aluno || !aluno.user) {
+                    console.warn("Dados do aluno não disponíveis");
+                    return;
+                }
+                
+                const nome_aluno = aluno.user.name
+                setUserInfo(nome_aluno)
 
-                const id_aluno = aluno.user.id
-                setUserId(id_aluno)
-            } catch (error) {
-                console.error("Erro ao carregar dados do aluno:", error);
-                // Mesmo em caso de erro, remove o loading do aluno para prosseguir
-            } finally {
-                setIsLoadingAluno(false);
-            }
-        }
-        
-        load();
-    }, []);
-
-    // console.log(userInfo) 
+                const id_aluno = aluno.user.id
+                setUserId(id_aluno)
+            } catch (error) {
+                console.error("Erro ao carregar dados do aluno:", error);
+                // Mesmo em caso de erro, remove o loading do aluno para prosseguir
+            } finally {
+                setIsLoadingAluno(false);
+            }
+        }
+        
+        load();
+    }, []);    // console.log(userInfo) 
     
     return (
         <div className="w-full min-h-screen flex flex-col bg-gray-150 font-sans">

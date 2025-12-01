@@ -8,6 +8,7 @@ export async function cadastrar_adm_recep(funcionario: Funcionario) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true",
                 "Accept": "application/json",
             },
             body: JSON.stringify(funcionario),

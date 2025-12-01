@@ -9,7 +9,8 @@ export async function Cadastrar_aula(aula: any) {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "ngrok-skip-browser-warning": "true"
                 },
                 body: JSON.stringify(aula)
             }

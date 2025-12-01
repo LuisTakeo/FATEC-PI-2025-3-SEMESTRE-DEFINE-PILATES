@@ -18,7 +18,7 @@ const tiposDeUsuario = [
     { value: 'administradores', label: 'Administradores' },
     { value: 'alunos', label: 'Alunos' },
     { value: 'instrutores', label: 'Instrutores' },
-    { value: 'todos', label: 'Usuários (Todos)' }, 
+    // { value: 'todos', label: 'Usuários (Todos)' }, 
 ];
 
 // FUNÇÃO AUXILIAR PARA O SPINNER
@@ -93,8 +93,15 @@ function PesquisaGeralContent() {
     const isFieldsDisabled = !!error || isFetchingAllUsers; 
 
     const handleToggleOrdem = useCallback(() => {
-        setOrdem(prev => prev === 'crescente' ? 'decrescente' : 'crescente');
-    }, []);
+        setOrdem(prev => {
+            const newOrdem = prev === 'crescente' ? 'decrescente' : 'crescente';
+            // Aplica a ordenação imediatamente quando a ordem muda
+            if (filteredResults.length > 0) {
+                setFilteredResults(currentResults => applySorting(currentResults, newOrdem));
+            }
+            return newOrdem;
+        });
+    }, [filteredResults.length]);
 
     const formatDate = (dateString?: string): string => {
         if (!dateString) return 'N/A';
@@ -165,15 +172,7 @@ function PesquisaGeralContent() {
         return () => clearTimeout(timeout);
     }, [situacao, nome, ordem, allUsers, isSearching, isReady, isFetchingAllUsers]); 
 
-    // 3. Efeito para aplicar ordenação
-    useEffect(() => {
-        if (filteredResults.length > 0 && hasSearched) {
-            setFilteredResults(prevResults => applySorting(prevResults, ordem));
-        }
-    }, [ordem, filteredResults.length, hasSearched]); 
-    
-    
-    // 4. DETERMINAÇÃO DAS MENSAGENS DE STATUS NA TELA - Lógica Simplificada
+    // 3. DETERMINAÇÃO DAS MENSAGENS DE STATUS NA TELA - Lógica Simplificada
     let displayMessage = ""; // INICIA VAZIO, como solicitado.
 
     if (error) {
