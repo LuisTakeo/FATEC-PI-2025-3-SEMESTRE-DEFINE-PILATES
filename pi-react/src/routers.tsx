@@ -19,6 +19,7 @@ import HomeAlunoPage from "./pages/Aluno/page";
 import AdminUsuariosPage from "./pages/Admin/paginapesquisa";   
 import AulasPendentes from "./pages/Calendarios/Calendario_Aluno/aulasPendentes"
 import CadastroAlunoAula from "./pages/Admin/CadastroAlunoAula"
+import { HealthStatus } from "./components/HealthStatus";
 
 function MainRoutes() {
     return (
@@ -27,6 +28,8 @@ function MainRoutes() {
             {/* ROTAS PÚBLICAS / HOME */}
             {/* ----------------------------------------------------------------- */}
             <Route path="/" element={<PaginaInicio />} />
+
+            <Route path="/health" element={<HealthStatus />} />
 
             {/* ----------------------------------------------------------------- */}
             {/* ROTAS DE LOGIN */}

@@ -41,7 +41,6 @@ services:
 
   # MySQL Database
   mysql:
-    cpus: 0.5
     image: mysql:8.0
     container_name: define-pilates-mysql
     restart: unless-stopped
@@ -65,7 +64,6 @@ services:
 
   # MongoDB Database
   mongodb:
-    cpus: 0.5
     image: mongo:7.0
     container_name: define-pilates-mongodb
     restart: unless-stopped
