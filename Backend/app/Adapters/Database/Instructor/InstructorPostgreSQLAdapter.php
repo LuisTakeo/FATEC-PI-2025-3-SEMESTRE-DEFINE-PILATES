@@ -98,7 +98,7 @@ class InstructorPostgreSQLAdapter implements InstructorRepositoryPort
     {
         try {
             $instructors = Instructor::with('user')
-                ->select('Id_instructors', 'Id_users', 'cref', 'crefito', 'hiring', 'classification')
+                ->select('Id_instructors', 'id_users', 'cref', 'crefito', 'hiring', 'classification')
                 ->get();
 
             if ($instructors->isEmpty()) {
