@@ -63,8 +63,8 @@ class StudentPostgreSQLAdapter implements StudentRepositoryPort
                     'nameuser' => $studentDTO->phone,
                     'fullname' => $studentDTO->name,        
                     'passworduser' => $hashedPassword,
-                    'typeuser' => 'student',
-                    'statususer' => 'active',
+                    'typeuser' => 'Student',
+                    'statususer' => 'Active',
                     'message_sent' => false,
                     'birthdate' => $studentDTO->birthDate->format('Y-m-d') // Formato para banco
                 ]);
@@ -124,7 +124,7 @@ class StudentPostgreSQLAdapter implements StudentRepositoryPort
     public function getAllStudentUsers(): array
     {
         try {
-            $students = UserTgi::where('typeuser', 'student')
+            $students = UserTgi::where('typeuser', 'Student')
                 ->select(['id_users', 'fullname', 'nameuser', 'typeuser', 'birthdate'])
                 ->with('student:Id_students,Id_users,cpf,Id_classprofessions')
                 ->get();

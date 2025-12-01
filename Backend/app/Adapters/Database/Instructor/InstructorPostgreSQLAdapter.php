@@ -27,8 +27,8 @@ class InstructorPostgreSQLAdapter implements InstructorRepositoryPort
                 'nameuser' => $instructorDTO->phone,
                 'fullname' => $instructorDTO->name,
                 'passworduser' => $instructorDTO->password,
-                'typeuser' => 'instructor',
-                'statususer' => 'active',
+                'typeuser' => 'Instructor',
+                'statususer' => 'Active',
                 'birthdate' => $instructorDTO->birthDate->format('Y-m-d')
             ]);
 

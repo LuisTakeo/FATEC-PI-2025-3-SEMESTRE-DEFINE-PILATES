@@ -19,8 +19,8 @@ class AdminReceptionistPostgreSQLAdapter implements AdminReceptionistRepositoryP
                 'nameuser' => $adminReceptionistDTO->phone,
                 'fullname' => $adminReceptionistDTO->name,
                 'passworduser' => $adminReceptionistDTO->password,
-                'typeuser' => strtolower($adminReceptionistDTO->typecollaborator),
-                'statususer' => 'active',
+                'typeuser' => $adminReceptionistDTO->typecollaborator,
+                'statususer' => 'Active',
                 'birthdate' => $adminReceptionistDTO->birthDate->format('Y-m-d')
             ]);
 
