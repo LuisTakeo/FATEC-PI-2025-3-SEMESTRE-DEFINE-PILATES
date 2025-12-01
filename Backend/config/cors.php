@@ -24,7 +24,8 @@ return [
         'http://localhost:5173',
         'http://localhost:3000',
         'https://chronogrammatic-unamended-janay.ngrok-free.dev',
-        'https://sibilation-edythe-unprivately.ngrok-free.dev'
+        'https://sibilation-edythe-unprivately.ngrok-free.dev',
+        'https://define-pilates-front-dev.onrender.com',
     ],
 
     'allowed_origins_patterns' => [],
